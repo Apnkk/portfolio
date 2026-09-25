@@ -103,7 +103,7 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+      <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center w-full">
         {/* Section Index */}
         <p className="mono text-[#f2a33c] mb-3">02 / NEXT</p>
         <h2 className="font-display font-semibold text-[clamp(2.2rem,5vw,4.2rem)] text-[#ede8dd] tracking-tight leading-none mb-10">
@@ -122,7 +122,7 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
             y: titleY,
             textShadow: isPlaying ? '0 0 80px rgba(242, 163, 60, 0.35)' : 'none',
           }}
-          className={`font-display font-bold text-[clamp(2.2rem,11.5vw,13rem)] leading-[0.92] tracking-tight transition-[color,text-shadow] duration-500 select-none will-change-transform max-w-full ${
+          className={`font-display font-bold text-[clamp(2.2rem,11.5vw,13rem)] leading-[0.92] tracking-tight transition-[color,text-shadow] duration-500 select-none will-change-transform w-full text-center origin-center whitespace-nowrap ${
             isPlaying ? 'stroke-amber' : 'stroke-cream'
           }`}
         >
