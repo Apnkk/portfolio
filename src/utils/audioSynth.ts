@@ -61,7 +61,26 @@ class PortfolioAudioEngine {
 
   constructor() {
     if (typeof window !== 'undefined') {
+      this.currentTrackIndex = this.getRandomTrackIndex();
       this.initAudio();
+    }
+  }
+
+  private getRandomTrackIndex(): number {
+    if (this.tracks.length <= 1) return 0;
+    try {
+      const lastTrack = sessionStorage.getItem('ares_last_track_id');
+      const eligible = this.tracks
+        .map((t, idx) => ({ track: t, idx }))
+        .filter((item) => item.track.id !== lastTrack);
+      const chosen =
+        eligible.length > 0
+          ? eligible[Math.floor(Math.random() * eligible.length)]
+          : { idx: Math.floor(Math.random() * this.tracks.length) };
+      sessionStorage.setItem('ares_last_track_id', this.tracks[chosen.idx].id);
+      return chosen.idx;
+    } catch {
+      return Math.floor(Math.random() * this.tracks.length);
     }
   }
 
@@ -232,6 +251,11 @@ class PortfolioAudioEngine {
     this.initAudio();
     this.currentTrackIndex = (index + this.tracks.length) % this.tracks.length;
     const track = this.tracks[this.currentTrackIndex];
+    try {
+      sessionStorage.setItem('ares_last_track_id', track.id);
+    } catch {
+      // ignore
+    }
     if (this.audio) {
       const wasPlaying = this.isPlaying;
       this.audio.src = track.src;
