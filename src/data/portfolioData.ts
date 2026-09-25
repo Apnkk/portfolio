@@ -24,7 +24,7 @@ export const portfolioData: PortfolioData = {
         en: "Available for contracts & full-stack builds — vibe coder in France"
       }
     },
-    email: "contact.ares.dev@gmail.com",
+    email: "contact@shopcore.buzz",
     resumeUrl: "#contact"
   },
   stats: [
