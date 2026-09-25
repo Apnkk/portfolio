@@ -1,0 +1,82 @@
+import { useLanguage } from '../context/LanguageContext';
+
+export const StackSection = () => {
+  const { language } = useLanguage();
+
+  const cells = [
+    {
+      domain: 'FRONTEND',
+      items: 'React 19 · TypeScript strict · Next.js · Vite · Tailwind CSS v4 · TanStack Query · Zustand',
+    },
+    {
+      domain: 'BACKEND',
+      items: 'Node 22 · Express & NestJS · FastAPI (Python) · Socket.IO & WebSockets · REST APIs · SSE Streaming',
+    },
+    {
+      domain: 'DATA',
+      items: 'PostgreSQL · Supabase · Redis caching · Drizzle ORM · Prisma · pgvector · Search indexing',
+    },
+    {
+      domain: language === 'fr' ? 'SYSTÈMES & CLOUD' : 'SYSTEMS & CLOUD',
+      items: 'Docker · Cloudflare Workers · Rust → WebAssembly · CI/CD GitHub Actions · Nginx · AWS S3/RDS',
+    },
+    {
+      domain: 'MOTION / UI',
+      items: 'Framer Motion · Web Audio API · Design systems · Responsive Bento layouts · Typography · Micro-interactions',
+    },
+    {
+      domain: language === 'fr' ? 'PRODUIT & VÉLOCITÉ' : 'PRODUCT & VELOCITY',
+      items:
+        language === 'fr'
+          ? 'Idée → Produit en production, en solo · Auth Passkeys · Paiements Stripe · i18n · Optimisation Core Web Vitals'
+          : 'Idea → shipped, solo · Passkeys Auth · Stripe Billing · i18n · Core Web Vitals performance tuning',
+    },
+  ];
+
+  return (
+    <section id="stack" className="py-24 sm:py-32 px-6 sm:px-12 md:px-16 max-w-7xl mx-auto text-left" aria-labelledby="stack-title">
+      {/* Section Head */}
+      <header className="mb-14 sm:mb-20">
+        <p className="mono text-[#f2a33c] mb-3">03 / STACK</p>
+        <h2 id="stack-title" className="font-display font-semibold text-[clamp(2.4rem,6vw,4.8rem)] text-[#ede8dd] tracking-tight leading-none">
+          {language === 'fr' ? (
+            <>
+              Full-stack, plein <em className="text-[#f2a33c] not-italic font-serif">volume</em>
+            </>
+          ) : (
+            <>
+              Full-stack, full <em className="text-[#f2a33c] not-italic font-serif">volume</em>
+            </>
+          )}
+        </h2>
+        <p className="text-[#837e6f] text-sm sm:text-base mt-4 max-w-lg font-normal">
+          {language === 'fr'
+            ? 'Une boîte à outils moderne forgée par des dizaines de milliers de lignes de code en production.'
+            : 'A modern engineering toolkit forged through tens of thousands of production code lines.'}
+        </p>
+      </header>
+
+      {/* Grid of Cells with Borders and Hover VU meters */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-[rgba(237,232,221,0.1)]">
+        {cells.map((cell, idx) => (
+          <div
+            key={idx}
+            className="group relative p-8 sm:p-11 border-r border-b border-[rgba(237,232,221,0.1)] hover:bg-[#15120d] transition-colors duration-400 overflow-hidden flex flex-col justify-between"
+          >
+            <div>
+              <h3 className="mono text-xs text-[#f2a33c] tracking-widest mb-4">
+                {cell.domain}
+              </h3>
+              <p className="text-[#ede8dd] text-sm sm:text-base font-medium leading-relaxed max-w-[34ch]">
+                {cell.items}
+              </p>
+            </div>
+
+            {/* VU Meter Bar across bottom */}
+            <div className="vu-bar" aria-hidden="true" />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};

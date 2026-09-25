@@ -1,200 +1,190 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { portfolioData } from '../data/portfolioData';
-import { Globe, Menu, X, Terminal, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 
 interface NavbarProps {
   onToggleTerminal?: () => void;
+  isPlaying?: boolean;
 }
 
-export const Navbar = ({ onToggleTerminal }: NavbarProps) => {
-  const { language, toggleLanguage } = useLanguage();
+export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
+  const { language, setLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
-
-  const navLinks = [
-    { href: '#about', label: language === 'fr' ? 'À propos' : 'About', id: 'about' },
-    { href: '#projects', label: language === 'fr' ? 'Projets' : 'Projects', id: 'projects' },
-    { href: '#skills', label: language === 'fr' ? 'Compétences' : 'Skills', id: 'skills' },
-    { href: '#experience', label: language === 'fr' ? 'Parcours' : 'Journey', id: 'experience' },
-    { href: '#contact', label: 'Contact', id: 'contact' },
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
-
-      // Simple active section detection
-      const sections = ['hero', 'about', 'projects', 'skills', 'experience', 'contact'];
-      for (const section of [...sections].reverse()) {
-        const el = document.getElementById(section);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 200) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
+      setScrolled(window.scrollY > 40);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navLinks = [
+    { href: '#work', label: language === 'fr' ? 'Projets' : 'Work' },
+    { href: '#next', label: language === 'fr' ? 'À venir' : 'Next' },
+    { href: '#stack', label: 'Stack' },
+    { href: '#method', label: language === 'fr' ? 'Méthode' : 'Method' },
+    { href: '#about', label: language === 'fr' ? 'À propos' : 'About' },
+    { href: '#contact', label: 'Contact', isContact: true },
+  ];
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 sm:pt-6 pointer-events-none">
-      <nav
-        className={`pointer-events-auto w-full max-w-5xl transition-all duration-300 rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between border ${
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-[900] flex items-center justify-between px-6 sm:px-12 py-5 transition-all duration-400 ${
           scrolled
-            ? 'bg-[#0d0d14]/85 backdrop-blur-xl border-white/10 shadow-2xl shadow-black/60'
-            : 'bg-[#0e0e16]/60 backdrop-blur-md border-white/8'
+            ? 'bg-[#0a0908b8] backdrop-blur-md border-b border-[rgba(237,232,221,0.1)]'
+            : 'bg-transparent'
         }`}
-        aria-label="Navigation principale"
       >
-        {/* Monogram / Brand */}
+        {/* Logo / Monogram with spinning disc */}
         <a
           href="#hero"
-          className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-lg py-1 px-1.5"
+          className="inline-flex items-center gap-2.5 font-mono text-[0.82rem] tracking-wider text-[#ede8dd] uppercase group select-none"
+          aria-label="Ares — retour en haut"
         >
-          <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-indigo-600 flex items-center justify-center font-mono font-bold text-white text-sm shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-            <span>A</span>
-            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border border-[#0d0d14] animate-pulse" />
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="font-semibold text-xs sm:text-sm tracking-tight text-white group-hover:text-cyan-300 transition-colors">
-              {portfolioData.personal.name}
-            </span>
-            <span className="text-[10px] text-neutral-400 font-mono hidden sm:inline-block">
-              {language === 'fr' ? 'Full-Stack Dev' : 'Full-Stack Eng.'}
-            </span>
-          </div>
+          <span
+            className={`w-3.5 h-3.5 rounded-full border-2 border-[#f2a33c] relative flex items-center justify-center ${
+              isPlaying ? 'animate-spin' : ''
+            }`}
+            style={{ animationDuration: '2.6s' }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff3d2e]" />
+          </span>
+          <span className="font-bold tracking-tight">
+            ares<sup className="text-[#f2a33c] font-normal text-[0.65em] ml-0.5">®</sup>
+          </span>
         </a>
 
-        {/* Desktop Nav Items */}
-        <ul className="hidden md:flex items-center gap-1 bg-white/[0.03] border border-white/5 rounded-full px-3 py-1">
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.id;
-            return (
-              <li key={link.id}>
-                <a
-                  href={link.href}
-                  className={`relative px-3.5 py-1.5 text-xs font-medium rounded-full transition-colors ${
-                    isActive ? 'text-white' : 'text-neutral-400 hover:text-neutral-200'
-                  }`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavIndicator"
-                      className="absolute inset-0 bg-white/10 rounded-full border border-white/15"
-                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{link.label}</span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+        {/* Desktop Links */}
+        <nav className="hidden md:flex items-center gap-7 font-mono text-[0.72rem] tracking-widest uppercase" aria-label="Navigation principale">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={`relative py-1 transition-colors group ${
+                link.isContact
+                  ? 'text-[#f2a33c] font-semibold hover:text-[#f2a33c]'
+                  : 'text-[#b9b3a4] hover:text-[#ede8dd]'
+              }`}
+            >
+              <span>{link.label}</span>
+              <span className="absolute left-0 bottom-0 w-full h-[1px] bg-[#f2a33c] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            </a>
+          ))}
 
-        {/* Right Actions: Lang, Terminal, Contact */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Interactive Terminal shortcut */}
+          {/* Dev Terminal Icon Button */}
           {onToggleTerminal && (
             <button
               onClick={onToggleTerminal}
-              className="p-2 text-neutral-400 hover:text-cyan-300 hover:bg-white/5 rounded-full transition-colors border border-transparent hover:border-white/10"
-              title={language === 'fr' ? 'Ouvrir le terminal dev' : 'Open dev terminal'}
-              aria-label="Terminal"
+              className="p-1.5 text-[#837e6f] hover:text-[#f2a33c] transition-colors"
+              title="CLI Dev"
+              aria-label="Terminal CLI"
             >
-              <Terminal className="w-4 h-4" />
+              <Terminal className="w-3.5 h-3.5" />
             </button>
           )}
 
-          {/* Language Toggle */}
-          <button
-            onClick={toggleLanguage}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono font-medium text-neutral-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-full transition-all hover:border-cyan-500/40"
-            title={language === 'fr' ? 'Passer en anglais' : 'Switch to French'}
-            aria-label="Changer de langue"
-          >
-            <Globe className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="uppercase">{language}</span>
-          </button>
+          {/* Language Switcher: EN / FR */}
+          <div className="flex items-center gap-1.5 text-[#837e6f] font-mono text-[0.72rem] ml-2 border-l border-white/10 pl-4">
+            <button
+              type="button"
+              onClick={() => setLanguage('en')}
+              className={`transition-colors hover:text-[#ede8dd] ${
+                language === 'en' ? 'text-[#f2a33c] font-bold' : 'text-[#837e6f]'
+              }`}
+            >
+              EN
+            </button>
+            <span className="text-[rgba(237,232,221,0.2)]">/</span>
+            <button
+              type="button"
+              onClick={() => setLanguage('fr')}
+              className={`transition-colors hover:text-[#ede8dd] ${
+                language === 'fr' ? 'text-[#f2a33c] font-bold' : 'text-[#837e6f]'
+              }`}
+            >
+              FR
+            </button>
+          </div>
+        </nav>
 
-          {/* Quick Contact CTA */}
-          <a
-            href="#contact"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-full bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-200 border border-cyan-500/30 hover:border-cyan-400/60 hover:bg-cyan-500/25 transition-all shadow-sm shadow-cyan-500/10 active:scale-[0.98]"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{language === 'fr' ? 'Collaborer' : "Let's talk"}</span>
-          </a>
+        {/* Mobile Hamburger Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden flex flex-col gap-1.5 p-2 text-[#ede8dd]"
+          aria-label="Menu"
+          aria-expanded={mobileMenuOpen}
+        >
+          <span
+            className={`w-6 h-[2px] bg-[#ede8dd] transition-transform duration-300 ${
+              mobileMenuOpen ? 'translate-y-2 rotate-45' : ''
+            }`}
+          />
+          <span
+            className={`w-6 h-[2px] bg-[#ede8dd] transition-opacity duration-300 ${
+              mobileMenuOpen ? 'opacity-0' : ''
+            }`}
+          />
+          <span
+            className={`w-6 h-[2px] bg-[#ede8dd] transition-transform duration-300 ${
+              mobileMenuOpen ? '-translate-y-2 -rotate-45' : ''
+            }`}
+          />
+        </button>
+      </header>
 
-          {/* Mobile menu trigger */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-neutral-300 hover:text-white rounded-full hover:bg-white/5 border border-white/5"
-            aria-label="Menu mobile"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Drawer */}
+      {/* Fullscreen Mobile Menu (styled like mysticsaba) */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -15, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -15, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="pointer-events-auto md:hidden absolute top-20 left-4 right-4 bg-[#0d0d14]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-5 shadow-2xl flex flex-col gap-3 z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-[850] bg-[#0a0908fa] backdrop-blur-2xl flex flex-col justify-center px-8 sm:px-16"
           >
-            <div className="flex flex-col gap-1 pb-3 border-b border-white/5">
+            <nav className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <a
-                  key={link.id}
+                  key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                    activeSection === link.id
-                      ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/20'
-                      : 'text-neutral-300 hover:bg-white/5'
-                  }`}
+                  className="font-display font-semibold text-3xl sm:text-5xl text-[#ede8dd] py-2 border-b border-[rgba(237,232,221,0.1)] hover:text-[#f2a33c] transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
-            </div>
+            </nav>
 
-            <div className="flex items-center justify-between pt-2">
-              <span className="text-xs text-neutral-400">
-                {language === 'fr' ? 'Langue du site :' : 'Site language:'}
-              </span>
+            <div className="flex items-center gap-4 mt-8 font-mono text-base text-[#837e6f]">
+              <span>Lang:</span>
               <button
-                onClick={toggleLanguage}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium text-white bg-white/10 rounded-lg border border-white/10"
+                type="button"
+                onClick={() => setLanguage('en')}
+                className={language === 'en' ? 'text-[#f2a33c] font-bold' : ''}
               >
-                <Globe className="w-3.5 h-3.5 text-cyan-400" />
-                <span className="uppercase">{language === 'fr' ? 'Français' : 'English'}</span>
+                EN
+              </button>
+              <span>/</span>
+              <button
+                type="button"
+                onClick={() => setLanguage('fr')}
+                className={language === 'fr' ? 'text-[#f2a33c] font-bold' : ''}
+              >
+                FR
               </button>
             </div>
 
-            <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="mt-2 flex items-center justify-center gap-2 w-full py-2.5 text-sm font-medium text-center rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white shadow-lg shadow-cyan-500/25"
-            >
-              <span>{language === 'fr' ? 'Me contacter' : 'Contact me'}</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
+            <p className="mt-8 font-mono text-xs text-[#837e6f] flex items-center gap-2">
+              <span className="status-dot" />
+              <span>FR — Remote friendly · Open to contracts & builds</span>
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 };

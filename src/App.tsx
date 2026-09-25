@@ -1,39 +1,53 @@
 import { useState } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
-import { BackgroundGlow } from './components/BackgroundGlow';
+import { CustomCursor } from './components/CustomCursor';
+import { AudioPlayer } from './components/AudioPlayer';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { BentoAbout } from './components/BentoAbout';
-import { ProjectsSection } from './components/ProjectsSection';
-import { SkillsSection } from './components/SkillsSection';
-import { ExperienceSection } from './components/ExperienceSection';
+import { MarqueeTicker } from './components/MarqueeTicker';
+import { WorkSection } from './components/WorkSection';
+import { NextSection } from './components/NextSection';
+import { StackSection } from './components/StackSection';
+import { MethodSection } from './components/MethodSection';
+import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
-import { Footer } from './components/Footer';
 import { TerminalDrawer } from './components/TerminalDrawer';
+import { audioEngine } from './utils/audioSynth';
 
-function PortfolioContent() {
+function PortfolioApp() {
+  const [isPlaying, setIsPlaying] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
 
+  const handleTogglePlay = () => {
+    const nextState = audioEngine.toggle();
+    setIsPlaying(nextState);
+  };
+
   return (
-    <div className="relative min-h-screen text-neutral-100 flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* Ambient background torch and subtle grid */}
-      <BackgroundGlow />
+    <div className="relative min-h-screen bg-[#0a0908] text-[#ede8dd] selection:bg-[#f2a33c] selection:text-[#0a0908]">
+      {/* Magnetic Creative Cursor */}
+      <CustomCursor />
 
-      {/* Floating pill navigation */}
-      <Navbar onToggleTerminal={() => setTerminalOpen((prev) => !prev)} />
+      {/* Persistent Audio Player Dock (Bottom Right) */}
+      <AudioPlayer isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
 
-      {/* Main Content Sections */}
-      <main className="relative z-10 flex-1">
-        <Hero />
-        <BentoAbout />
-        <ProjectsSection />
-        <SkillsSection />
-        <ExperienceSection />
+      {/* Top Navbar */}
+      <Navbar
+        isPlaying={isPlaying}
+        onToggleTerminal={() => setTerminalOpen((prev) => !prev)}
+      />
+
+      {/* Main Editorial Content */}
+      <main id="main">
+        <Hero isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
+        <MarqueeTicker />
+        <WorkSection />
+        <NextSection isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
+        <StackSection />
+        <MethodSection />
+        <AboutSection />
         <ContactSection />
       </main>
-
-      {/* Footer */}
-      <Footer onOpenTerminal={() => setTerminalOpen(true)} />
 
       {/* Dev Interactive Terminal */}
       <TerminalDrawer
@@ -47,7 +61,7 @@ function PortfolioContent() {
 export function App() {
   return (
     <LanguageProvider>
-      <PortfolioContent />
+      <PortfolioApp />
     </LanguageProvider>
   );
 }

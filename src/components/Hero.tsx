@@ -1,160 +1,139 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { portfolioData } from '../data/portfolioData';
-import { 
-  ArrowDown, 
-  Copy, 
-  Check, 
-  Sparkles, 
-  Code2,
-  Terminal,
-  Zap,
-  Smartphone,
-  Layers,
-  Database
-} from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { Play, Pause, ArrowDownRight } from 'lucide-react';
 
-export const Hero = () => {
+interface HeroProps {
+  isPlaying: boolean;
+  onTogglePlay: () => void;
+}
+
+export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
   const { language } = useLanguage();
-  const [copied, setCopied] = useState(false);
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText(portfolioData.personal.email);
-    setCopied(true);
-    confetti({
-      particleCount: 35,
-      spread: 60,
-      origin: { y: 0.7 },
-      colors: ['#06b6d4', '#8b5cf6', '#3b82f6']
-    });
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  const stackPills = [
-    { label: "React 19", icon: Code2, color: "text-cyan-400 border-cyan-500/20 bg-cyan-500/5" },
-    { label: "Next.js 15", icon: Zap, color: "text-white border-white/20 bg-white/5" },
-    { label: "TypeScript", icon: Terminal, color: "text-blue-400 border-blue-500/20 bg-blue-500/5" },
-    { label: "React Native", icon: Smartphone, color: "text-emerald-400 border-emerald-500/20 bg-emerald-500/5" },
-    { label: "Node & FastAPI", icon: Layers, color: "text-amber-400 border-amber-500/20 bg-amber-500/5" },
-    { label: "PostgreSQL & Supabase", icon: Database, color: "text-indigo-400 border-indigo-500/20 bg-indigo-500/5" },
-  ];
 
   return (
-    <section id="hero" className="relative pt-32 sm:pt-40 pb-20 md:pb-28 px-4 max-w-5xl mx-auto flex flex-col items-center text-center">
-      {/* Availability Status Badge */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-medium mb-6 sm:mb-8 shadow-sm shadow-emerald-500/10 hover:border-emerald-500/40 transition-colors"
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+    <section
+      id="hero"
+      className="relative min-h-[95vh] sm:min-h-screen flex flex-col justify-end overflow-hidden pt-28 pb-0 text-left"
+      aria-label="Introduction"
+    >
+      {/* Ambient Radial Gradients */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 70% 50% at 75% 25%, rgba(242, 163, 60, 0.12), transparent 60%),
+            radial-gradient(ellipse 60% 45% at 20% 75%, rgba(255, 61, 46, 0.07), transparent 65%)
+          `,
+        }}
+      />
+
+      <div className="relative z-10 px-6 sm:px-12 md:px-16 mb-8 sm:mb-14">
+        {/* Status Kicker */}
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mono text-[#b9b3a4] flex items-center gap-2 mb-4 sm:mb-6"
+        >
+          <span className="status-dot" aria-hidden="true" />
+          <span>
+            {language === 'fr'
+              ? 'disponible pour missions & projets ambitieux — vibe coder en France'
+              : 'available for contracts & full-stack builds — vibe coder in France'}
+          </span>
+        </motion.p>
+
+        {/* Giant Clash Display Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="font-display font-bold uppercase tracking-tight leading-[0.88] select-none text-[clamp(3.8rem,14vw,11.5rem)] mb-6 sm:mb-8"
+        >
+          <span className="block text-[#ede8dd]">ARES</span>
+          <span className="block stroke-amber">DEV</span>
+        </motion.h1>
+
+        {/* Subtitle & Role */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="max-w-xl text-left"
+        >
+          <p className="font-display font-medium text-[clamp(1.15rem,2.4vw,1.6rem)] text-[#ede8dd] tracking-tight">
+            {language === 'fr' ? (
+              <>
+                Développeur full-stack <em className="text-[#f2a33c] not-italic font-serif">&amp;</em> creative builder.
+              </>
+            ) : (
+              <>
+                Full-stack developer <em className="text-[#f2a33c] not-italic font-serif">&amp;</em> creative builder.
+              </>
+            )}
+          </p>
+
+          <p className="text-[#b9b3a4] text-[clamp(0.95rem,1.5vw,1.1rem)] mt-2 font-normal leading-relaxed">
+            {language === 'fr'
+              ? 'Je conçois des produits web & mobiles haute performance — véloces, soignés et avec du caractère.'
+              : 'I build streaming-grade web & mobile products — fast, polished, and a little bit loud.'}
+          </p>
+        </motion.div>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="flex flex-wrap items-center gap-3.5 sm:gap-4 mt-8 sm:mt-10"
+        >
+          <a href="#work" className="btn btn--solid group">
+            <span>{language === 'fr' ? 'Voir les projets' : 'View work'}</span>
+            <ArrowDownRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
+          </a>
+
+          <a href="#contact" className="btn btn--ghost">
+            <span>{language === 'fr' ? 'Me contacter' : 'Contact me'}</span>
+          </a>
+
+          <button
+            onClick={onTogglePlay}
+            className={`btn btn--play ${isPlaying ? 'is-playing' : ''}`}
+            aria-label={isPlaying ? 'Mettre en pause' : 'Écouter la musique'}
+          >
+            <span className="play-icon-box">
+              {isPlaying ? (
+                <Pause className="w-3.5 h-3.5 fill-current" />
+              ) : (
+                <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+              )}
+            </span>
+            <span>
+              {isPlaying
+                ? language === 'fr'
+                  ? 'Ambiance audio active'
+                  : 'Music playing'
+                : language === 'fr'
+                ? 'Écouter en naviguant'
+                : 'Listen while browsing'}
+            </span>
+          </button>
+        </motion.div>
+      </div>
+
+      {/* Hero Bottom Meta Bar */}
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 px-6 sm:px-12 md:px-16 py-4 border-t border-[rgba(237,232,221,0.1)] text-[#837e6f] font-mono text-[0.72rem] tracking-wider uppercase">
+        <span>{language === 'fr' ? 'EN PRODUCTION DEPUIS 2023 →' : 'SHIPPING SINCE 2023 →'}</span>
+        <span className="hidden sm:inline-block text-[#b9b3a4]">
+          NEXUSFLOW · PULSETRACK · DEVSTUDIO · SYNTHESIS
         </span>
-        <span>{portfolioData.personal.availability.text[language]}</span>
-      </motion.div>
-
-      {/* Main Fluid Heading */}
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="fluid-h1 font-black tracking-tight text-white max-w-4xl"
-      >
-        {language === 'fr' ? (
-          <>
-            Concevoir des produits <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">web & mobiles</span> d'exception.
-          </>
-        ) : (
-          <>
-            Architecting scalable <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">web & mobile</span> software.
-          </>
-        )}
-      </motion.h1>
-
-      {/* Subtitle */}
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="fluid-sub text-neutral-400 mt-6 max-w-2xl font-normal"
-      >
-        {portfolioData.personal.shortBio[language]}
-      </motion.p>
-
-      {/* Call to Actions & Copy Email */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 mt-8 sm:mt-10"
-      >
-        {/* Explore Projects Button */}
-        <a
-          href="#projects"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-neutral-950 font-semibold text-sm hover:bg-neutral-100 transition-all duration-150 active:scale-[0.98] shadow-lg shadow-white/10 group"
-        >
-          <span>{language === 'fr' ? 'Explorer les projets' : 'View Projects'}</span>
-          <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-        </a>
-
-        {/* Contact CTA */}
-        <a
-          href="#contact"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-neutral-900/80 hover:bg-neutral-800 text-white font-medium text-sm border border-white/10 hover:border-white/20 transition-all duration-150 active:scale-[0.98] backdrop-blur-md"
-        >
-          <Sparkles className="w-4 h-4 text-cyan-400" />
-          <span>{language === 'fr' ? 'Me contacter' : 'Get in touch'}</span>
-        </a>
-
-        {/* Copy Email Button with instant feedback */}
-        <button
-          onClick={copyEmail}
-          className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 font-mono text-xs border border-white/10 hover:border-cyan-500/40 transition-all duration-150 active:scale-[0.98]"
-          title={language === 'fr' ? "Copier l'adresse email" : 'Copy email address'}
-        >
-          {copied ? (
-            <>
-              <Check className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-300">{language === 'fr' ? 'Email copié !' : 'Copied!'}</span>
-            </>
-          ) : (
-            <>
-              <Copy className="w-4 h-4 text-neutral-400" />
-              <span>{portfolioData.personal.email}</span>
-            </>
-          )}
-        </button>
-      </motion.div>
-
-      {/* Floating Tech Stack Ticker / Badges */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="mt-14 sm:mt-16 w-full"
-      >
-        <p className="text-xs uppercase tracking-widest font-mono text-neutral-500 mb-4">
-          {language === 'fr' ? 'Stack technique de pointe' : 'Core Technologies & Tools'}
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 max-w-3xl mx-auto">
-          {stackPills.map((pill) => {
-            const Icon = pill.icon;
-            return (
-              <div
-                key={pill.label}
-                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg border text-xs font-mono font-medium backdrop-blur-sm transition-transform hover:scale-105 duration-150 ${pill.color}`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{pill.label}</span>
-              </div>
-            );
-          })}
-        </div>
-      </motion.div>
+        <span className="inline-flex items-center gap-2.5">
+          <span>SCROLL</span>
+          <span className="w-10 h-[1px] bg-[rgba(237,232,221,0.25)] relative overflow-hidden inline-block">
+            <span className="absolute inset-0 bg-[#f2a33c] animate-[scrollhint_2.2s_cubic-bezier(0.22,1,0.36,1)_infinite]" />
+          </span>
+        </span>
+      </div>
     </section>
   );
 };
