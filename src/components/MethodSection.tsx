@@ -64,14 +64,14 @@ export const MethodSection = () => {
     <section
       ref={sectionRef}
       id="method"
-      className="py-24 sm:py-32 px-6 sm:px-12 md:px-16 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] text-left"
+      className="py-16 sm:py-32 px-5 sm:px-12 md:px-16 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] text-left"
       aria-labelledby="method-title"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Head */}
-        <header className="mb-14 sm:mb-20">
-          <p className="mono text-[#f2a33c] mb-3">04 / METHOD</p>
-          <h2 id="method-title" className="font-display font-semibold text-[clamp(2.4rem,6vw,4.8rem)] text-[#ede8dd] tracking-tight leading-none">
+        <header className="mb-10 sm:mb-20">
+          <p className="mono text-[#f2a33c] mb-2 sm:mb-3">04 / METHOD</p>
+          <h2 id="method-title" className="font-display font-semibold text-[clamp(2.1rem,6vw,4.8rem)] text-[#ede8dd] tracking-tight leading-none">
             {language === 'fr' ? (
               <>
                 Du bruit <em className="text-[#f2a33c] not-italic font-serif">au</em> signal
@@ -82,17 +82,20 @@ export const MethodSection = () => {
               </>
             )}
           </h2>
-          <p className="text-[#837e6f] text-sm sm:text-base mt-4 max-w-lg font-normal">
+          <p className="text-[#837e6f] text-xs sm:text-base mt-3 sm:mt-4 max-w-lg font-normal leading-relaxed">
             {language === 'fr'
               ? "Une boucle d'itération rapide qui transforme une intuition en logiciel fiable et élégant."
               : 'A rapid iteration loop turning raw ideas into dependable, polished software.'}
           </p>
         </header>
 
-        {/* Steps Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 relative">
+        {/* Steps Grid with Mobile Vertical Timeline Rail */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-6 relative">
           {/* Top Track (Desktop) */}
           <div className="hidden lg:block absolute top-[7px] left-0 right-0 h-[1px] bg-[rgba(237,232,221,0.1)] pointer-events-none" />
+
+          {/* Vertical Track (Mobile) */}
+          <div className="lg:hidden absolute left-[6px] top-3 bottom-3 w-[1px] bg-[rgba(237,232,221,0.12)] pointer-events-none" />
 
           {/* Animated Connecting Pulse Line (Desktop) */}
           <motion.div
@@ -103,19 +106,24 @@ export const MethodSection = () => {
           {steps.map((step, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.45, delay: idx * 0.1 }}
-              className="relative lg:pt-8 flex flex-col z-10"
+              transition={{ duration: 0.45, delay: idx * 0.08 }}
+              className="relative pl-7 lg:pl-0 lg:pt-8 flex flex-col z-10"
             >
-              {/* Dot on line */}
+              {/* Dot on line (Desktop) */}
               <div className="hidden lg:flex absolute top-0 left-0 w-3.5 h-3.5 rounded-full border border-[#f2a33c] bg-[#050506] items-center justify-center shadow-[0_0_8px_rgba(242,163,60,0.4)]">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#f2a33c]" />
               </div>
 
-              <span className="mono text-[#837e6f] text-xs mb-2">{step.num}</span>
-              <h3 className="font-display font-semibold text-xl sm:text-2xl text-[#ede8dd] mb-2 tracking-tight">
+              {/* Dot on line (Mobile) */}
+              <div className="lg:hidden absolute left-0 top-1 w-3.5 h-3.5 rounded-full border border-[#f2a33c] bg-[#050506] flex items-center justify-center shadow-[0_0_8px_rgba(242,163,60,0.4)]">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#f2a33c]" />
+              </div>
+
+              <span className="mono text-[#837e6f] text-xs mb-1.5">{step.num}</span>
+              <h3 className="font-display font-semibold text-lg sm:text-2xl text-[#ede8dd] mb-1.5 sm:mb-2 tracking-tight">
                 {step.name}
               </h3>
               <p className="text-[#837e6f] text-xs sm:text-sm leading-relaxed font-normal">

@@ -49,13 +49,13 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="pt-24 sm:pt-32 pb-0 px-6 sm:px-12 md:px-16 bg-[#050506] border-t border-[rgba(237,232,221,0.08)] text-center" aria-labelledby="contact-title">
+    <section id="contact" className="pt-16 sm:pt-32 pb-0 px-5 sm:px-12 md:px-16 bg-[#050506] border-t border-[rgba(237,232,221,0.08)] text-center" aria-labelledby="contact-title">
       <div className="max-w-5xl mx-auto">
         {/* Section Index */}
-        <p className="mono text-[#f2a33c] mb-3">06 / CONTACT</p>
+        <p className="mono text-[#f2a33c] mb-2 sm:mb-3">06 / CONTACT</p>
 
         {/* Big Impact Title */}
-        <h2 id="contact-title" className="font-display font-semibold text-[clamp(2.4rem,8vw,6.5rem)] text-[#ede8dd] tracking-tight leading-[1.02] mb-10 select-none">
+        <h2 id="contact-title" className="font-display font-semibold text-[clamp(2.1rem,7.5vw,6.5rem)] text-[#ede8dd] tracking-tight leading-[1.05] mb-6 sm:mb-10 select-none">
           <span className="block">{language === 'fr' ? 'Un projet' : 'Got a project'}</span>
           <span className="block">
             {language === 'fr' ? 'qui veut du ' : 'that needs '}
@@ -64,23 +64,23 @@ export const ContactSection = () => {
         </h2>
 
         {/* Large Interactive Email Pill Button */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center max-w-full px-2">
           <button
             onClick={copyEmail}
-            className="group inline-flex items-center gap-3 font-mono text-[clamp(0.95rem,2.4vw,1.35rem)] tracking-wider py-3.5 sm:py-4 px-7 sm:px-9 rounded-full border border-[rgba(237,232,221,0.2)] bg-black/60 hover:border-[#f2a33c] hover:text-[#f2a33c] transition-all duration-300 hover:shadow-[0_0_35px_rgba(242,163,60,0.18)] active:scale-[0.98] select-none"
+            className="group inline-flex items-center justify-center gap-2.5 sm:gap-3 font-mono text-[clamp(0.78rem,3.2vw,1.35rem)] tracking-wider py-3 sm:py-4 px-5 sm:px-9 rounded-full border border-[rgba(237,232,221,0.2)] bg-black/60 hover:border-[#f2a33c] hover:text-[#f2a33c] transition-all duration-300 hover:shadow-[0_0_35px_rgba(242,163,60,0.18)] active:scale-[0.98] select-none max-w-full truncate"
             title="Copier l'adresse email"
           >
-            <span>{portfolioData.personal.email}</span>
+            <span className="truncate">{portfolioData.personal.email}</span>
             {copiedEmail ? (
-              <Check className="w-4 h-4 text-[#3dd68c]" />
+              <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#3dd68c] shrink-0" />
             ) : (
-              <Copy className="w-4 h-4 text-[#837e6f] group-hover:text-[#f2a33c] transition-colors" />
+              <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#837e6f] group-hover:text-[#f2a33c] transition-colors shrink-0" />
             )}
           </button>
         </div>
 
         {/* Direct Message Form (Always Visible) */}
-        <div className="mt-8 max-w-lg mx-auto p-6 sm:p-8 rounded-2xl bg-[#0a0a0c] border border-[rgba(237,232,221,0.12)] text-left shadow-2xl">
+        <div className="mt-7 sm:mt-8 max-w-lg mx-auto p-5 sm:p-8 rounded-2xl bg-[#0a0a0c] border border-[rgba(237,232,221,0.12)] text-left shadow-2xl">
           {status === 'success' ? (
             <div className="text-center py-6 space-y-2">
               <p className="text-[#3dd68c] font-display font-semibold text-lg">

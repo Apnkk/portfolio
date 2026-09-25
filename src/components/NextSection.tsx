@@ -89,7 +89,7 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
     <section
       ref={sectionRef}
       id="next"
-      className="relative py-28 sm:py-36 px-6 sm:px-12 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] overflow-hidden text-center"
+      className="relative py-16 sm:py-36 px-5 sm:px-12 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] overflow-hidden text-center"
     >
       {/* Background Amber Glow */}
       <div
@@ -115,14 +115,14 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
           — {language === 'fr' ? 'BIENTÔT DISPONIBLE' : 'COMING SOON'} —
         </p>
 
-        {/* Giant Outlined Wordmark with Parallax & Dolly Zoom */}
+        {/* Giant Outlined Wordmark with Parallax & Dolly Zoom - Responsive clamp to prevent mobile overflow */}
         <motion.h3
           style={{
             scale: titleScale,
             y: titleY,
             textShadow: isPlaying ? '0 0 80px rgba(242, 163, 60, 0.35)' : 'none',
           }}
-          className={`font-display font-bold text-[clamp(3.8rem,16vw,13rem)] leading-[0.92] tracking-tight transition-[color,text-shadow] duration-500 select-none will-change-transform ${
+          className={`font-display font-bold text-[clamp(2.2rem,11.5vw,13rem)] leading-[0.92] tracking-tight transition-[color,text-shadow] duration-500 select-none will-change-transform max-w-full ${
             isPlaying ? 'stroke-amber' : 'stroke-cream'
           }`}
         >

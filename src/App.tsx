@@ -32,14 +32,16 @@ function PortfolioApp() {
 
   // Initialize Lenis Inertial Smooth Scrolling (like a fluid camera dolly)
   useEffect(() => {
+    const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
     const lenis = new Lenis({
-      duration: 1.25,
+      duration: isTouch ? 0.85 : 1.25,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.1,
-      touchMultiplier: 1.6,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.0,
+      syncTouch: true,
     });
     lenisRef.current = lenis;
     (window as unknown as { __lenis: Lenis }).__lenis = lenis;
@@ -157,7 +159,7 @@ function PortfolioApp() {
       />
 
       {/* Main Editorial Scrollytelling Content */}
-      <main id="main">
+      <main id="main" className="pb-24 sm:pb-0">
         <Hero scrollVelocity={scrollVelocity} />
         <MarqueeTicker scrollVelocity={scrollVelocity} />
         <WorkSection />

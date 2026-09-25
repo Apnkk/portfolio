@@ -5,15 +5,15 @@ export const AboutSection = () => {
   const { language } = useLanguage();
 
   return (
-    <section id="about" className="py-24 sm:py-32 px-6 sm:px-12 md:px-16 max-w-5xl mx-auto text-left" aria-labelledby="about-title">
+    <section id="about" className="py-16 sm:py-32 px-5 sm:px-12 md:px-16 max-w-5xl mx-auto text-left" aria-labelledby="about-title">
       {/* Section Head */}
-      <header className="mb-12 sm:mb-16">
+      <header className="mb-8 sm:mb-16">
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className="mono text-[#f2a33c] mb-3"
+          className="mono text-[#f2a33c] mb-2 sm:mb-3"
         >
           05 / ABOUT
         </motion.p>
@@ -23,14 +23,14 @@ export const AboutSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.08 }}
-          className="font-display font-semibold text-[clamp(2.4rem,6vw,4.8rem)] text-[#ede8dd] tracking-tight leading-none"
+          className="font-display font-semibold text-[clamp(2.1rem,6vw,4.8rem)] text-[#ede8dd] tracking-tight leading-none"
         >
           {language === 'fr' ? 'Salut, je suis Ares' : "Hi, I'm Ares"}
         </motion.h2>
       </header>
 
       {/* Editorial Body */}
-      <div className="space-y-8 font-display font-medium text-[clamp(1.2rem,2.5vw,1.85rem)] text-[#ede8dd] leading-[1.4] tracking-tight">
+      <div className="space-y-5 sm:space-y-8 font-display font-medium text-[clamp(1.05rem,2.5vw,1.85rem)] text-[#ede8dd] leading-[1.4] tracking-tight">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
