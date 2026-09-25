@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { Play, Pause, ArrowDownRight } from 'lucide-react';
@@ -9,22 +10,91 @@ interface HeroProps {
 
 export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
   const { language } = useLanguage();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animFrame = useRef<number | null>(null);
+
+  // Subtle ambient floating particles on deep OLED black
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const onResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', onResize);
+
+    const particles: { x: number; y: number; size: number; speedY: number; opacity: number }[] = [];
+    const count = 38;
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 1.6 + 0.6,
+        speedY: Math.random() * 0.3 + 0.08,
+        opacity: Math.random() * 0.45 + 0.1,
+      });
+    }
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.y -= p.speedY * (isPlaying ? 1.6 : 1);
+        if (p.y < 0) {
+          p.y = height;
+          p.x = Math.random() * width;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(242, 163, 60, ${p.opacity * (isPlaying ? 1.3 : 1)})`;
+        ctx.fill();
+      }
+
+      animFrame.current = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+      if (animFrame.current) cancelAnimationFrame(animFrame.current);
+    };
+  }, [isPlaying]);
 
   return (
     <section
       id="hero"
-      className="relative min-h-[95vh] sm:min-h-screen flex flex-col justify-end overflow-hidden pt-28 pb-0 text-left"
+      className="relative min-h-[95vh] sm:min-h-screen flex flex-col justify-end overflow-hidden pt-28 pb-0 text-left bg-black"
       aria-label="Introduction"
     >
-      {/* Ambient Radial Gradients */}
+      {/* Ambient Floating Particles Canvas */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 pointer-events-none z-0 opacity-75"
+        aria-hidden="true"
+      />
+
+      {/* Nuanced OLED Dark Gradients & Atmospheric Vignette */}
       <div
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           background: `
-            radial-gradient(ellipse 70% 50% at 75% 25%, rgba(242, 163, 60, 0.12), transparent 60%),
-            radial-gradient(ellipse 60% 45% at 20% 75%, rgba(255, 61, 46, 0.07), transparent 65%)
+            radial-gradient(circle at 68% 32%, rgba(242, 163, 60, 0.065), transparent 48%),
+            radial-gradient(circle at 22% 68%, rgba(255, 61, 46, 0.035), transparent 52%),
+            radial-gradient(ellipse 90% 80% at 50% 50%, transparent 25%, #000000 92%),
+            linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 35%, #000000 100%)
           `,
         }}
+        aria-hidden="true"
       />
 
       <div className="relative z-10 px-6 sm:px-12 md:px-16 mb-8 sm:mb-14">
@@ -43,15 +113,16 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
           </span>
         </motion.p>
 
-        {/* Giant Clash Display Title */}
+        {/* Monumental Title: ONLY "ARES" */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display font-bold uppercase tracking-tight leading-[0.88] select-none text-[clamp(3.8rem,14vw,11.5rem)] mb-6 sm:mb-8"
+          className="font-display font-bold uppercase tracking-[-0.035em] leading-[0.82] select-none text-[clamp(4.8rem,18vw,14rem)] mb-6 sm:mb-8"
         >
-          <span className="block text-[#ede8dd]">ARES</span>
-          <span className="block stroke-amber">DEV</span>
+          <span className="block text-[#ede8dd] drop-shadow-[0_12px_40px_rgba(0,0,0,0.9)]">
+            ARES
+          </span>
         </motion.h1>
 
         {/* Subtitle & Role */}
@@ -122,14 +193,14 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
       </div>
 
       {/* Hero Bottom Meta Bar */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 px-6 sm:px-12 md:px-16 py-4 border-t border-[rgba(237,232,221,0.1)] text-[#837e6f] font-mono text-[0.72rem] tracking-wider uppercase">
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 px-6 sm:px-12 md:px-16 py-4 border-t border-[rgba(237,232,221,0.08)] text-[#837e6f] font-mono text-[0.72rem] tracking-wider uppercase bg-black/60 backdrop-blur-sm">
         <span>{language === 'fr' ? 'EN PRODUCTION DEPUIS 2023 →' : 'SHIPPING SINCE 2023 →'}</span>
         <span className="hidden sm:inline-block text-[#b9b3a4]">
-          NEXUSFLOW · PULSETRACK · DEVSTUDIO · SYNTHESIS
+          Z-FLIX IOS · Z-FLIX PC · SPOTI · Z-AUTOMATION
         </span>
         <span className="inline-flex items-center gap-2.5">
           <span>SCROLL</span>
-          <span className="w-10 h-[1px] bg-[rgba(237,232,221,0.25)] relative overflow-hidden inline-block">
+          <span className="w-10 h-[1px] bg-[rgba(237,232,221,0.2)] relative overflow-hidden inline-block">
             <span className="absolute inset-0 bg-[#f2a33c] animate-[scrollhint_2.2s_cubic-bezier(0.22,1,0.36,1)_infinite]" />
           </span>
         </span>

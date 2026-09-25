@@ -30,11 +30,11 @@ export const AboutSection = () => {
         <p className="text-[#b9b3a4]">
           {language === 'fr' ? (
             <>
-              Tout ce que je livre vit au croisement de la <strong className="text-[#f2a33c] font-medium">performance, des médias et du web moderne</strong> : workflows d'IA avec NexusFlow, suivi biométrique mobile avec PulseTrack, IDE cloud collaboratif avec DevStudio. J'aime les interfaces qui vibrent dès la première seconde.
+              Tout ce que je livre vit au croisement de la <strong className="text-[#f2a33c] font-medium">performance, des médias et du code natif</strong> : écosystème streaming avec Z-Flix (iOS & Desktop), UI Liquid Glass pour Spoti, pipelines d'automatisation avec Z-Automation. J'aime les interfaces qui vibrent dès la première seconde.
             </>
           ) : (
             <>
-              Everything I ship lives at the intersection of <strong className="text-[#f2a33c] font-medium">performance, media, and the modern web</strong>: AI orchestration with NexusFlow, native biometric health with PulseTrack, collaborative cloud workspaces with DevStudio. I love software that feels alive the instant you open it.
+              Everything I ship lives at the intersection of <strong className="text-[#f2a33c] font-medium">performance, media, and native software</strong>: streaming ecosystem with Z-Flix (iOS & Desktop), custom Liquid Glass UI for Spoti, resilient scraping & automation with Z-Automation. I love software that feels alive the instant you open it.
             </>
           )}
         </p>

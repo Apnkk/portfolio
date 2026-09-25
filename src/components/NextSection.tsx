@@ -56,7 +56,7 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
   }, [isPlaying]);
 
   return (
-    <section id="next" className="relative py-28 sm:py-36 px-6 sm:px-12 bg-[#121008] border-y border-[rgba(237,232,221,0.1)] overflow-hidden text-center">
+    <section id="next" className="relative py-28 sm:py-36 px-6 sm:px-12 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] overflow-hidden text-center">
       {/* Background Amber Glow */}
       <div
         className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${

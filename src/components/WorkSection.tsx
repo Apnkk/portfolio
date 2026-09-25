@@ -67,7 +67,7 @@ export const WorkSection = () => {
       </header>
 
       {/* Editorial Numbered Rows */}
-      <div className="divide-y divide-[rgba(237,232,221,0.1)] border-y border-[rgba(237,232,221,0.1)]">
+      <div className="divide-y divide-[rgba(237,232,221,0.08)] border-y border-[rgba(237,232,221,0.08)]">
         {projects.map((project, idx) => {
           const { bg } = getVisualGradients(project.category);
 
@@ -126,7 +126,7 @@ export const WorkSection = () => {
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(237,232,221,0.06)] to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-out pointer-events-none" />
 
                   {/* Bottom Visual Label */}
-                  <span className="absolute bottom-2.5 left-2.5 mono text-[10px] text-[#ede8dd] tracking-wider py-1 px-2.5 rounded-md bg-[#0a0908cc] backdrop-blur-md border border-[rgba(237,232,221,0.1)]">
+                  <span className="absolute bottom-2.5 left-2.5 mono text-[10px] text-[#ede8dd] tracking-wider py-1 px-2.5 rounded-md bg-black/85 backdrop-blur-md border border-[rgba(237,232,221,0.08)]">
                     {project.title.toUpperCase()} — {project.statusLabel[language].toUpperCase()}
                   </span>
                 </div>

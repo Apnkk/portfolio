@@ -24,7 +24,7 @@ function PortfolioApp() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0a0908] text-[#ede8dd] selection:bg-[#f2a33c] selection:text-[#0a0908]">
+    <div className="relative min-h-screen bg-black text-[#ede8dd] selection:bg-[#f2a33c] selection:text-black">
       {/* Magnetic Creative Cursor */}
       <CustomCursor />
 

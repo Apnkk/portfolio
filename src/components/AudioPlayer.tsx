@@ -144,12 +144,12 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 15, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="w-[340px] sm:w-[380px] p-4 rounded-2xl bg-[#12100cd8] border border-[rgba(237,232,221,0.2)] backdrop-blur-2xl shadow-2xl shadow-black/80 flex flex-col gap-3 font-sans text-left"
+            className="w-[340px] sm:w-[380px] p-4 rounded-2xl bg-[#0a0a0ce6] border border-[rgba(237,232,221,0.14)] backdrop-blur-2xl shadow-2xl shadow-black/90 flex flex-col gap-3 font-sans text-left"
           >
             {/* Header info with rotating vinyl disc */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#2a2113] to-[#15100a] border border-white/10 flex items-center justify-center overflow-hidden">
+                <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#18181b] to-[#09090b] border border-white/10 flex items-center justify-center overflow-hidden">
                   <div
                     className={`w-7 h-7 rounded-full border-2 border-[rgba(237,232,221,0.8)] relative flex items-center justify-center ${
                       isPlaying ? 'animate-spin' : ''
@@ -212,7 +212,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
                 <button
                   onClick={onTogglePlay}
-                  className="w-10 h-10 rounded-full bg-[#ede8dd] hover:bg-[#f2a33c] text-[#0a0908] flex items-center justify-center shadow-lg transition-transform active:scale-95"
+                  className="w-10 h-10 rounded-full bg-[#ede8dd] hover:bg-[#f2a33c] text-black flex items-center justify-center shadow-lg transition-transform active:scale-95"
                   aria-label={isPlaying ? 'Pause' : 'Lecture'}
                 >
                   {isPlaying ? (
@@ -285,16 +285,16 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
       {/* Compact Dock Pill */}
       <div
-        className={`flex items-center gap-3 p-1.5 pr-3 rounded-full bg-[#12100cd6] border backdrop-blur-xl transition-all shadow-xl shadow-black/60 ${
+        className={`flex items-center gap-3 p-1.5 pr-3 rounded-full bg-[#0a0a0ce0] border backdrop-blur-xl transition-all shadow-xl shadow-black/70 ${
           isPlaying
             ? 'border-[#f2a33c80] shadow-[0_0_24px_rgba(242,163,60,0.18)]'
-            : 'border-[rgba(237,232,221,0.18)] hover:border-[#f2a33c80]'
+            : 'border-[rgba(237,232,221,0.14)] hover:border-[#f2a33c80]'
         }`}
       >
         {/* Play/Pause round button */}
         <button
           onClick={onTogglePlay}
-          className="w-10 h-10 rounded-full bg-[#f2a33c] text-[#0a0908] flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-md"
+          className="w-10 h-10 rounded-full bg-[#f2a33c] text-black flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-md"
           aria-label={isPlaying ? 'Pause' : 'Écouter en naviguant'}
         >
           {isPlaying ? (

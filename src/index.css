@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0a0908;
-  --color-bg-alt: #121008;
-  --color-surface: #15120d;
-  --color-line: rgba(237, 232, 221, 0.1);
-  --color-line-strong: rgba(237, 232, 221, 0.22);
+  --color-bg: #000000;
+  --color-bg-alt: #050506;
+  --color-surface: #0a0a0c;
+  --color-line: rgba(237, 232, 221, 0.08);
+  --color-line-strong: rgba(237, 232, 221, 0.16);
   --color-cream: #ede8dd;
   --color-cream-dim: #b9b3a4;
-  --color-muted: #837e6f;
+  --color-muted: #757062;
   --color-amber: #f2a33c;
-  --color-amber-soft: rgba(242, 163, 60, 0.14);
+  --color-amber-soft: rgba(242, 163, 60, 0.12);
   --color-red: #ff3d2e;
   --color-green: #3dd68c;
 
@@ -20,16 +20,16 @@
 }
 
 :root {
-  --bg: #0a0908;
-  --bg-2: #121008;
-  --surface: #15120d;
-  --line: rgba(237, 232, 221, 0.1);
-  --line-strong: rgba(237, 232, 221, 0.22);
+  --bg: #000000;
+  --bg-2: #050506;
+  --surface: #0a0a0c;
+  --line: rgba(237, 232, 221, 0.08);
+  --line-strong: rgba(237, 232, 221, 0.16);
   --cream: #ede8dd;
   --cream-dim: #b9b3a4;
-  --muted: #837e6f;
+  --muted: #757062;
   --amber: #f2a33c;
-  --amber-soft: rgba(242, 163, 60, 0.14);
+  --amber-soft: rgba(242, 163, 60, 0.12);
   --red: #ff3d2e;
   --green: #3dd68c;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -193,14 +193,14 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0908;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #26221c;
+  background: #18181b;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3d362d;
+  background: #27272a;
 }
 
 /* VU Equalizer Bar */

@@ -56,7 +56,7 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-2xl bg-[#0e0e16] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl z-10 my-8 overflow-hidden text-left"
+          className="relative w-full max-w-2xl bg-[#0a0a0c] border border-[rgba(237,232,221,0.14)] rounded-3xl p-6 sm:p-8 shadow-2xl z-10 my-8 overflow-hidden text-left"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"

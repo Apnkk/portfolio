@@ -23,7 +23,7 @@ export const MarqueeTicker = () => {
   ));
 
   return (
-    <div className="overflow-hidden border-y border-[rgba(237,232,221,0.1)] py-3.5 bg-[#121008] select-none" aria-hidden="true">
+    <div className="overflow-hidden border-y border-[rgba(237,232,221,0.08)] py-3.5 bg-[#050506] select-none" aria-hidden="true">
       <div className="animate-marquee flex whitespace-nowrap">
         <div className="flex shrink-0 items-center">{content}</div>
         <div className="flex shrink-0 items-center">{content}</div>

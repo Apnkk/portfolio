@@ -47,7 +47,7 @@ export const MethodSection = () => {
   ];
 
   return (
-    <section id="method" className="py-24 sm:py-32 px-6 sm:px-12 md:px-16 bg-[#121008] border-y border-[rgba(237,232,221,0.1)] text-left" aria-labelledby="method-title">
+    <section id="method" className="py-24 sm:py-32 px-6 sm:px-12 md:px-16 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] text-left" aria-labelledby="method-title">
       <div className="max-w-7xl mx-auto">
         {/* Section Head */}
         <header className="mb-14 sm:mb-20">
@@ -73,12 +73,12 @@ export const MethodSection = () => {
         {/* Steps Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 relative">
           {/* Top Connecting Line (Desktop) */}
-          <div className="hidden lg:block absolute top-[7px] left-0 right-0 h-[1px] bg-[rgba(237,232,221,0.1)] pointer-events-none" />
+          <div className="hidden lg:block absolute top-[7px] left-0 right-0 h-[1px] bg-[rgba(237,232,221,0.08)] pointer-events-none" />
 
           {steps.map((step, idx) => (
             <div key={idx} className="relative lg:pt-8 flex flex-col">
               {/* Dot on line */}
-              <div className="hidden lg:flex absolute top-0 left-0 w-3.5 h-3.5 rounded-full border border-[#f2a33c] bg-[#121008] items-center justify-center">
+              <div className="hidden lg:flex absolute top-0 left-0 w-3.5 h-3.5 rounded-full border border-[#f2a33c] bg-[#050506] items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#f2a33c]" />
               </div>
 

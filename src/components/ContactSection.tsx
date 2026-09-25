@@ -52,7 +52,7 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="pt-24 sm:pt-32 pb-0 px-6 sm:px-12 md:px-16 bg-[#121008] border-t border-[rgba(237,232,221,0.1)] text-center" aria-labelledby="contact-title">
+    <section id="contact" className="pt-24 sm:pt-32 pb-0 px-6 sm:px-12 md:px-16 bg-[#050506] border-t border-[rgba(237,232,221,0.08)] text-center" aria-labelledby="contact-title">
       <div className="max-w-5xl mx-auto">
         {/* Section Index */}
         <p className="mono text-[#f2a33c] mb-3">06 / CONTACT</p>
@@ -98,7 +98,7 @@ export const ContactSection = () => {
 
         {/* Direct Message Form (Expandable) */}
         {showForm && (
-          <div className="mt-8 max-w-lg mx-auto p-6 sm:p-8 rounded-2xl bg-[#0a0908] border border-[rgba(237,232,221,0.15)] text-left shadow-2xl">
+          <div className="mt-8 max-w-lg mx-auto p-6 sm:p-8 rounded-2xl bg-[#0a0a0c] border border-[rgba(237,232,221,0.1)] text-left shadow-2xl">
             {status === 'success' ? (
               <div className="text-center py-6 space-y-2">
                 <p className="text-[#3dd68c] font-display font-semibold text-lg">
@@ -126,7 +126,7 @@ export const ContactSection = () => {
                     value={formState.name}
                     onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                     placeholder="Alex"
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#15120d] border border-[rgba(237,232,221,0.12)] text-[#ede8dd] text-xs font-mono focus:border-[#f2a33c] focus:outline-none transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#000000] border border-[rgba(237,232,221,0.1)] text-[#ede8dd] text-xs font-mono focus:border-[#f2a33c] focus:outline-none transition-colors"
                   />
                 </div>
 
@@ -140,7 +140,7 @@ export const ContactSection = () => {
                     value={formState.email}
                     onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                     placeholder="alex@domain.com"
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#15120d] border border-[rgba(237,232,221,0.12)] text-[#ede8dd] text-xs font-mono focus:border-[#f2a33c] focus:outline-none transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#000000] border border-[rgba(237,232,221,0.1)] text-[#ede8dd] text-xs font-mono focus:border-[#f2a33c] focus:outline-none transition-colors"
                   />
                 </div>
 
@@ -158,7 +158,7 @@ export const ContactSection = () => {
                         ? 'Votre projet, vos besoins, calendrier estimé...'
                         : 'Your project, scope, estimated timeline...'
                     }
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#15120d] border border-[rgba(237,232,221,0.12)] text-[#ede8dd] text-xs font-mono focus:border-[#f2a33c] focus:outline-none transition-colors resize-none"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#000000] border border-[rgba(237,232,221,0.1)] text-[#ede8dd] text-xs font-mono focus:border-[#f2a33c] focus:outline-none transition-colors resize-none"
                   />
                 </div>
 
@@ -232,8 +232,8 @@ export const ContactSection = () => {
         </ul>
 
         {/* Footer Bar */}
-        <footer className="mt-24 sm:mt-32 py-7 border-t border-[rgba(237,232,221,0.1)] flex flex-col sm:flex-row items-center justify-between gap-4 mono text-xs text-[#837e6f]">
-          <span>© 2026 ARES DEV</span>
+        <footer className="mt-24 sm:mt-32 py-7 border-t border-[rgba(237,232,221,0.08)] flex flex-col sm:flex-row items-center justify-between gap-4 mono text-xs text-[#837e6f]">
+          <span>© 2026 ARES</span>
           <span className="text-[#b9b3a4]">REACT 19 · TAILWIND 4 · WEB AUDIO</span>
           <button
             onClick={scrollToTop}

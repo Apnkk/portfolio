@@ -35,7 +35,7 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
       <header
         className={`fixed top-0 left-0 right-0 z-[900] flex items-center justify-between px-6 sm:px-12 py-5 transition-all duration-400 ${
           scrolled
-            ? 'bg-[#0a0908b8] backdrop-blur-md border-b border-[rgba(237,232,221,0.1)]'
+            ? 'bg-black/75 backdrop-blur-md border-b border-[rgba(237,232,221,0.08)]'
             : 'bg-transparent'
         }`}
       >
@@ -144,7 +144,7 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[850] bg-[#0a0908fa] backdrop-blur-2xl flex flex-col justify-center px-8 sm:px-16"
+            className="fixed inset-0 z-[850] bg-black/95 backdrop-blur-2xl flex flex-col justify-center px-8 sm:px-16"
           >
             <nav className="flex flex-col gap-2">
               {navLinks.map((link) => (
@@ -152,7 +152,7 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="font-display font-semibold text-3xl sm:text-5xl text-[#ede8dd] py-2 border-b border-[rgba(237,232,221,0.1)] hover:text-[#f2a33c] transition-colors"
+                  className="font-display font-semibold text-3xl sm:text-5xl text-[#ede8dd] py-2 border-b border-[rgba(237,232,221,0.08)] hover:text-[#f2a33c] transition-colors"
                 >
                   {link.label}
                 </a>

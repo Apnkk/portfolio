@@ -57,11 +57,11 @@ export const StackSection = () => {
       </header>
 
       {/* Grid of Cells with Borders and Hover VU meters */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-[rgba(237,232,221,0.1)]">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-[rgba(237,232,221,0.08)]">
         {cells.map((cell, idx) => (
           <div
             key={idx}
-            className="group relative p-8 sm:p-11 border-r border-b border-[rgba(237,232,221,0.1)] hover:bg-[#15120d] transition-colors duration-400 overflow-hidden flex flex-col justify-between"
+            className="group relative p-8 sm:p-11 border-r border-b border-[rgba(237,232,221,0.08)] hover:bg-[#0a0a0c] transition-colors duration-400 overflow-hidden flex flex-col justify-between"
           >
             <div>
               <h3 className="mono text-xs text-[#f2a33c] tracking-widest mb-4">
