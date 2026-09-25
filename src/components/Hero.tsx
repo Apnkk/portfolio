@@ -1,14 +1,47 @@
 import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { ArrowDownRight } from 'lucide-react';
 
-export const Hero = () => {
+interface HeroProps {
+  scrollVelocity?: number;
+}
+
+export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
   const { language } = useLanguage();
+  const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrame = useRef<number | null>(null);
+  const velocityRef = useRef(0);
 
-  // Subtle ambient floating particles on deep OLED black
+  // Keep velocityRef in sync with prop and event
+  useEffect(() => {
+    velocityRef.current = scrollVelocity;
+  }, [scrollVelocity]);
+
+  // Framer Motion Scrollytelling Dolly-Zoom Camera Push
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // Monumental Title Dolly Zoom
+  const titleScale = useTransform(scrollYProgress, [0, 0.8], [1, 1.38]);
+  const titleY = useTransform(scrollYProgress, [0, 0.8], [0, 130]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.55, 0.85], [1, 0.85, 0]);
+  const titleBlur = useTransform(scrollYProgress, [0, 0.55, 0.85], ['blur(0px)', 'blur(1px)', 'blur(8px)']);
+
+  // Foregrounds / Subtitle Parallax Separation
+  const kickerOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
+  const kickerY = useTransform(scrollYProgress, [0, 0.25], [0, -25]);
+
+  const subY = useTransform(scrollYProgress, [0, 0.65], [0, -45]);
+  const subOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
+
+  const ctaY = useTransform(scrollYProgress, [0, 0.5], [0, 25]);
+  const ctaOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
+
+  // 3D Cinematic Starfield Warp & Hyperspace Speed Lines
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -25,33 +58,109 @@ export const Hero = () => {
     };
     window.addEventListener('resize', onResize);
 
-    const particles: { x: number; y: number; size: number; speedY: number; opacity: number }[] = [];
-    const count = 38;
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        size: Math.random() * 1.6 + 0.6,
-        speedY: Math.random() * 0.3 + 0.08,
-        opacity: Math.random() * 0.45 + 0.1,
+    // High frequency scroll event listener
+    const onScrollEvent = (e: Event) => {
+      const custom = e as CustomEvent<{ velocity: number }>;
+      if (custom.detail?.velocity !== undefined) {
+        velocityRef.current = custom.detail.velocity;
+      }
+    };
+    window.addEventListener('portfolio-scroll', onScrollEvent);
+
+    // 3D Starfield particles with depth Z
+    const numStars = 110;
+    const maxZ = 1200;
+    const focalLength = 360;
+
+    interface Star {
+      x: number;
+      y: number;
+      z: number;
+      prevZ: number;
+      size: number;
+      colorType: number; // 0: amber, 1: red, 2: cream
+      baseAlpha: number;
+    }
+
+    const stars: Star[] = [];
+    for (let i = 0; i < numStars; i++) {
+      const z = Math.random() * maxZ + 1;
+      stars.push({
+        x: (Math.random() - 0.5) * width * 2,
+        y: (Math.random() - 0.5) * height * 2,
+        z,
+        prevZ: z,
+        size: Math.random() * 1.5 + 0.8,
+        colorType: Math.random() > 0.35 ? 0 : Math.random() > 0.4 ? 1 : 2,
+        baseAlpha: Math.random() * 0.5 + 0.3,
       });
     }
 
+    let smoothedVelocity = 0;
+
     const render = () => {
+      // Gentle decay of velocity
+      smoothedVelocity += (Math.abs(velocityRef.current) - smoothedVelocity) * 0.12;
+
       ctx.clearRect(0, 0, width, height);
 
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.y -= p.speedY;
-        if (p.y < 0) {
-          p.y = height;
-          p.x = Math.random() * width;
+      const cx = width / 2;
+      const cy = height / 2;
+      const speed = 0.7 + smoothedVelocity * 7.5; // accelerates into the depth with scroll!
+      const isWarping = smoothedVelocity > 0.6;
+
+      for (let i = 0; i < stars.length; i++) {
+        const star = stars[i];
+        star.prevZ = star.z;
+        star.z -= speed;
+
+        // Recycle star when it passes the camera or goes out of bounds
+        if (star.z <= 2) {
+          star.z = maxZ;
+          star.prevZ = maxZ;
+          star.x = (Math.random() - 0.5) * width * 2;
+          star.y = (Math.random() - 0.5) * height * 2;
         }
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(242, 163, 60, ${p.opacity})`;
-        ctx.fill();
+        // Project 3D coordinates to 2D screen
+        const k = focalLength / star.z;
+        const sx = cx + star.x * k;
+        const sy = cy + star.y * k;
+
+        // Check screen bounds
+        if (sx < -100 || sx > width + 100 || sy < -100 || sy > height + 100) {
+          star.z = maxZ;
+          continue;
+        }
+
+        const depthFade = Math.min(1, Math.max(0.1, (1 - star.z / maxZ) * 1.2));
+        const alpha = star.baseAlpha * depthFade;
+
+        let color = `rgba(242, 163, 60, ${alpha})`;
+        if (star.colorType === 1) color = `rgba(255, 61, 46, ${alpha * 0.9})`;
+        if (star.colorType === 2) color = `rgba(237, 232, 221, ${alpha * 0.8})`;
+
+        if (isWarping) {
+          // Draw motion blur / warp light streak towards camera
+          const prevK = focalLength / Math.max(2, star.prevZ);
+          const prevSx = cx + star.x * prevK;
+          const prevSy = cy + star.y * prevK;
+
+          ctx.beginPath();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = Math.min(2.8, star.size * k * 0.9);
+          ctx.lineCap = 'round';
+          ctx.moveTo(prevSx, prevSy);
+          ctx.lineTo(sx, sy);
+          ctx.stroke();
+        } else {
+          // Draw ambient glowing particle
+          const r = Math.max(0.6, star.size * k * 0.6);
+          ctx.beginPath();
+          ctx.arc(sx, sy, r, 0, Math.PI * 2);
+          ctx.fillStyle = color;
+          ctx.fill();
+        }
       }
 
       animFrame.current = requestAnimationFrame(render);
@@ -61,20 +170,22 @@ export const Hero = () => {
 
     return () => {
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('portfolio-scroll', onScrollEvent);
       if (animFrame.current) cancelAnimationFrame(animFrame.current);
     };
   }, []);
 
   return (
     <section
+      ref={heroRef}
       id="hero"
       className="relative min-h-[95vh] sm:min-h-screen flex flex-col justify-between overflow-hidden pt-28 pb-0 text-center bg-black"
       aria-label="Introduction"
     >
-      {/* Ambient Floating Particles Canvas */}
+      {/* 3D Warp & Starfield Particles Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 pointer-events-none z-0 opacity-75"
+        className="absolute inset-0 pointer-events-none z-0 opacity-80"
         aria-hidden="true"
       />
 
@@ -93,12 +204,13 @@ export const Hero = () => {
       />
 
       <div className="relative z-10 px-6 sm:px-12 md:px-16 my-auto py-10 sm:py-14 flex flex-col items-center text-center max-w-5xl mx-auto w-full">
-        {/* Status Kicker */}
+        {/* Status Kicker with Parallax Fade */}
         <motion.p
+          style={{ opacity: kickerOpacity, y: kickerY }}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mono text-[#b9b3a4] flex items-center justify-center gap-2 mb-4 sm:mb-6 text-center text-xs sm:text-[0.82rem] tracking-wider uppercase"
+          className="mono text-[#b9b3a4] flex items-center justify-center gap-2 mb-4 sm:mb-6 text-center text-xs sm:text-[0.82rem] tracking-wider uppercase will-change-transform"
         >
           <span className="status-dot" aria-hidden="true" />
           <span>
@@ -108,24 +220,34 @@ export const Hero = () => {
           </span>
         </motion.p>
 
-        {/* Monumental Title: ONLY "ARES" */}
+        {/* Monumental Title Dolly-Zoom Camera Push: ONLY "ARES" */}
         <motion.h1
+          style={{
+            scale: titleScale,
+            y: titleY,
+            opacity: titleOpacity,
+            filter: titleBlur,
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display font-bold uppercase tracking-[-0.035em] leading-[0.82] select-none text-[clamp(4.8rem,18vw,14rem)] mb-6 sm:mb-8 text-center"
+          className="font-display font-bold uppercase tracking-[-0.035em] leading-[0.82] select-none text-[clamp(4.8rem,18vw,14rem)] mb-6 sm:mb-8 text-center origin-center will-change-transform"
         >
           <span className="block text-[#ede8dd] drop-shadow-[0_12px_40px_rgba(0,0,0,0.9)]">
             ARES
           </span>
         </motion.h1>
 
-        {/* Subtitle & Role */}
+        {/* Subtitle & Role with Parallax Drift */}
         <motion.div
+          style={{
+            y: subY,
+            opacity: subOpacity,
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-2xl text-center mx-auto flex flex-col items-center"
+          className="max-w-2xl text-center mx-auto flex flex-col items-center will-change-transform"
         >
           <p className="font-display font-medium text-[clamp(1.2rem,2.5vw,1.8rem)] text-[#ede8dd] tracking-tight text-center">
             {language === 'fr' ? (
@@ -148,10 +270,14 @@ export const Hero = () => {
 
         {/* CTAs */}
         <motion.div
+          style={{
+            y: ctaY,
+            opacity: ctaOpacity,
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 mt-8 sm:mt-10"
+          className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 mt-8 sm:mt-10 will-change-transform"
         >
           <a href="#work" className="btn btn--solid group">
             <span>{language === 'fr' ? 'Voir les projets' : 'View work'}</span>

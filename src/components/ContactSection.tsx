@@ -23,7 +23,12 @@ export const ContactSection = () => {
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number) => void } }).__lenis;
+    if (lenis) {
+      lenis.scrollTo(0);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleSubmit = (e: FormEvent) => {

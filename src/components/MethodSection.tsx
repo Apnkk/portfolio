@@ -1,7 +1,21 @@
+import { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 
 export const MethodSection = () => {
   const { language } = useLanguage();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start 85%', 'center center'],
+  });
+
+  const lineScaleX = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 22,
+    restDelta: 0.001,
+  });
 
   const steps = [
     {
@@ -47,7 +61,12 @@ export const MethodSection = () => {
   ];
 
   return (
-    <section id="method" className="py-24 sm:py-32 px-6 sm:px-12 md:px-16 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] text-left" aria-labelledby="method-title">
+    <section
+      ref={sectionRef}
+      id="method"
+      className="py-24 sm:py-32 px-6 sm:px-12 md:px-16 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] text-left"
+      aria-labelledby="method-title"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Section Head */}
         <header className="mb-14 sm:mb-20">
@@ -72,13 +91,26 @@ export const MethodSection = () => {
 
         {/* Steps Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 relative">
-          {/* Top Connecting Line (Desktop) */}
-          <div className="hidden lg:block absolute top-[7px] left-0 right-0 h-[1px] bg-[rgba(237,232,221,0.08)] pointer-events-none" />
+          {/* Top Track (Desktop) */}
+          <div className="hidden lg:block absolute top-[7px] left-0 right-0 h-[1px] bg-[rgba(237,232,221,0.1)] pointer-events-none" />
+
+          {/* Animated Connecting Pulse Line (Desktop) */}
+          <motion.div
+            style={{ scaleX: lineScaleX }}
+            className="hidden lg:block absolute top-[7px] left-0 right-0 h-[2px] bg-gradient-to-r from-[#f2a33c] via-[#ff3d2e] to-[#3dd68c] origin-left pointer-events-none shadow-[0_0_8px_rgba(242,163,60,0.6)] z-0 will-change-transform"
+          />
 
           {steps.map((step, idx) => (
-            <div key={idx} className="relative lg:pt-8 flex flex-col">
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, delay: idx * 0.1 }}
+              className="relative lg:pt-8 flex flex-col z-10"
+            >
               {/* Dot on line */}
-              <div className="hidden lg:flex absolute top-0 left-0 w-3.5 h-3.5 rounded-full border border-[#f2a33c] bg-[#050506] items-center justify-center">
+              <div className="hidden lg:flex absolute top-0 left-0 w-3.5 h-3.5 rounded-full border border-[#f2a33c] bg-[#050506] items-center justify-center shadow-[0_0_8px_rgba(242,163,60,0.4)]">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#f2a33c]" />
               </div>
 
@@ -89,7 +121,7 @@ export const MethodSection = () => {
               <p className="text-[#837e6f] text-xs sm:text-sm leading-relaxed font-normal">
                 {step.desc}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

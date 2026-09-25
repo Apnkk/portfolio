@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 
 export const StackSection = () => {
@@ -59,8 +60,12 @@ export const StackSection = () => {
       {/* Grid of Cells with Borders and Hover VU meters */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-[rgba(237,232,221,0.08)]">
         {cells.map((cell, idx) => (
-          <div
+          <motion.div
             key={idx}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.45, delay: idx * 0.06 }}
             className="group relative p-8 sm:p-11 border-r border-b border-[rgba(237,232,221,0.08)] hover:bg-[#0a0a0c] transition-colors duration-400 overflow-hidden flex flex-col justify-between"
           >
             <div>
@@ -74,7 +79,7 @@ export const StackSection = () => {
 
             {/* VU Meter Bar across bottom */}
             <div className="vu-bar" aria-hidden="true" />
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>
