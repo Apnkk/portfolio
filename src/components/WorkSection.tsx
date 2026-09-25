@@ -98,37 +98,65 @@ export const WorkSection = () => {
 
               {/* Row Body: Visual Card on Left + Details on Right */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 mt-8 items-start">
-                {/* Visual Art Preview Card (with scanline sweep) */}
+                {/* Visual Art Preview Card (with real project image and scanline sweep) */}
                 <div
                   onClick={() => setSelectedProject(project)}
-                  className="lg:col-span-5 relative aspect-[16/10] rounded-xl overflow-hidden border border-[rgba(237,232,221,0.12)] cursor-pointer group-hover:border-[rgba(242,163,60,0.4)] transition-all duration-500 shadow-xl"
-                  style={{ background: bg }}
+                  className="lg:col-span-5 relative aspect-[16/10] rounded-xl overflow-hidden border border-[rgba(237,232,221,0.12)] cursor-pointer group-hover:border-[rgba(242,163,60,0.5)] transition-all duration-500 shadow-2xl bg-black"
                 >
-                  {/* Subtle code pattern mockup inside */}
-                  <div className="absolute inset-0 p-5 flex flex-col justify-between font-mono text-[11px] text-[#ede8dd]/60 select-none">
-                    <div className="flex items-center justify-between border-b border-white/5 pb-2">
-                      <span className="text-[#f2a33c] uppercase">{project.categoryLabel[language]}</span>
-                      <span className="text-[10px] text-[#837e6f]">STATUS: 200 OK</span>
+                  {project.image ? (
+                    <div className="relative w-full h-full overflow-hidden">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover object-top filter brightness-[0.88] contrast-[1.05] group-hover:scale-105 group-hover:brightness-100 transition-all duration-700 ease-out"
+                        loading="lazy"
+                      />
+                      {/* Gradient vignettes for editorial depth */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/35 pointer-events-none" />
                     </div>
+                  ) : (
+                    /* Subtle code pattern mockup inside if no image */
+                    <div className="absolute inset-0 p-5 flex flex-col justify-between font-mono text-[11px] text-[#ede8dd]/60 select-none" style={{ background: bg }}>
+                      <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                        <span className="text-[#f2a33c] uppercase">{project.categoryLabel[language]}</span>
+                        <span className="text-[10px] text-[#837e6f]">STATUS: 200 OK</span>
+                      </div>
 
-                    <div className="space-y-1 text-[11px] text-[#ede8dd]/80">
-                      <p className="text-white font-bold text-sm tracking-tight">{project.title}</p>
-                      <p className="line-clamp-2 text-xs text-[#b9b3a4]">{project.tagline[language]}</p>
-                    </div>
+                      <div className="space-y-1 text-[11px] text-[#ede8dd]/80">
+                        <p className="text-white font-bold text-sm tracking-tight">{project.title}</p>
+                        <p className="line-clamp-2 text-xs text-[#b9b3a4]">{project.tagline[language]}</p>
+                      </div>
 
-                    <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-[#837e6f]">
-                      <span>{project.metrics ? project.metrics[language] : 'PRODUCTION'}</span>
-                      <span className="text-white group-hover:text-[#f2a33c] transition-colors">VOIR PROJET →</span>
+                      <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-[#837e6f]">
+                        <span>{project.metrics ? project.metrics[language] : 'PRODUCTION'}</span>
+                        <span className="text-white group-hover:text-[#f2a33c] transition-colors">VOIR PROJET →</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Scanline Sweep Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(237,232,221,0.06)] to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-out pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(237,232,221,0.08)] to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-out pointer-events-none" />
+
+                  {/* Top Category Badge */}
+                  <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+                    <span className="mono text-[10px] text-[#ede8dd] tracking-wider py-1 px-2.5 rounded-md bg-black/80 backdrop-blur-md border border-[rgba(237,232,221,0.12)]">
+                      {project.categoryLabel[language].toUpperCase()}
+                    </span>
+                    <span className="mono text-[10px] text-[#3dd68c] tracking-wider py-1 px-2 rounded-md bg-black/80 backdrop-blur-md border border-[rgba(61,214,140,0.25)] flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#3dd68c]" />
+                      <span>{project.statusLabel[language].toUpperCase()}</span>
+                    </span>
+                  </div>
 
                   {/* Bottom Visual Label */}
-                  <span className="absolute bottom-2.5 left-2.5 mono text-[10px] text-[#ede8dd] tracking-wider py-1 px-2.5 rounded-md bg-black/85 backdrop-blur-md border border-[rgba(237,232,221,0.08)]">
-                    {project.title.toUpperCase()} — {project.statusLabel[language].toUpperCase()}
-                  </span>
+                  <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+                    <span className="mono text-[10px] text-[#ede8dd] tracking-wider py-1 px-2.5 rounded-md bg-black/85 backdrop-blur-md border border-[rgba(237,232,221,0.08)]">
+                      {project.title.toUpperCase()}
+                    </span>
+                    <span className="mono text-[10px] text-[#f2a33c] tracking-wider py-1 px-2.5 rounded-md bg-black/85 backdrop-blur-md border border-[rgba(242,163,60,0.3)]">
+                      {language === 'fr' ? 'APERÇU →' : 'PREVIEW →'}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Project Info, Tags & Actions on Right */}

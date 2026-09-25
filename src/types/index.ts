@@ -8,6 +8,7 @@ export interface Project {
   tagline: { fr: string; en: string };
   description: { fr: string; en: string };
   longDescription: { fr: string; en: string };
+  image?: string;
   tags: string[];
   metrics?: { fr: string; en: string };
   featured?: boolean;

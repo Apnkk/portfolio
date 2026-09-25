@@ -100,6 +100,17 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
           {/* Modal Content */}
           <div className="relative z-10 mt-6 space-y-6 max-h-[60vh] overflow-y-auto pr-1">
+            {/* Project Image Preview */}
+            {project.image && (
+              <div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover object-top filter brightness-95"
+                />
+              </div>
+            )}
+
             {/* Detailed Description */}
             <div>
               <h4 className="text-xs font-mono uppercase tracking-wider text-neutral-400 mb-2">

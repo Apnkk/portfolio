@@ -94,6 +94,7 @@ export const portfolioData: PortfolioData = {
         en: "Z-Flix iOS is designed for smooth non-App Store distribution via modern sideloaders like Feather and AltStore. The architecture decouples video source resolvers from the rendering layer to deliver consistent 60 FPS performance across iPhone and iPad devices."
       },
       tags: ["iOS", "Liquid Glass UI", "AltStore", "Feather", "Video Engine", "TypeScript"],
+      image: "/projects/zflix-ios.jpg",
       metrics: { fr: "Z-Movies & Z-Animes", en: "Z-Movies & Z-Animes" },
       featured: true,
       status: "production",
@@ -138,6 +139,7 @@ export const portfolioData: PortfolioData = {
         en: "The launcher streamlines desktop distribution. It verifies local integrity on boot, queries GitHub release endpoints for latest builds, and applies patch updates automatically without manual user steps."
       },
       tags: ["Desktop App", "TypeScript", "Node.js", "GitHub Releases API", "Auto-Updater"],
+      image: "/projects/zflix-pc.jpg",
       metrics: { fr: "PC Desktop Releases", en: "PC Desktop Releases" },
       featured: true,
       status: "production",
@@ -182,6 +184,7 @@ export const portfolioData: PortfolioData = {
         en: "Spoti Liquid Glass proves the feasibility of injecting high-end UI customizations into existing iOS app bundles while maintaining native stability and full sideloading support."
       },
       tags: ["iOS Tweaks", "Liquid Glass", "Objective-C / Swift", "UI Modding", "Sideloading"],
+      image: "/projects/spoti-now-playing.webp",
       metrics: { fr: "No Jailbreak Needed", en: "No Jailbreak Needed" },
       featured: true,
       status: "opensource",
@@ -226,6 +229,7 @@ export const portfolioData: PortfolioData = {
         en: "The technical backbone behind my streaming apps: reverse-engineered video protocols, direct stream resolvers, rate-limiting avoidance, and distributed Redis caching."
       },
       tags: ["Node.js 22", "TypeScript", "Reverse Engineering", "FastAPI", "Redis", "Docker"],
+      image: "/projects/zautomation.jpg",
       metrics: { fr: "< 50ms temps de réponse", en: "< 50ms response time" },
       featured: false,
       status: "production",
