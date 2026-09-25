@@ -24,7 +24,7 @@ export const TerminalDrawer = ({ isOpen, onClose }: TerminalDrawerProps) => {
       output: (
         <div className="text-neutral-300 space-y-1">
           <p className="text-cyan-400 font-bold">
-            🚀 {portfolioData.personal.name} - Interactive CLI v2.4
+            &gt; {portfolioData.personal.name} ~ dev-cli v2.4
           </p>
           <p className="text-neutral-400 text-xs">
             {language === 'fr'
@@ -117,8 +117,8 @@ export const TerminalDrawer = ({ isOpen, onClose }: TerminalDrawerProps) => {
         navigator.clipboard.writeText(portfolioData.personal.email);
         confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
         res = (
-          <p className="text-emerald-400 text-xs">
-            ✔ {language === 'fr' ? 'Email copié dans le presse-papiers :' : 'Email copied to clipboard:'} {portfolioData.personal.email}
+          <p className="text-emerald-400 text-xs font-mono">
+            [OK] {language === 'fr' ? 'Email copié dans le presse-papiers :' : 'Email copied to clipboard:'} {portfolioData.personal.email}
           </p>
         );
         break;

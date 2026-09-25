@@ -2,26 +2,26 @@ import type { PortfolioData } from '../types';
 
 export const portfolioData: PortfolioData = {
   personal: {
-    name: "Ares Dev",
+    name: "Ares",
     role: {
-      fr: "Développeur Full-Stack Web & Mobile",
-      en: "Full-Stack Web & Mobile Developer"
+      fr: "Développeur Full-Stack & Creative Builder",
+      en: "Full-Stack Developer & Creative Builder"
     },
     shortBio: {
-      fr: "Je conçois des applications web et mobiles performantes, esthétiques et intuitives avec React, Next.js, Node.js et React Native.",
-      en: "I build high-performance, beautiful, and intuitive web and mobile applications using React, Next.js, Node.js, and React Native."
+      fr: "Je développe des applications de streaming, du mobile iOS, du reverse d'APIs et des interfaces rapides qui ont du caractère.",
+      en: "I build streaming-grade apps, iOS software, reverse-engineered APIs, and fast web products with character."
     },
     fullBio: {
-      fr: "Passionné par l'intersection entre ingénierie logicielle robuste et design d'interaction soigné, je développe des solutions scalables de bout en bout. De l'architecture backend distribuée aux micro-interactions frontend fluides, je transforme des idées complexes en produits numériques d'exception.",
-      en: "Passionate about the intersection of robust software engineering and polished interaction design, I build scalable end-to-end solutions. From distributed backend architectures to fluid frontend micro-interactions, I turn complex ideas into standout digital products."
+      fr: "Je traite chaque projet comme un produit vivant. Je vibe-code vite pour sortir des prototypes fonctionnels, puis je consolide proprement : TypeScript strict, architectures scalables, builds iOS propres et pipelines d'automatisation. Pas de blabla inutile, du code qui tourne en prod.",
+      en: "I treat every build like a living product. I vibe-code fast to get working prototypes in users' hands, then engineer it properly: strict TypeScript, scalable architectures, solid iOS builds, and automated pipelines. No corporate fluff, just code running in production."
     },
-    location: "Paris, France (Disponible en remote)",
+    location: "France (Remote friendly)",
     timezone: "Europe/Paris",
     availability: {
       status: "available",
       text: {
-        fr: "Disponible pour de nouvelles opportunités & missions",
-        en: "Available for new projects & opportunities"
+        fr: "Disponible pour projets & missions — vibe coder en France",
+        en: "Available for contracts & full-stack builds — vibe coder in France"
       }
     },
     email: "contact.ares.dev@gmail.com",
@@ -29,38 +29,38 @@ export const portfolioData: PortfolioData = {
   },
   stats: [
     {
-      value: "3+",
-      label: { fr: "Années d'expérience", en: "Years Experience" },
-      subtext: { fr: "En production logicielle", en: "In production software" }
+      value: "10+",
+      label: { fr: "Repositories publics & privés", en: "Public & Private Repos" },
+      subtext: { fr: "Ecosystème Z-Flix & Outils", en: "Z-Flix Ecosystem & Tools" }
     },
     {
-      value: "25+",
-      label: { fr: "Projets livrés", en: "Projects Shipped" },
-      subtext: { fr: "Web, Mobile & APIs", en: "Web, Mobile & APIs" }
+      value: "iOS & PC",
+      label: { fr: "Plateformes supportées", en: "Platforms Supported" },
+      subtext: { fr: "Mobile, Desktop & Web", en: "Mobile, Desktop & Web" }
     },
     {
-      value: "99.9%",
-      label: { fr: "Uptime & Fiabilité", en: "Uptime & Reliability" },
-      subtext: { fr: "Architecture testée", en: "Battle-tested arch" }
+      value: "WASM / TS",
+      label: { fr: "Stack de prédilection", en: "Primary Toolset" },
+      subtext: { fr: "Performance & typage strict", en: "Performance & strict types" }
     },
     {
       value: "100%",
-      label: { fr: "Satisfaction Client", en: "Client Satisfaction" },
-      subtext: { fr: "Focus qualité & vitesse", en: "Quality & speed focus" }
+      label: { fr: "Autonomie de livraison", en: "Solo Shipping" },
+      subtext: { fr: "De l'idée au déploiement", en: "From idea to live deploy" }
     }
   ],
   socials: [
     {
       name: "GitHub",
-      url: "https://github.com",
+      url: "https://github.com/Apnkk",
       icon: "Github",
-      handle: "@ares-dev"
+      handle: "@Apnkk"
     },
     {
-      name: "LinkedIn",
-      url: "https://linkedin.com",
-      icon: "Linkedin",
-      handle: "in/ares-dev"
+      name: "Discord",
+      url: "https://discord.com",
+      icon: "MessageSquare",
+      handle: "ares.dev"
     },
     {
       name: "X / Twitter",
@@ -69,341 +69,238 @@ export const portfolioData: PortfolioData = {
       handle: "@ares_code"
     },
     {
-      name: "Discord",
-      url: "https://discord.com",
-      icon: "MessageSquare",
-      handle: "ares.dev"
+      name: "LinkedIn",
+      url: "https://linkedin.com",
+      icon: "Linkedin",
+      handle: "in/ares-dev"
     }
   ],
   projects: [
     {
-      id: "nexusflow-ai",
-      title: "NexusFlow AI",
-      category: "ai",
-      categoryLabel: { fr: "IA & Automatisation", en: "AI & Automation" },
-      tagline: {
-        fr: "Plateforme d'orchestration de workflows IA autonomes et traitement multimodal.",
-        en: "Autonomous AI workflow orchestration platform and multimodal processing engine."
-      },
-      description: {
-        fr: "Application SaaS permettant aux équipes de connecter des LLMs, bases vectorielles et APIs tierces via un éditeur visuel nodale en temps réel.",
-        en: "SaaS application enabling engineering teams to connect LLMs, vector databases, and third-party APIs via a real-time nodal visual builder."
-      },
-      longDescription: {
-        fr: "NexusFlow AI est une solution complète conçue pour rationaliser l'intégration d'agents d'intelligence artificielle dans les processus métier. Elle intègre un éditeur de graphes interactif avec rendu instantané, un moteur d'exécution asynchrone capable de traiter des milliers d'événements par seconde, ainsi qu'une passerelle de streaming SSE avec tolérance aux pannes.",
-        en: "NexusFlow AI is an end-to-end solution designed to streamline the integration of AI agents into enterprise workflows. It features a reactive node canvas with instant rendering, an asynchronous execution engine handling thousands of events per second, and an SSE streaming gateway with automated fallback."
-      },
-      tags: ["Next.js 15", "TypeScript", "FastAPI", "LangChain", "PostgreSQL", "Tailwind CSS"],
-      metrics: { fr: "+12 000 requêtes / jour", en: "+12,000 queries / day" },
-      featured: true,
-      status: "production",
-      statusLabel: { fr: "En production", en: "In Production" },
-      githubUrl: "https://github.com",
-      liveUrl: "https://example.com",
-      gradient: "from-cyan-500/20 via-blue-500/10 to-transparent",
-      features: {
-        fr: [
-          "Éditeur nodale visuel avec React Flow et drag-and-drop fluide",
-          "Streaming de réponses LLM en direct avec gestion d'interruption",
-          "Indexation vectorielle avec Pinecone et embeddings dynamiques",
-          "Authentification sécurisée avec RBAC et abonnements Stripe"
-        ],
-        en: [
-          "Interactive visual node builder with React Flow and fluid drag-and-drop",
-          "Real-time LLM response streaming with interruption handling",
-          "Vector indexing with Pinecone and dynamic embeddings pipeline",
-          "Secure authentication with granular RBAC and Stripe subscription tiers"
-        ]
-      },
-      architecture: {
-        fr: "Architecture micro-services hybride avec Next.js 15 en frontend, FastAPI pour les pipelines d'IA intensifs, et PostgreSQL managé avec pgvector pour le stockage unifié des données et embeddings.",
-        en: "Hybrid microservices architecture featuring Next.js 15 on the edge, FastAPI for compute-heavy AI pipelines, and managed PostgreSQL with pgvector for unified relational data and embeddings."
-      }
-    },
-    {
-      id: "pulsetrack-mobile",
-      title: "PulseTrack Mobile",
+      id: "z-flix-ios",
+      title: "Z-Flix iOS",
       category: "mobile",
-      categoryLabel: { fr: "Mobile & Santé", en: "Mobile & Health" },
+      categoryLabel: { fr: "iOS & Streaming", en: "iOS & Streaming" },
       tagline: {
-        fr: "Application mobile cross-platform de suivi biométrique et fitness personnalisé.",
-        en: "Cross-platform mobile app for biometric tracking and personalized fitness analytics."
+        fr: "Application de streaming pour iOS avec Liquid Glass UI, optimisée pour Feather et AltStore.",
+        en: "Streaming-grade media app for iOS with Liquid Glass UI for Feather and AltStore."
       },
       description: {
-        fr: "Application iOS & Android conçue avec React Native et Expo, offrant des graphiques temps réel, synchronisation offline-first et synchronisation avec Apple Health & Google Fit.",
-        en: "iOS & Android app built with React Native and Expo, offering realtime charts, offline-first sync, and native sync with Apple Health & Google Fit."
+        fr: "Client mobile complet pour la lecture de films et animés sans jailbreak. Intègre un lecteur natif optimisé, reprise de lecture et interface Liquid Glass fluide.",
+        en: "Full-featured mobile client for movies and anime streaming without jailbreak. Native media player, resume state, and liquid-smooth glass interactions."
       },
       longDescription: {
-        fr: "PulseTrack permet aux sportifs et coachs d'analyser leurs performances physiologiques avec une précision clinique. L'application intègre un moteur de synchronisation locale basé sur WatermelonDB garantissant un fonctionnement fluide même sans connexion Internet, synchronisant automatiquement les données dès la reconnexion.",
-        en: "PulseTrack enables athletes and coaches to analyze biometric data with clinical precision. Built with a local-first engine using WatermelonDB, the app guarantees smooth 60fps operation even in offline conditions, seamlessly reconciling updates upon reconnection."
+        fr: "Z-Flix iOS a été pensé pour offrir une expérience fluide sans passer par l'App Store officiel, via les systèmes de signature Feather et AltStore. L'architecture sépare le moteur de résolution de sources vidéo du rendu graphique pour garantir du 60 FPS constant sur iPhone et iPad.",
+        en: "Z-Flix iOS is designed for smooth non-App Store distribution via modern sideloaders like Feather and AltStore. The architecture decouples video source resolvers from the rendering layer to deliver consistent 60 FPS performance across iPhone and iPad devices."
       },
-      tags: ["React Native", "Expo", "TypeScript", "Supabase", "Reanimated", "Tailwind Native"],
-      metrics: { fr: "4.9/5 étoiles (5k+ dl)", en: "4.9/5 stars (5k+ dl)" },
+      tags: ["iOS", "Liquid Glass UI", "AltStore", "Feather", "Video Engine", "TypeScript"],
+      metrics: { fr: "Z-Movies & Z-Animes", en: "Z-Movies & Z-Animes" },
       featured: true,
       status: "production",
-      statusLabel: { fr: "App Store & Play Store", en: "App Store & Play Store" },
-      githubUrl: "https://github.com",
-      liveUrl: "https://example.com",
-      gradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
-      features: {
-        fr: [
-          "Interface fluide 60 FPS propulsée par React Native Reanimated 3",
-          "Synchronisation bidirectionnelle Apple HealthKit et Google Fit",
-          "Architecture Offline-First avec résolution automatique des conflits",
-          "Widgets d'accueil iOS & Android interactifs"
-        ],
-        en: [
-          "Silky smooth 60 FPS UI powered by React Native Reanimated 3",
-          "Bidirectional sync with Apple HealthKit and Google Fit APIs",
-          "Offline-First data layer with conflict resolution algorithms",
-          "Interactive iOS & Android home screen widgets"
-        ]
-      },
-      architecture: {
-        fr: "Codebase unifiée TypeScript avec Expo EAS, backend Supabase avec Row Level Security (RLS) et fonctions Edge sans serveur.",
-        en: "Unified TypeScript codebase using Expo EAS, backed by Supabase with Row Level Security (RLS) and serverless Edge Functions."
-      }
-    },
-    {
-      id: "devstudio-cloud",
-      title: "DevStudio Cloud",
-      category: "fullstack",
-      categoryLabel: { fr: "Full-Stack Web", en: "Full-Stack Web" },
-      tagline: {
-        fr: "Environnement de développement collaboratif en ligne avec conteneurs éphémères.",
-        en: "Cloud-native collaborative IDE with instant ephemeral container environments."
-      },
-      description: {
-        fr: "Éditeur de code dans le navigateur avec support multi-curseur, terminal WebRTC interactif, exécution de code sandboxée et prévisualisation instantanée.",
-        en: "In-browser code editor featuring live multi-cursor pairing, interactive WebRTC terminal, sandboxed code execution, and instant live preview."
-      },
-      longDescription: {
-        fr: "DevStudio Cloud résout le problème de configuration locale pour les équipes de dev. En un clic, un développeur peut lancer un environnement complet avec VSCode dans le navigateur, synchroniser son code avec ses pairs via des CRDTs (Yjs) et compiler son application dans un conteneur sécurisé.",
-        en: "DevStudio Cloud eliminates local environment setup hurdles. In a single click, developers spin up isolated workspaces, collaborate live using conflict-free replicated data types (CRDTs / Yjs), and compile code inside hardened micro-containers."
-      },
-      tags: ["React 19", "Node.js", "WebSockets", "Docker", "Monaco Editor", "Redis"],
-      metrics: { fr: "<80ms latence sync", en: "<80ms sync latency" },
-      featured: true,
-      status: "opensource",
-      statusLabel: { fr: "Open Source", en: "Open Source" },
-      githubUrl: "https://github.com",
-      liveUrl: "https://example.com",
-      gradient: "from-purple-500/20 via-indigo-500/10 to-transparent",
-      features: {
-        fr: [
-          "Collaboration en temps réel multi-utilisateurs avec Yjs et WebSockets",
-          "Émulateur de terminal interactif via xterm.js et protocoles PTY",
-          "Orchestration dynamique de conteneurs Docker éphémères",
-          "Système de fichiers virtuel performant et persistance cloud"
-        ],
-        en: [
-          "Real-time multi-user live code pairing via Yjs and WebSockets",
-          "Interactive browser terminal powered by xterm.js and PTY streams",
-          "Dynamic orchestration of ephemeral Docker worker containers",
-          "Fast in-memory virtual file system with background cloud snapshots"
-        ]
-      },
-      architecture: {
-        fr: "Frontend React 19 avec Monaco Editor, cluster de passerelles WebSocket Node.js avec pub/sub Redis et workers de conteneurs Docker isolés.",
-        en: "React 19 frontend with Monaco Editor, clustered Node.js WebSocket gateways with Redis pub/sub, and isolated Docker container worker fleet."
-      }
-    },
-    {
-      id: "synthetix-commerce",
-      title: "Synthetix Commerce",
-      category: "fullstack",
-      categoryLabel: { fr: "E-Commerce Headless", en: "Headless E-Commerce" },
-      tagline: {
-        fr: "Boutique en ligne headless ultra-optimisée avec score de performance 100/100.",
-        en: "Ultra-optimized headless commerce storefront with 100/100 Core Web Vitals."
-      },
-      description: {
-        fr: "Plateforme e-commerce moderne conçue pour une vitesse maximale : navigation instantanée, transitions de vue fluides, panier persistant et checkout Stripe intégré.",
-        en: "Modern e-commerce platform built for extreme speed: instantaneous navigation, smooth view transitions, persistent cart, and Stripe Checkout."
-      },
-      longDescription: {
-        fr: "Synthetix Commerce illustre les standards de performance web les plus exigeants : temps de chargement sous la seconde, Interaction to Next Paint (INP) inférieur à 50ms, et navigation sans aucun rechargement grâce à l'API View Transitions.",
-        en: "Synthetix Commerce exemplifies bleeding-edge web performance standards: sub-second initial paint, INP under 50ms, and zero-reload navigation via the native View Transitions API."
-      },
-      tags: ["Next.js App Router", "Tailwind CSS v4", "TanStack Query", "Stripe API", "Zustand"],
-      metrics: { fr: "100/100 Lighthouse", en: "100/100 Lighthouse" },
-      featured: false,
-      status: "production",
-      statusLabel: { fr: "En production", en: "In Production" },
-      githubUrl: "https://github.com",
-      liveUrl: "https://example.com",
+      statusLabel: { fr: "Releases Officielles", en: "Official Releases" },
+      githubUrl: "https://github.com/Apnkk/Z-Flix-iOS-Releases",
+      liveUrl: "https://github.com/Apnkk/Z-Flix-iOS-Releases",
       gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
       features: {
         fr: [
-          "Score Lighthouse 100/100 en Performance, SEO et Accessibilité",
-          "Moteur de recherche instantané à tolérance de fautes",
-          "Paiement 1-click avec Apple Pay, Google Pay et Stripe",
-          "Gestion globale de l'état panier avec Zustand et persistance locale"
+          "Interface Liquid Glass avec effets de transparence et micro-animations",
+          "Compatibilité totale sideloading Feather, AltStore et Sideloadly",
+          "Catalogue unifié Z-Movies & Z-Animes avec recherche instantanée",
+          "Lecteur vidéo matériel avec accélération et reprise automatique"
         ],
         en: [
-          "100/100 Lighthouse scores in Performance, SEO, and Accessibility",
-          "Instant fuzzy product search with client-side indexing",
-          "One-click checkout with Apple Pay, Google Pay, and Stripe",
-          "Global cart state management with Zustand and persistent storage"
+          "Liquid Glass interface with custom blur layers and micro-interactions",
+          "Complete sideloading support for Feather, AltStore, and Sideloadly",
+          "Unified Z-Movies & Z-Animes catalog with instant title search",
+          "Hardware-accelerated video player with automatic playback resume"
         ]
       },
       architecture: {
-        fr: "Next.js App Router avec rendu hybride statique/dynamique (ISR), API GraphQL Shopify/Medusa, et mise en cache distribuée sur Vercel Edge Network.",
-        en: "Next.js App Router with hybrid ISR caching, headless commerce GraphQL endpoints, and distributed edge caching via Vercel Edge Network."
+        fr: "Structure orientée composants avec passerelle de parsing de sources vidéo, cache local des métadonnées et distribution par paquets IPA signés.",
+        en: "Component-based architecture featuring isolated video resolver modules, local metadata caching, and signed IPA distribution pipeline."
       }
     },
     {
-      id: "ciphervault",
-      title: "CipherVault",
-      category: "tools",
-      categoryLabel: { fr: "Sécurité & Cryptographie", en: "Security & Crypto" },
+      id: "zflix-launcher",
+      title: "Z-Flix Launcher & PC",
+      category: "fullstack",
+      categoryLabel: { fr: "Desktop & Outils", en: "Desktop & Tooling" },
       tagline: {
-        fr: "Gestionnaire de secrets d'équipe Zero-Knowledge avec authentification Passkeys.",
-        en: "Zero-Knowledge team secrets manager with biometric Passkeys authentication."
+        fr: "Launcher desktop PC pour installer, lancer et mettre à jour l'écosystème Z-Flix.",
+        en: "PC desktop launcher to install, launch, and automatically update the Z-Flix suite."
       },
       description: {
-        fr: "Application sécurisée de partage de variables d'environnement et certificats chiffrés de bout en bout avec WebCrypto API et WebAuthn.",
-        en: "Secure end-to-end encrypted secret and certificate manager using WebCrypto API and biometric WebAuthn."
+        fr: "Application de bureau permettant la gestion automatique des versions, le téléchargement des mises à jour et le lancement fluide des applications Movies & Animes sur PC.",
+        en: "Desktop tool managing automated version checks, release downloads, and seamless execution of Movies & Animes on Windows."
       },
       longDescription: {
-        fr: "CipherVault garantit que le serveur ne connaît jamais les clés privées ni les mots de passe des utilisateurs. Le chiffrement AES-256-GCM s'effectue intégralement dans le navigateur côté client avant tout envoi réseau.",
-        en: "CipherVault ensures the server never possesses master keys or user credentials. High-grade AES-256-GCM encryption occurs entirely inside the client browser prior to any network transmission."
+        fr: "Le launcher résout le problème de distribution des versions desktop. Il vérifie l'intégrité des fichiers au démarrage, interroge l'API GitHub pour récupérer les dernières builds et applique les patchs sans intervention de l'utilisateur.",
+        en: "The launcher streamlines desktop distribution. It verifies local integrity on boot, queries GitHub release endpoints for latest builds, and applies patch updates automatically without manual user steps."
       },
-      tags: ["TypeScript", "React", "Rust", "WebCrypto API", "WebAuthn", "Tailwind CSS"],
-      metrics: { fr: "Chiffrement AES-GCM 256", en: "AES-GCM 256 Encryption" },
-      featured: false,
-      status: "opensource",
-      statusLabel: { fr: "Open Source", en: "Open Source" },
-      githubUrl: "https://github.com",
-      liveUrl: "https://example.com",
-      gradient: "from-rose-500/20 via-pink-500/10 to-transparent",
+      tags: ["Desktop App", "TypeScript", "Node.js", "GitHub Releases API", "Auto-Updater"],
+      metrics: { fr: "PC Desktop Releases", en: "PC Desktop Releases" },
+      featured: true,
+      status: "production",
+      statusLabel: { fr: "En production", en: "In Production" },
+      githubUrl: "https://github.com/Apnkk/zflix-launcher",
+      liveUrl: "https://github.com/Apnkk/zflix-launcher",
+      gradient: "from-red-500/20 via-orange-500/10 to-transparent",
       features: {
         fr: [
-          "Authentification biométrique sans mot de passe via Passkeys (WebAuthn)",
-          "Chiffrement Zero-Knowledge côté client avec WebCrypto",
-          "Partage sécurisé de secrets avec révocation instantanée",
-          "Audit trail immuable pour chaque accès aux identifiants"
+          "Mise à jour en un clic avec vérification des checksums",
+          "Lancement instantané de Z-Flix Animes et Z-Flix Movies",
+          "Interface sobre, rapide et sans lourdeur",
+          "Gestion des erreurs réseau avec reprise de téléchargement"
         ],
         en: [
-          "Passwordless biometric authentication via Passkeys (WebAuthn)",
-          "Client-side Zero-Knowledge encryption with WebCrypto API",
-          "Secure secret sharing with granular instant revocation",
-          "Tamper-proof audit logs for all credential access events"
+          "One-click updates with checksum verification",
+          "Instant launching for Z-Flix Animes and Z-Flix Movies",
+          "Minimalist, lightweight, and responsive desktop UI",
+          "Resilient download manager with connection resume"
         ]
       },
       architecture: {
-        fr: "Frontend React avec primitives WebCrypto, microservice d'audit écrit en Rust pour un maximum de sûreté mémoire et PostgreSQL chiffré.",
-        en: "React frontend leveraging WebCrypto primitives, hardened audit microservice in Rust for memory safety, and encrypted PostgreSQL store."
+        fr: "Architecture desktop légère en TypeScript, communication par processus isolés et interaction directe avec les flux de releases GitHub.",
+        en: "Lightweight TypeScript desktop architecture, isolated worker processes, and direct integration with GitHub release streams."
       }
     },
     {
-      id: "aura-ui",
-      title: "Aura UI Kit",
+      id: "spoti-liquid-glass",
+      title: "Spoti Liquid Glass",
       category: "tools",
-      categoryLabel: { fr: "Design System & UI", en: "Design System & UI" },
+      categoryLabel: { fr: "iOS Modding & UI", en: "iOS Modding & UI" },
       tagline: {
-        fr: "Collection de composants React haut de gamme, accessibles et micro-animés.",
-        en: "Premium, accessible, and micro-animated React UI component system."
+        fr: "Refonte de l'interface utilisateur pour l'application Spotify sur iOS avec Liquid Glass UI.",
+        en: "Custom Liquid Glass user interface tweak for the Spotify iOS app, no jailbreak."
       },
       description: {
-        fr: "Design system open source pour développeurs exigeants : boutons tactiles, modales accessibles (WCAG 2.2 AA), bento grids et animations fluides.",
-        en: "Open source design system for discerning developers: tactile buttons, WCAG 2.2 AA compliant modal dialogs, bento grids, and fluid motion."
+        fr: "Projet de personnalisation esthétique intégrant des composants dépolis modernes et des transitions fluides sur iOS sans nécessiter de jailbreak.",
+        en: "UI enhancement project injecting modern frosted glass styling, custom playback docks, and responsive controls on non-jailbroken iOS devices."
       },
       longDescription: {
-        fr: "Aura UI est né du besoin de composants frontend modernes combinant esthétique Linear/Apple, conformité stricte aux standards d'accessibilité (European Accessibility Act) et zéro surcoût de bundle grâce à Tailwind CSS v4.",
-        en: "Aura UI was born from the need for modern frontend components merging Linear/Apple aesthetics with strict accessibility compliance (EAA & WCAG 2.2 AA) and minimal bundle overhead via Tailwind CSS v4."
+        fr: "Spoti Liquid Glass démontre la faisabilité d'injecter des modifications d'interface avancées dans des applications iOS existantes tout en conservant la compatibilité avec les sideloaders modernes (AltStore, Feather, TrollStore).",
+        en: "Spoti Liquid Glass proves the feasibility of injecting high-end UI customizations into existing iOS app bundles while maintaining native stability and full sideloading support."
       },
-      tags: ["React 19", "Tailwind CSS v4", "Framer Motion", "Radix UI", "Accessibility"],
-      metrics: { fr: "100% WCAG 2.2 AA", en: "100% WCAG 2.2 AA" },
-      featured: false,
+      tags: ["iOS Tweaks", "Liquid Glass", "Objective-C / Swift", "UI Modding", "Sideloading"],
+      metrics: { fr: "No Jailbreak Needed", en: "No Jailbreak Needed" },
+      featured: true,
       status: "opensource",
-      statusLabel: { fr: "Composants npm", en: "npm Package" },
-      githubUrl: "https://github.com",
-      liveUrl: "https://example.com",
+      statusLabel: { fr: "Open Source", en: "Open Source" },
+      githubUrl: "https://github.com/Apnkk/spoti.pw",
+      liveUrl: "https://github.com/Apnkk/spoti.pw",
+      gradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
+      features: {
+        fr: [
+          "Interface Liquid Glass sur le lecteur et les menus",
+          "Fonctionnement sans jailbreak via injection de dylib propre",
+          "Consommation batterie optimisée et fluidité 60 FPS",
+          "Code source auditable et ouvert sur GitHub"
+        ],
+        en: [
+          "Liquid Glass UI applied across player and navigation views",
+          "Jailbreak-free operation via clean dylib injection",
+          "Optimized battery consumption and constant 60 FPS rendering",
+          "Open source and auditable on GitHub"
+        ]
+      },
+      architecture: {
+        fr: "Injection dynamique de vues et surcharge des styles système via dylib compilée pour architectures ARM64 iOS.",
+        en: "Dynamic view injection and runtime styling hooks bundled inside an ARM64 compiled dylib for iOS."
+      }
+    },
+    {
+      id: "z-automation-core",
+      title: "Z-Automation & Streaming Core",
+      category: "ai",
+      categoryLabel: { fr: "Backend & Reverse", en: "Backend & Reverse" },
+      tagline: {
+        fr: "Serveur d'agrégation de flux, scraping d'APIs et mise en cache haute vitesse.",
+        en: "Stream aggregation gateway, reverse API scrapers, and high-speed caching."
+      },
+      description: {
+        fr: "Backend d'automatisation capable de parser des dizaines de sources vidéo, contourner les protections d'accès et délivrer des flux propres en moins de 50ms.",
+        en: "Automation backend parsing multiple video providers, bypassing challenge screens, and serving clean normalized streams under 50ms."
+      },
+      longDescription: {
+        fr: "La colonne vertébrale technique de mes applications : reverse engineering des protocoles de diffusion, résolveurs de liens directs, gestion du rate-limiting et cache Redis distribué.",
+        en: "The technical backbone behind my streaming apps: reverse-engineered video protocols, direct stream resolvers, rate-limiting avoidance, and distributed Redis caching."
+      },
+      tags: ["Node.js 22", "TypeScript", "Reverse Engineering", "FastAPI", "Redis", "Docker"],
+      metrics: { fr: "< 50ms temps de réponse", en: "< 50ms response time" },
+      featured: false,
+      status: "production",
+      statusLabel: { fr: "Backend Actif", en: "Active Backend" },
+      githubUrl: "https://github.com/Apnkk",
+      liveUrl: "https://github.com/Apnkk",
       gradient: "from-cyan-500/20 via-indigo-500/10 to-transparent",
       features: {
         fr: [
-          "Navigation clavier complète et pièges de focus optimisés pour lecteurs d'écran",
-          "Compatible avec Tailwind CSS v4 et variables CSS natives",
-          "Animations fluides propulsées par des ressorts physiques (spring physics)",
-          "Prise en charge native des thèmes sombres et clairs"
+          "Résolution instantanée de flux vidéo multi-sources",
+          "Contournement automatique des verrous de protection et bots",
+          "Cache mémoire multi-niveaux avec Redis et Node 22",
+          "Endpoints REST stricts et documentés"
         ],
         en: [
-          "Full keyboard navigation and screen-reader focus traps",
-          "Native Tailwind CSS v4 support with CSS design tokens",
-          "Organic spring-physics animations powered by Motion",
-          "First-class dark and light theme token synchronization"
+          "Instant resolution across multiple video source providers",
+          "Automated challenge bypass and header forgery handling",
+          "Multi-tier in-memory caching with Redis and Node 22",
+          "Strict and documented REST API endpoints"
         ]
       },
       architecture: {
-        fr: "Architecture headless basée sur Radix UI Primitives, stylée avec Tailwind CSS v4 et packagée avec Rollup / tsup pour un tree-shaking parfait.",
-        en: "Headless architecture built atop Radix UI Primitives, styled with Tailwind CSS v4, and packaged with tsup for optimal tree-shaking."
+        fr: "Cluster Node 22 / FastAPI conteneurisé sous Docker avec proxy reverse Cloudflare et surveillance de santé en temps réel.",
+        en: "Containerized Node 22 / FastAPI Docker cluster behind Cloudflare reverse proxies with live health monitoring."
       }
     }
   ],
   skills: [
     {
       id: "frontend",
-      title: { fr: "Frontend & UI/UX", en: "Frontend & UI/UX" },
+      title: { fr: "Frontend & UI", en: "Frontend & UI" },
       icon: "Layout",
       skills: [
         { name: "React 19", level: 95, highlight: true, tag: "Expert" },
-        { name: "Next.js (App Router)", level: 92, highlight: true, tag: "Expert" },
-        { name: "TypeScript", level: 94, highlight: true, tag: "Expert" },
+        { name: "TypeScript strict", level: 94, highlight: true, tag: "Expert" },
         { name: "Tailwind CSS v4", level: 95, highlight: true, tag: "Expert" },
+        { name: "Next.js", level: 90, highlight: false },
         { name: "Framer Motion", level: 88, highlight: false },
-        { name: "TanStack Query", level: 90, highlight: false },
-        { name: "HTML5 / WCAG 2.2 AA", level: 92, highlight: false }
+        { name: "Zustand & TanStack Query", level: 90, highlight: false }
       ]
     },
     {
-      id: "backend",
-      title: { fr: "Backend & Architectures", en: "Backend & Systems" },
-      icon: "Server",
-      skills: [
-        { name: "Node.js & Express", level: 92, highlight: true, tag: "Expert" },
-        { name: "NestJS", level: 85, highlight: false },
-        { name: "Python & FastAPI", level: 86, highlight: true },
-        { name: "PostgreSQL & Supabase", level: 90, highlight: true },
-        { name: "REST & GraphQL", level: 88, highlight: false },
-        { name: "Redis & Caching", level: 84, highlight: false },
-        { name: "Prisma & Drizzle ORM", level: 89, highlight: false }
-      ]
-    },
-    {
-      id: "mobile",
-      title: { fr: "Mobile & Cross-Platform", en: "Mobile & Apps" },
+      id: "mobile-ios",
+      title: { fr: "Mobile & iOS", en: "Mobile & iOS" },
       icon: "Smartphone",
       skills: [
-        { name: "React Native", level: 90, highlight: true, tag: "Avancé" },
-        { name: "Expo & EAS", level: 92, highlight: true },
-        { name: "Reanimated 3", level: 85, highlight: false },
-        { name: "Offline-First Sync", level: 86, highlight: false },
-        { name: "iOS & Android Builds", level: 84, highlight: false }
+        { name: "iOS Sideloading (Feather/AltStore)", level: 95, highlight: true, tag: "Expert" },
+        { name: "React Native", level: 88, highlight: true },
+        { name: "Liquid Glass Design", level: 92, highlight: true },
+        { name: "IPA Packaging & Signing", level: 90, highlight: false },
+        { name: "Dylib Injection & Tweaks", level: 85, highlight: false }
       ]
     },
     {
-      id: "cloud-devops",
-      title: { fr: "DevOps & Cloud", en: "DevOps & Cloud" },
+      id: "backend-systems",
+      title: { fr: "Backend & Reverse", en: "Backend & Reverse" },
+      icon: "Server",
+      skills: [
+        { name: "Node.js 22", level: 92, highlight: true, tag: "Expert" },
+        { name: "API Reverse Engineering", level: 94, highlight: true, tag: "Expert" },
+        { name: "FastAPI / Python", level: 86, highlight: false },
+        { name: "WebSockets & Streaming", level: 88, highlight: true },
+        { name: "Redis Caching", level: 88, highlight: false },
+        { name: "PostgreSQL & Supabase", level: 88, highlight: false }
+      ]
+    },
+    {
+      id: "devops-infra",
+      title: { fr: "DevOps & Déploiement", en: "DevOps & Cloud" },
       icon: "Cloud",
       skills: [
-        { name: "Docker & Conteneurs", level: 88, highlight: true },
-        { name: "CI/CD GitHub Actions", level: 86, highlight: false },
-        { name: "Vercel / Cloudflare", level: 92, highlight: true },
-        { name: "AWS (S3, Lambda, RDS)", level: 80, highlight: false },
-        { name: "Linux & Bash", level: 85, highlight: false }
-      ]
-    },
-    {
-      id: "ai-tooling",
-      title: { fr: "IA & Productivité", en: "AI & Modern Tooling" },
-      icon: "Cpu",
-      skills: [
-        { name: "OpenAI & Anthropic APIs", level: 90, highlight: true },
-        { name: "LangChain & RAG", level: 84, highlight: false },
-        { name: "Vector DBs (Pinecone/pgvector)", level: 85, highlight: false },
-        { name: "Git & GitFlow", level: 95, highlight: true },
-        { name: "Figma (Dev Mode)", level: 88, highlight: false }
+        { name: "Docker", level: 90, highlight: true },
+        { name: "GitHub Actions & CI/CD", level: 88, highlight: false },
+        { name: "Cloudflare & Proxies", level: 90, highlight: true },
+        { name: "Linux & Bash", level: 86, highlight: false }
       ]
     }
   ],
@@ -411,100 +308,74 @@ export const portfolioData: PortfolioData = {
     {
       id: "exp-1",
       role: {
-        fr: "Développeur Full-Stack Senior / Lead",
-        en: "Senior / Lead Full-Stack Developer"
+        fr: "Créateur & Développeur Lead",
+        en: "Creator & Lead Developer"
       },
-      company: "TechScale Solutions",
+      company: "Écosystème Z-Flix (iOS & Desktop)",
       period: { fr: "2024 - Présent", en: "2024 - Present" },
-      location: "Paris / Remote",
+      location: "France / Remote",
       description: {
-        fr: "Direction technique de la refonte des plateformes web et mobiles de l'entreprise. Implémentation d'une architecture Next.js / TypeScript / PostgreSQL et mise en place des bonnes pratiques CI/CD.",
-        en: "Technical leadership for the redesign of the company's core web and mobile platforms. Architected Next.js / TypeScript / PostgreSQL stack and automated CI/CD pipelines."
+        fr: "Conception, développement et maintenance de la suite Z-Flix : application iOS signée pour Feather/AltStore, application PC desktop et launcher de mise à jour automatique.",
+        en: "Architected, built, and shipped the Z-Flix ecosystem: sideloaded iOS client for Feather/AltStore, desktop Windows client, and automated launcher."
       },
       achievements: {
         fr: [
-          "Réduction de 45% des temps de chargement LCP grâce à une stratégie d'optimisation Next.js",
-          "Conception et livraison de l'application mobile en React Native (Expo) en 4 mois",
-          "Mentorat d'une équipe de 4 développeurs et mise en place de revues de code rigoureuses"
+          "Mise en place d'une interface Liquid Glass fluide et adaptée aux appareils mobiles",
+          "Création d'un pipeline de mise à jour automatique via l'API GitHub Releases",
+          "Reverse engineering de plusieurs résolveurs de streaming pour garantir la disponibilité des flux"
         ],
         en: [
-          "Reduced LCP load times by 45% through advanced Next.js caching and asset optimization",
-          "Architected and shipped production cross-platform React Native app in 4 months",
-          "Mentored 4 software engineers and established high-standard code review culture"
+          "Built smooth Liquid Glass UI tailored for mobile devices",
+          "Created automated launcher updater querying GitHub Release APIs",
+          "Reverse engineered multiple streaming resolvers for maximum uptime"
         ]
       },
-      technologies: ["React 19", "Next.js", "TypeScript", "Node.js", "PostgreSQL", "Docker", "Tailwind CSS"],
+      technologies: ["iOS", "TypeScript", "Node.js", "Liquid Glass", "Docker", "Reverse Engineering"],
       type: "work"
     },
     {
       id: "exp-2",
       role: {
-        fr: "Développeur Full-Stack & Mobile",
-        en: "Full-Stack & Mobile Developer"
+        fr: "Développeur Full-Stack & Tooling",
+        en: "Full-Stack & Tooling Developer"
       },
-      company: "NovaPulse Studio",
-      period: { fr: "2022 - 2024", en: "2022 - 2024" },
-      location: "France / Remote",
-      description: {
-        fr: "Développement d'applications SaaS et mobiles pour des startups à forte croissance. Création d'APIs REST/GraphQL performantes et d'interfaces web ultra-réactives.",
-        en: "Engineered scalable SaaS web applications and companion mobile apps for high-growth startups. Built resilient REST/GraphQL backends and reactive user interfaces."
-      },
-      achievements: {
-        fr: [
-          "Développement de plus de 10 micro-services avec Node.js et FastAPI",
-          "Création d'un design system interne réutilisé sur 5 applications différentes",
-          "Intégration de solutions de paiement Stripe et abonnements récurrents sécurisés"
-        ],
-        en: [
-          "Shipped over 10 microservices with Node.js and FastAPI",
-          "Created reusable internal design system adopted across 5 product teams",
-          "Integrated Stripe billing, webhooks, and recurring multi-tier subscriptions"
-        ]
-      },
-      technologies: ["React", "React Native", "TypeScript", "FastAPI", "Supabase", "Redis", "Tailwind CSS"],
-      type: "work"
-    },
-    {
-      id: "exp-3",
-      role: {
-        fr: "Master en Ingénierie Logicielle & Systèmes d'Information",
-        en: "Master's Degree in Software Engineering & Information Systems"
-      },
-      company: "École d'Ingénieurs en Informatique",
-      period: { fr: "2019 - 2022", en: "2019 - 2022" },
+      company: "Projets Open Source & Outils Indépendants",
+      period: { fr: "2023 - 2024", en: "2023 - 2024" },
       location: "France",
       description: {
-        fr: "Spécialisation en architectures logicielles distribuées, développement web et mobile avancé, bases de données relationnelles et non relationnelles, et sécurité applicative.",
-        en: "Specialization in distributed software architectures, advanced web and mobile engineering, modern databases, and application security."
+        fr: "Création d'outils web, de bots d'automatisation, de tweaks iOS (Spoti Liquid Glass) et de micro-services backend orientés haute performance.",
+        en: "Built web utilities, automation bots, custom iOS tweaks (Spoti Liquid Glass), and high-performance backend microservices."
       },
       achievements: {
         fr: [
-          "Major de promotion sur le projet de fin d'études en architecture cloud",
-          "Hackathons remportés : 1ère place hackathon FinTech & Web3"
+          "Publication et maintenance de dépôts open source suivis par la communauté",
+          "Conception d'APIs strictes avec temps de réponse sous les 50ms",
+          "Développement d'outils d'automatisation et de contournement de protections"
         ],
         en: [
-          "Top graduation honors for capstone distributed cloud architecture project",
-          "Winner: 1st place in FinTech innovation hackathon"
+          "Published and maintained open source repositories used by active communities",
+          "Designed strict API contracts with sub-50ms response times",
+          "Engineered automation tooling and challenge bypass bots"
         ]
       },
-      technologies: ["Algorithms", "Software Architecture", "Distributed Systems", "Database Design", "Security"],
-      type: "education"
+      technologies: ["React 19", "Node.js", "TypeScript", "Python", "Redis", "Sideloading"],
+      type: "work"
     }
   ],
   interests: {
     fr: [
-      "Intelligence Artificielle & Agents autonomes",
-      "Design d'interaction & Micro-animations",
-      "Performance Web & Optimisation Core Web Vitals",
-      "Open Source & Partage technique",
-      "Musique & Design sonore"
+      "Streaming audio & vidéo haute performance",
+      "Reverse engineering et contournement d'APIs",
+      "Liquid Glass UI & Design d'interaction soigné",
+      "Écosystème iOS, sideloading et tweaks",
+      "Automatisation de bout en bout et vitesse d'exécution"
     ],
     en: [
-      "Artificial Intelligence & Autonomous Agents",
-      "Interaction Design & Micro-animations",
-      "Web Performance & Core Web Vitals optimization",
-      "Open Source contribution & Dev Community",
-      "Electronic Music & Audio Synthesis"
+      "High-performance audio and video streaming",
+      "Reverse engineering and API scraping",
+      "Liquid Glass UI and tactile interaction design",
+      "iOS ecosystem, sideloading, and custom tweaks",
+      "End-to-end automation and rapid execution"
     ]
   }
 };

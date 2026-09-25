@@ -102,7 +102,7 @@ export const ContactSection = () => {
             {status === 'success' ? (
               <div className="text-center py-6 space-y-2">
                 <p className="text-[#3dd68c] font-display font-semibold text-lg">
-                  ✔ {language === 'fr' ? 'Message envoyé avec succès !' : 'Message sent successfully!'}
+                  {language === 'fr' ? 'Message envoyé avec succès.' : 'Message sent successfully.'}
                 </p>
                 <p className="text-xs text-[#b9b3a4]">
                   {language === 'fr' ? 'Je vous répondrai sous 24h.' : 'I will get back to you within 24 hours.'}
@@ -187,7 +187,7 @@ export const ContactSection = () => {
         <ul className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 mt-12 sm:mt-16 mono text-xs text-[#b9b3a4]" aria-label="Réseaux sociaux">
           <li>
             <a
-              href="https://github.com"
+              href="https://github.com/Apnkk"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-[#f2a33c] transition-colors flex items-center gap-1"
@@ -204,7 +204,7 @@ export const ContactSection = () => {
               }`}
             >
               <span>DISCORD — ARES.DEV</span>
-              <span aria-hidden="true">{copiedDiscord ? '✔' : '⧉'}</span>
+              <span aria-hidden="true" className="text-[10px]">{copiedDiscord ? '[COPIED]' : '[COPY]'}</span>
             </button>
           </li>
           <li>

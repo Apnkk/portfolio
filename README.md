@@ -1,64 +1,68 @@
-# ⚡ Ares — Full-Stack Developer & Creative Builder
+# Ares — Full-Stack Developer & Creative Builder
 
-Portfolio moderne, éditorial et immersif d'ingénieur logiciel et développeur Full-Stack Web & Mobile, combinant une direction artistique forte (palette sombre chaude, typographie d'affiche *Clash Display*, grain argentique, curseur magnétique et ambiance sonore Web Audio API intégrée).
-
----
-
-## ✨ Points Forts & Direction Artistique
-
-- **Ambiance Visuelle Unique** :
-  - Noirs chauds profonds (`#0a0908`), touches d'ambre vif (`#f2a33c`), accents carmin (`#ff3d2e`) et typographie texturée crème (`#ede8dd`).
-  - Typographies premium : **Clash Display** (titrages monumentaux), **Satoshi** (corps éditorial) et **JetBrains Mono** (accents techniques).
-  - Texture de film argentique subtile (`.noise`) et curseur magnétique interactif avec halo ambré réactif aux éléments cliquables.
-
-- **Expérience Audio Immersive (« Listen while browsing »)** :
-  - **Dock audio persistant en bas à droite** propulsé par l'API Web Audio native (génération d'accords lo-fi et synthwave chauds en direct, 0 fichier externe lourd, 0 problème de droits d'auteur).
-  - Égaliseur visuel en temps réel sur canvas interactif et disque vinyle tournant dans la barre de navigation quand la musique est active.
-
-- **Structure Éditoriale Numérotée** :
-  - **01 / WORK** : Grands titres au survol (`① NexusFlow AI ↗`, `② PulseTrack Mobile ↗`, etc.), cartes visuelles avec balayage d'effet cathodique (*scanlines*), métriques réelles et modale complète d'architecture logicielle.
-  - **02 / NEXT** : Teaser grand format (*The next record*) avec oscillographe d'onde sinusoïdale en direct sur canvas.
-  - **03 / STACK** : Grille de 6 domaines d'ingénierie (*Frontend*, *Backend*, *Data*, *Systems & Cloud*, *Motion/UI*, *Product & Velocity*) avec vu-mètre interactif au survol de chaque cellule.
-  - **04 / METHOD** : Les 5 étapes de développement (*Idée*, *Prototype*, *Architecture*, *Finition*, *Livraison*) reliées par une ligne temporelle continue.
-  - **05 / ABOUT** : Manifeste de développement, philosophie de code rapide combinée à la rigueur d'ingénierie et automatisation.
-  - **06 / CONTACT** : Titre XXL percutant (*Got a project that needs volume?*), bouton de copie d'email en un clic avec confettis, formulaire direct intégré et liens réseaux sociaux.
-
-- **Bilingue Instantané (FR / EN)** :
-  - Sélecteur rapide dans l'en-tête permettant de basculer la totalité du contenu entre Français et Anglais.
-
-- **CLI Dev Interactif** :
-  - Accédez au mini-terminal intégré (`$ help`, `projects`, `skills`, `bio`, `contact`) depuis le bouton terminal.
+Portfolio personnel d'Ares (Apnkk) : direction artistique sombre et chaude, typographie Clash Display, grain argentique, lecteur Web Audio integre et mise en avant de l'ecosysteme de projets (Z-Flix iOS, Z-Flix PC Launcher, Spoti Liquid Glass, Z-Automation).
 
 ---
 
-## 🛠️ Stack Technique
+## Architecture & Points Cles
 
-- **Framework** : [React 19](https://react.dev/) + [Vite](https://vite.dev/)
-- **Typage** : [TypeScript](https://www.typescriptlang.org/) (mode strict)
-- **Styling** : [Tailwind CSS v4](https://tailwindcss.com/)
-- **Animations** : [Framer Motion](https://motion.dev/)
-- **Audio & Visualizer** : Web Audio API & Canvas 2D
-- **Qualité de code** : `oxlint` (0 erreurs, 0 avertissements)
+- Direction Artistique :
+  - Noirs chauds (#0a0908), ambre (#f2a33c), accents carmin (#ff3d2e) et texte creme (#ede8dd).
+  - Typographies : Clash Display, Satoshi et JetBrains Mono.
+  - Curseur magnetique interactif avec anneau ambre et texture de grain argentique (.noise).
+
+- Ambiance Audio ("Listen while browsing") :
+  - Synthetiseur d'accords ambiants Web Audio API sans fichier audio externe lourd.
+  - Visualiseur d'ondes et egaliseur canvas reactif en direct.
+  - Disque vinyle anime dans la navigation lors de la lecture.
+
+- Structure Editoriale :
+  - 01 / WORK : Projets Z-Flix iOS, Z-Flix PC Launcher, Spoti Liquid Glass, Z-Automation.
+  - 02 / NEXT : Annonce du projet Synthesis OS avec oscillographe canvas en direct.
+  - 03 / STACK : 6 domaines techniques (Frontend, Backend, Data, Systems, Motion/UI, Product) avec vu-metres au survol.
+  - 04 / METHOD : Les 5 etapes du process (Idee, Prototype, Architecture, Finition, Livraison).
+  - 05 / ABOUT : Presentation personnelle sans langue de bois.
+  - 06 / CONTACT : Copie d'email en un clic, formulaire direct et liens vers GitHub (@Apnkk) et Discord.
+
+- Bilingue Francais / Anglais :
+  - Commutateur instantane EN / FR dans la barre de navigation.
+
+- CLI Integree :
+  - Terminal developpeur interactif accessible avec les commandes : help, bio, projects, skills, contact, email, clear, sudo.
 
 ---
 
-## 🚀 Lancement Local
+## Stack Technique
+
+- Framework : React 19 + Vite
+- Langage : TypeScript strict
+- Styles : Tailwind CSS v4
+- Animations : Framer Motion
+- Audio : Web Audio API native + Canvas 2D
+- Linters : oxlint
+
+---
+
+## Commandes
 
 ```bash
-# 1. Installer les dépendances
+# Installation
 npm install
 
-# 2. Lancer le serveur de développement
+# Developpement
 npm run dev
 
-# 3. Compiler pour la production
+# Build de production
 npm run build
+
+# Verification lint
+npm run lint
 ```
 
 ---
 
-## ✏️ Personnalisation de vos Informations
+## Configuration des Donnees
 
-Toutes vos données (nom, bio, email, liens de réseaux, projets, compétences, parcours) sont modifiables dans un seul fichier :
+Toutes les informations (projets, liens, bio, stack, contact) sont centralisees dans :
 
-📁 [`src/data/portfolioData.ts`](./src/data/portfolioData.ts)
+`src/data/portfolioData.ts`
