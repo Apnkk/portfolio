@@ -58,21 +58,9 @@ export const portfolioData: PortfolioData = {
     },
     {
       name: "Discord",
-      url: "https://discord.com",
+      url: "https://discord.com/users/498671450996342794",
       icon: "MessageSquare",
-      handle: "ares.dev"
-    },
-    {
-      name: "X / Twitter",
-      url: "https://x.com",
-      icon: "Twitter",
-      handle: "@ares_code"
-    },
-    {
-      name: "LinkedIn",
-      url: "https://linkedin.com",
-      icon: "Linkedin",
-      handle: "in/ares-dev"
+      handle: "498671450996342794"
     }
   ],
   projects: [

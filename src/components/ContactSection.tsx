@@ -7,7 +7,6 @@ import confetti from 'canvas-confetti';
 export const ContactSection = () => {
   const { language } = useLanguage();
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [copiedDiscord, setCopiedDiscord] = useState(false);
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
 
@@ -21,12 +20,6 @@ export const ContactSection = () => {
       colors: ['#f2a33c', '#ff3d2e', '#ede8dd'],
     });
     setTimeout(() => setCopiedEmail(false), 2500);
-  };
-
-  const copyDiscord = () => {
-    navigator.clipboard.writeText('ares.dev');
-    setCopiedDiscord(true);
-    setTimeout(() => setCopiedDiscord(false), 2000);
   };
 
   const scrollToTop = () => {
@@ -180,35 +173,13 @@ export const ContactSection = () => {
             </a>
           </li>
           <li>
-            <button
-              onClick={copyDiscord}
-              className={`hover:text-[#f2a33c] transition-colors flex items-center gap-1 ${
-                copiedDiscord ? 'text-[#3dd68c]' : ''
-              }`}
-            >
-              <span>DISCORD — ARES.DEV</span>
-              <span aria-hidden="true" className="text-[10px]">{copiedDiscord ? '[COPIED]' : '[COPY]'}</span>
-            </button>
-          </li>
-          <li>
             <a
-              href="https://linkedin.com"
+              href="https://discord.com/users/498671450996342794"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-[#f2a33c] transition-colors flex items-center gap-1"
             >
-              <span>LINKEDIN</span>
-              <span aria-hidden="true">↗</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://x.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#f2a33c] transition-colors flex items-center gap-1"
-            >
-              <span>X / TWITTER</span>
+              <span>DISCORD</span>
               <span aria-hidden="true">↗</span>
             </a>
           </li>

@@ -108,7 +108,7 @@ export const TerminalDrawer = ({ isOpen, onClose }: TerminalDrawerProps) => {
             <p className="text-emerald-400 font-semibold">{portfolioData.personal.availability.text[language]}</p>
             <p className="text-neutral-300">Email: {portfolioData.personal.email}</p>
             <p className="text-neutral-300">GitHub: {portfolioData.socials.find(s => s.name === 'GitHub')?.url}</p>
-            <p className="text-neutral-300">LinkedIn: {portfolioData.socials.find(s => s.name === 'LinkedIn')?.url}</p>
+            <p className="text-neutral-300">Discord: {portfolioData.socials.find(s => s.name === 'Discord')?.url}</p>
           </div>
         );
         break;
