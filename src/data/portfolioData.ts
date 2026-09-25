@@ -31,12 +31,12 @@ export const portfolioData: PortfolioData = {
     {
       value: "10+",
       label: { fr: "Repositories publics & privés", en: "Public & Private Repos" },
-      subtext: { fr: "Ecosystème Z-Flix & Outils", en: "Z-Flix Ecosystem & Tools" }
+      subtext: { fr: "Ecosystème Z-Flix, ShopCore & Outils", en: "Z-Flix, ShopCore & Tools" }
     },
     {
-      value: "iOS & PC",
+      value: "Web & PC",
       label: { fr: "Plateformes supportées", en: "Platforms Supported" },
-      subtext: { fr: "Mobile, Desktop & Web", en: "Mobile, Desktop & Web" }
+      subtext: { fr: "Web, Windows & iOS", en: "Web, Windows & iOS" }
     },
     {
       value: "WASM / TS",
@@ -77,70 +77,114 @@ export const portfolioData: PortfolioData = {
   ],
   projects: [
     {
-      id: "z-flix-ios",
-      title: "Z-Flix iOS",
-      category: "mobile",
-      categoryLabel: { fr: "iOS & Streaming", en: "iOS & Streaming" },
+      id: "shopcore",
+      title: "ShopCore",
+      category: "fullstack",
+      categoryLabel: { fr: "E-Commerce & Abonnements", en: "E-Commerce & SaaS" },
       tagline: {
-        fr: "Application de streaming pour iOS avec Liquid Glass UI, optimisée pour Feather et AltStore.",
-        en: "Streaming-grade media app for iOS with Liquid Glass UI for Feather and AltStore."
+        fr: "Plateforme e-commerce d'abonnements et comptes premium avec livraison automatisée.",
+        en: "Premium accounts and subscription e-commerce platform with automated delivery."
       },
       description: {
-        fr: "Client mobile complet pour la lecture de films et animés sans jailbreak. Intègre un lecteur natif optimisé, reprise de lecture et interface Liquid Glass fluide.",
-        en: "Full-featured mobile client for movies and anime streaming without jailbreak. Native media player, resume state, and liquid-smooth glass interactions."
+        fr: "Plateforme e-commerce complète avec paiements Stripe & Crypto, livraison instantanée en quelques minutes, système de gestion des stocks et garantie 24h.",
+        en: "Full-stack e-commerce marketplace featuring Stripe & Crypto checkout, instant automated fulfillment, inventory tracking, and 24h guarantee."
       },
       longDescription: {
-        fr: "Z-Flix iOS a été pensé pour offrir une expérience fluide sans passer par l'App Store officiel, via les systèmes de signature Feather et AltStore. L'architecture sépare le moteur de résolution de sources vidéo du rendu graphique pour garantir du 60 FPS constant sur iPhone et iPad.",
-        en: "Z-Flix iOS is designed for smooth non-App Store distribution via modern sideloaders like Feather and AltStore. The architecture decouples video source resolvers from the rendering layer to deliver consistent 60 FPS performance across iPhone and iPad devices."
+        fr: "ShopCore est une plateforme de vente en ligne conçue pour la distribution automatisée d'abonnements numériques. Le système intègre un pipeline de paiement hybride (Stripe + Crypto), un provisionnement instantané et un espace client fluide développé sous Next.js moderne.",
+        en: "ShopCore is an automated e-commerce web platform engineered for digital subscriptions. Features a hybrid payment engine (Stripe + Crypto gateways), real-time order fulfillment, and a high-performance Next.js storefront."
       },
-      tags: ["iOS", "Liquid Glass UI", "AltStore", "Feather", "Video Engine", "TypeScript"],
-      image: "/projects/zflix-ios.jpg",
-      metrics: { fr: "Z-Movies & Z-Animes", en: "Z-Movies & Z-Animes" },
+      tags: ["Next.js", "TypeScript", "Tailwind CSS", "Stripe API", "Crypto Payments", "E-Commerce"],
+      image: "/projects/shopcore.png",
+      metrics: { fr: "shopcore.buzz", en: "shopcore.buzz" },
       featured: true,
       status: "production",
-      statusLabel: { fr: "Releases Officielles", en: "Official Releases" },
-      githubUrl: "https://github.com/Apnkk/Z-Flix-iOS-Releases",
-      liveUrl: "https://github.com/Apnkk/Z-Flix-iOS-Releases",
-      gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
+      statusLabel: { fr: "En production", en: "Live Platform" },
+      liveUrl: "https://shopcore.buzz",
+      gradient: "from-indigo-500/20 via-purple-500/10 to-transparent",
       features: {
         fr: [
-          "Interface Liquid Glass avec effets de transparence et micro-animations",
-          "Compatibilité totale sideloading Feather, AltStore et Sideloadly",
-          "Catalogue unifié Z-Movies & Z-Animes avec recherche instantanée",
-          "Lecteur vidéo matériel avec accélération et reprise automatique"
+          "Paiement unique sécurisé Stripe et passerelle Crypto multi-devises",
+          "Livraison instantanée automatisée des accès par email et webhook",
+          "Interface responsive ultra-rapide sous Next.js et Tailwind CSS",
+          "Gestion automatique des stocks et garantie 24h intégrée"
         ],
         en: [
-          "Liquid Glass interface with custom blur layers and micro-interactions",
-          "Complete sideloading support for Feather, AltStore, and Sideloadly",
-          "Unified Z-Movies & Z-Animes catalog with instant title search",
-          "Hardware-accelerated video player with automatic playback resume"
+          "Secure Stripe checkout and multi-currency Crypto gateway",
+          "Automated instant fulfillment via email and webhooks",
+          "Ultra-fast responsive UI built on Next.js and Tailwind CSS",
+          "Automated inventory management with built-in 24h guarantee"
         ]
       },
       architecture: {
-        fr: "Structure orientée composants avec passerelle de parsing de sources vidéo, cache local des métadonnées et distribution par paquets IPA signés.",
-        en: "Component-based architecture featuring isolated video resolver modules, local metadata caching, and signed IPA distribution pipeline."
+        fr: "Architecture Next.js App Router full-stack, intégration Stripe Checkout et webhooks pour la délivrance asynchrone des commandes.",
+        en: "Full-stack Next.js App Router architecture, Stripe Checkout and resilient webhooks for asynchronous order processing."
+      }
+    },
+    {
+      id: "zflix-desktop",
+      title: "Z-Flix Desktop",
+      category: "fullstack",
+      categoryLabel: { fr: "Streaming & Médias", en: "Streaming & Media" },
+      tagline: {
+        fr: "Application de streaming média avec hubs de contenus, lecteur vidéo et catalogue unifié.",
+        en: "Media streaming application with studio hubs, high-performance video player, and unified catalog."
+      },
+      description: {
+        fr: "Client streaming pour séries, films et animés avec intégration de hubs (Netflix, Disney+, HBO Max, Marvel, DC), lecteur HLS sans coupure et interface sombre cinématique.",
+        en: "Streaming client for movies, series, and anime featuring studio hubs (Netflix, Disney+, HBO Max, Marvel, DC), seamless HLS player, and cinematic dark UI."
+      },
+      longDescription: {
+        fr: "Z-Flix Desktop offre une expérience de streaming fluide sans publicité. L'application agrège et indexe les catalogues de plusieurs plateformes majeures, propose un sélecteur de sources vidéo résilient et un lecteur avec reprise de lecture automatique.",
+        en: "Z-Flix Desktop delivers an ad-free streaming experience. Aggregates and indexes multi-platform catalogs, resilient stream resolvers, and hardware-accelerated playback with resume state."
+      },
+      tags: ["Desktop & Web", "React", "TypeScript", "Video Player", "HLS", "Cinematic UI"],
+      image: "/projects/zflix-desktop.png",
+      metrics: { fr: "Z-Movies & Z-Animes", en: "Z-Movies & Z-Animes" },
+      featured: true,
+      status: "production",
+      statusLabel: { fr: "En production", en: "In Production" },
+      githubUrl: "https://github.com/Apnkk/Z-FLIX-app",
+      liveUrl: "https://github.com/Apnkk/Z-FLIX-app",
+      gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
+      features: {
+        fr: [
+          "Hubs dédiés (Netflix, Disney+, HBO, Marvel, DC, Apple TV, Prime Video)",
+          "Lecteur vidéo avec choix des pistes VF et VOSTFR",
+          "Reprise de lecture automatique et gestion de liste personnelle",
+          "Interface sombre cinématique ultra-fluide"
+        ],
+        en: [
+          "Dedicated studio hubs (Netflix, Disney+, HBO, Marvel, DC, Apple TV, Prime Video)",
+          "Video player supporting multiple audio and subtitle tracks",
+          "Automatic playback resume and personal watchlist",
+          "Ultra-smooth cinematic dark UI"
+        ]
+      },
+      architecture: {
+        fr: "Frontend réactif avec passerelle d'agrégation de flux vidéo HLS et distribution optimisée.",
+        en: "Reactive frontend with HLS stream aggregation gateway and optimized playback pipeline."
       }
     },
     {
       id: "zflix-launcher",
-      title: "Z-Flix Launcher & PC",
-      category: "fullstack",
-      categoryLabel: { fr: "Desktop & Outils", en: "Desktop & Tooling" },
+      title: "Z-Launcher",
+      category: "tools",
+      categoryLabel: { fr: "Launcher Desktop", en: "Desktop Launcher" },
       tagline: {
-        fr: "Launcher desktop PC pour installer, lancer et mettre à jour l'écosystème Z-Flix.",
-        en: "PC desktop launcher to install, launch, and automatically update the Z-Flix suite."
+        fr: "Launcher de bureau PC pour lancer, mettre à jour et gérer Z-Movies et Z-Animes.",
+        en: "PC desktop launcher to launch, update, and manage Z-Movies and Z-Animes."
       },
       description: {
-        fr: "Application de bureau permettant la gestion automatique des versions, le téléchargement des mises à jour et le lancement fluide des applications Movies & Animes sur PC.",
-        en: "Desktop tool managing automated version checks, release downloads, and seamless execution of Movies & Animes on Windows."
+        fr: "Application de bureau Windows avec interface thématique nuit cyberpunk, bouton de lancement instantané, vérification d'intégrité et mises à jour automatiques.",
+        en: "Windows desktop launcher with cyberpunk night aesthetic, instant launch button, integrity checks, and automatic release updates."
       },
       longDescription: {
-        fr: "Le launcher résout le problème de distribution des versions desktop. Il vérifie l'intégrité des fichiers au démarrage, interroge l'API GitHub pour récupérer les dernières builds et applique les patchs sans intervention de l'utilisateur.",
-        en: "The launcher streamlines desktop distribution. It verifies local integrity on boot, queries GitHub release endpoints for latest builds, and applies patch updates automatically without manual user steps."
+        fr: "Z-Launcher est le point d'entrée pour l'écosystème de bureau Z-Flix. Il gère l'installation propre des composants, vérifie les versions disponibles et lance les applications en mode optimisé.",
+        en: "Z-Launcher is the central gateway for the desktop Z-Flix suite. Handles component installation, checks remote release versions, and launches the software with hardware optimization."
       },
-      tags: ["Desktop App", "TypeScript", "Node.js", "GitHub Releases API", "Auto-Updater"],
-      image: "/projects/zflix-pc.jpg",
-      metrics: { fr: "PC Desktop Releases", en: "PC Desktop Releases" },
+      tags: ["Windows", "TypeScript", "Desktop Tool", "Auto-Updater", "Cyberpunk UI"],
+      image: "/projects/zlauncher.png",
+      metrics: { fr: "PC Desktop Launcher", en: "PC Desktop Launcher" },
       featured: true,
       status: "production",
       statusLabel: { fr: "En production", en: "In Production" },
@@ -149,21 +193,66 @@ export const portfolioData: PortfolioData = {
       gradient: "from-red-500/20 via-orange-500/10 to-transparent",
       features: {
         fr: [
-          "Mise à jour en un clic avec vérification des checksums",
-          "Lancement instantané de Z-Flix Animes et Z-Flix Movies",
-          "Interface sobre, rapide et sans lourdeur",
-          "Gestion des erreurs réseau avec reprise de téléchargement"
+          "Lancement instantané de Z-Movies et Z-Animes",
+          "Vérification automatique des mises à jour au démarrage",
+          "Interface sombre immersive avec visuels soignés",
+          "Système de vérification des fichiers et désinstallation propre"
         ],
         en: [
-          "One-click updates with checksum verification",
-          "Instant launching for Z-Flix Animes and Z-Flix Movies",
-          "Minimalist, lightweight, and responsive desktop UI",
-          "Resilient download manager with connection resume"
+          "Instant one-click launch for Z-Movies and Z-Animes",
+          "Automatic update checks on startup",
+          "Immersive dark aesthetic with high-end visuals",
+          "File integrity verification and clean uninstaller"
         ]
       },
       architecture: {
-        fr: "Architecture desktop légère en TypeScript, communication par processus isolés et interaction directe avec les flux de releases GitHub.",
-        en: "Lightweight TypeScript desktop architecture, isolated worker processes, and direct integration with GitHub release streams."
+        fr: "Client desktop Windows avec communication inter-processus et gestion des flux de releases.",
+        en: "Windows desktop client with IPC bridges and remote release pipeline."
+      }
+    },
+    {
+      id: "zmusic",
+      title: "Z-Music",
+      category: "mobile",
+      categoryLabel: { fr: "Audio & Streaming", en: "Audio & Streaming" },
+      tagline: {
+        fr: "Client de streaming musical sans limites avec lecteur dépoli et gestion des playlists.",
+        en: "Limitless music streaming client with frosted audio dock and playlist management."
+      },
+      description: {
+        fr: "Application de streaming musical inspirée de Spotify avec lecture audio en continu, gestion de playlists, titres likés, paroles synchronisées et dock de lecture flottant.",
+        en: "Music streaming application featuring continuous playback, custom playlists, liked tracks, synced lyrics, and floating audio player dock."
+      },
+      longDescription: {
+        fr: "Z-Music offre un univers musical sans limites : recherche instantanée d'artistes et de morceaux, lecture haute fidélité, affichage des paroles, gestion de bibliothèque personnelle et lecteur audio avec barre de progression interactive.",
+        en: "Z-Music delivers limitless music streaming: instant artist and track search, high-fidelity playback, lyrics display, library management, and an interactive playback dock."
+      },
+      tags: ["Desktop & Web", "Audio Engine", "TypeScript", "Playlists", "Lyrics", "Modern UI"],
+      image: "/projects/zmusic.png",
+      metrics: { fr: "Stream Audio", en: "Audio Streaming" },
+      featured: true,
+      status: "production",
+      statusLabel: { fr: "En production", en: "In Production" },
+      githubUrl: "https://github.com/Apnkk",
+      liveUrl: "https://github.com/Apnkk",
+      gradient: "from-amber-500/20 via-yellow-500/10 to-transparent",
+      features: {
+        fr: [
+          "Recherche rapide de morceaux, albums et artistes",
+          "Gestion de playlists personnalisées et favoris",
+          "Lecteur audio flottant avec contrôles complets et volume",
+          "Paroles synchronisées et suggestions d'albums iconiques"
+        ],
+        en: [
+          "Rapid search across tracks, albums, and artists",
+          "Personalized playlist and favorites management",
+          "Floating audio player dock with full playback controls and volume",
+          "Synchronized lyrics and iconic album recommendations"
+        ]
+      },
+      architecture: {
+        fr: "Moteur audio Web Audio / HTML5 avec mise en mémoire tampon dynamique et interface réactive.",
+        en: "Web Audio / HTML5 audio engine with dynamic stream buffering and responsive UI."
       }
     },
     {
@@ -209,51 +298,6 @@ export const portfolioData: PortfolioData = {
       architecture: {
         fr: "Injection dynamique de vues et surcharge des styles système via dylib compilée pour architectures ARM64 iOS.",
         en: "Dynamic view injection and runtime styling hooks bundled inside an ARM64 compiled dylib for iOS."
-      }
-    },
-    {
-      id: "z-automation-core",
-      title: "Z-Automation & Streaming Core",
-      category: "ai",
-      categoryLabel: { fr: "Backend & Reverse", en: "Backend & Reverse" },
-      tagline: {
-        fr: "Serveur d'agrégation de flux, scraping d'APIs et mise en cache haute vitesse.",
-        en: "Stream aggregation gateway, reverse API scrapers, and high-speed caching."
-      },
-      description: {
-        fr: "Backend d'automatisation capable de parser des dizaines de sources vidéo, contourner les protections d'accès et délivrer des flux propres en moins de 50ms.",
-        en: "Automation backend parsing multiple video providers, bypassing challenge screens, and serving clean normalized streams under 50ms."
-      },
-      longDescription: {
-        fr: "La colonne vertébrale technique de mes applications : reverse engineering des protocoles de diffusion, résolveurs de liens directs, gestion du rate-limiting et cache Redis distribué.",
-        en: "The technical backbone behind my streaming apps: reverse-engineered video protocols, direct stream resolvers, rate-limiting avoidance, and distributed Redis caching."
-      },
-      tags: ["Node.js 22", "TypeScript", "Reverse Engineering", "FastAPI", "Redis", "Docker"],
-      image: "/projects/zautomation.jpg",
-      metrics: { fr: "< 50ms temps de réponse", en: "< 50ms response time" },
-      featured: false,
-      status: "production",
-      statusLabel: { fr: "Backend Actif", en: "Active Backend" },
-      githubUrl: "https://github.com/Apnkk",
-      liveUrl: "https://github.com/Apnkk",
-      gradient: "from-cyan-500/20 via-indigo-500/10 to-transparent",
-      features: {
-        fr: [
-          "Résolution instantanée de flux vidéo multi-sources",
-          "Contournement automatique des verrous de protection et bots",
-          "Cache mémoire multi-niveaux avec Redis et Node 22",
-          "Endpoints REST stricts et documentés"
-        ],
-        en: [
-          "Instant resolution across multiple video source providers",
-          "Automated challenge bypass and header forgery handling",
-          "Multi-tier in-memory caching with Redis and Node 22",
-          "Strict and documented REST API endpoints"
-        ]
-      },
-      architecture: {
-        fr: "Cluster Node 22 / FastAPI conteneurisé sous Docker avec proxy reverse Cloudflare et surveillance de santé en temps réel.",
-        en: "Containerized Node 22 / FastAPI Docker cluster behind Cloudflare reverse proxies with live health monitoring."
       }
     }
   ],

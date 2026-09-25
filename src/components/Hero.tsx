@@ -196,7 +196,7 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
       <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 px-6 sm:px-12 md:px-16 py-4 border-t border-[rgba(237,232,221,0.08)] text-[#837e6f] font-mono text-[0.72rem] tracking-wider uppercase bg-black/60 backdrop-blur-sm">
         <span>{language === 'fr' ? 'EN PRODUCTION DEPUIS 2023 →' : 'SHIPPING SINCE 2023 →'}</span>
         <span className="hidden sm:inline-block text-[#b9b3a4]">
-          Z-FLIX IOS · Z-FLIX PC · SPOTI · Z-AUTOMATION
+          SHOPCORE · Z-FLIX · Z-LAUNCHER · Z-MUSIC · SPOTI
         </span>
         <span className="inline-flex items-center gap-2.5">
           <span>SCROLL</span>
