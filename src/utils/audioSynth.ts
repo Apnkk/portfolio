@@ -7,6 +7,7 @@ export interface Track {
   artist: string;
   src: string;
   defaultDuration: string;
+  waveform: number[];
 }
 
 export interface AudioPlayerState {
@@ -26,6 +27,11 @@ export const TRACKS: Track[] = [
     artist: 'Ares',
     src: '/music/DEAR%20BLACK.mp3',
     defaultDuration: '0:21',
+    waveform: [
+      0.95, 0.45, 0.55, 0.68, 0.72, 0.58, 0.65, 0.82, 0.9, 0.75, 0.62, 0.78, 0.88, 0.92, 0.7, 0.65,
+      0.85, 0.95, 0.8, 0.6, 0.75, 0.9, 0.85, 0.7, 0.65, 0.8, 0.95, 0.88, 0.72, 0.65, 0.82, 0.9,
+      0.78, 0.65, 0.75, 0.85, 0.7, 0.6, 0.55, 0.48, 0.38, 0.25,
+    ],
   },
   {
     id: 'jane-your-early',
@@ -33,6 +39,11 @@ export const TRACKS: Track[] = [
     artist: 'Ares',
     src: '/music/JANE%20YOUR%20EARLY.mp3',
     defaultDuration: '0:23',
+    waveform: [
+      0.93, 0.57, 0.73, 0.72, 0.63, 0.81, 0.59, 0.51, 0.75, 0.81, 0.59, 0.8, 0.45, 0.7, 0.67, 0.4,
+      0.55, 0.67, 0.61, 0.59, 1.0, 0.75, 0.58, 0.67, 0.7, 0.59, 0.65, 0.72, 0.8, 0.55, 0.68, 0.71,
+      0.52, 0.64, 0.68, 0.69, 0.53, 0.48, 0.57, 0.53, 0.38, 0.28,
+    ],
   },
   {
     id: 'sega',
@@ -40,6 +51,11 @@ export const TRACKS: Track[] = [
     artist: 'Ares',
     src: '/music/SEGA.mp3',
     defaultDuration: '0:12',
+    waveform: [
+      0.68, 0.71, 0.63, 0.69, 0.74, 0.65, 0.79, 1.0, 0.89, 0.84, 0.95, 0.74, 0.91, 0.65, 0.86, 0.81,
+      0.67, 0.73, 0.83, 0.73, 0.65, 0.81, 0.9, 0.79, 0.71, 0.76, 0.82, 0.7, 0.89, 0.76, 0.85, 0.91,
+      0.89, 0.96, 0.87, 0.78, 0.79, 0.75, 0.88, 0.69, 0.55, 0.3,
+    ],
   },
 ];
 

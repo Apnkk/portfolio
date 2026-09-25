@@ -11,14 +11,10 @@ interface AudioPlayerProps {
 export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [playerState, setPlayerState] = useState<AudioPlayerState>(() => audioEngine.getState());
+  const [hoverRatio, setHoverRatio] = useState<number | null>(null);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const panelCanvasRef = useRef<HTMLCanvasElement>(null);
+  const waveformCanvasRef = useRef<HTMLCanvasElement>(null);
   const animFrameRef = useRef<number | null>(null);
-
-  // Peak hold meters for 36 spectrum bands
-  const peaksRef = useRef<number[]>(new Array(36).fill(0));
-  const peakDecayRef = useRef<number[]>(new Array(36).fill(0));
 
   // Subscribe to audio engine updates
   useEffect(() => {
@@ -27,206 +23,9 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
     });
   }, []);
 
-  // Ensure AudioContext is resumed on user gesture anywhere on the player
   const handleUserInteraction = () => {
     audioEngine.resumeContext();
   };
-
-  // High-fidelity spectrum visualizer loop
-  useEffect(() => {
-    const draw = () => {
-      const analyser = audioEngine.getAnalyser();
-      const canvas = canvasRef.current;
-      const panelCanvas = panelCanvasRef.current;
-
-      // 1. Panel Visualizer (Expanded Studio Spectrum Analyzer)
-      if (panelCanvas) {
-        const ctx = panelCanvas.getContext('2d');
-        if (ctx) {
-          const width = panelCanvas.width;
-          const height = panelCanvas.height;
-          ctx.clearRect(0, 0, width, height);
-
-          // Subtle pro-audio grid lines
-          ctx.lineWidth = 1;
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
-          ctx.beginPath();
-          [height * 0.25, height * 0.5, height * 0.7].forEach((gridY) => {
-            ctx.moveTo(0, gridY);
-            ctx.lineTo(width, gridY);
-          });
-          ctx.stroke();
-
-          // Frequency data extraction
-          const barCount = 36;
-          const gap = 3;
-          const totalGap = gap * (barCount - 1);
-          const barWidth = Math.max(3, (width - totalGap) / barCount);
-          const baselineY = Math.floor(height * 0.72);
-          const maxBarHeight = baselineY - 4;
-
-          let dataArray: Uint8Array | null = null;
-          let hasRealEnergy = false;
-
-          if (analyser) {
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-            analyser.getByteFrequencyData(dataArray as any);
-            let sum = 0;
-            for (let k = 0; k < dataArray.length; k++) {
-              sum += dataArray[k];
-            }
-            const avg = sum / dataArray.length;
-            hasRealEnergy = isPlaying && avg > 1.5;
-          }
-
-          const nowSec = performance.now() / 1000;
-          const crestPoints: { x: number; y: number }[] = [];
-
-          for (let i = 0; i < barCount; i++) {
-            let magnitude = 0; // 0 to 255
-
-            if (hasRealEnergy && dataArray) {
-              // Logarithmic perceptual scale mapping
-              const binIdx = Math.min(
-                dataArray.length - 1,
-                Math.floor(Math.pow(i / barCount, 1.45) * (dataArray.length - 1))
-              );
-              const raw = dataArray[binIdx] || 0;
-              // High-frequency treble boost for balanced visuals
-              const boost = 1.0 + (i / barCount) * 0.85;
-              magnitude = Math.min(255, raw * boost);
-            } else if (isPlaying) {
-              // Musical harmonic rhythm fallback (ensures energetic dance even if browser restricts media stream)
-              const kick = Math.pow(Math.sin(nowSec * 7.2), 4) * 110;
-              const bassRoll = (1 - (i / barCount) * 0.65) * kick;
-              const midWave = Math.sin(nowSec * 3.8 + i * 0.38) * 45;
-              const hiHat = Math.sin(nowSec * 14.5 + i * 0.9) * 35 * (i / barCount);
-              magnitude = Math.max(14, Math.min(245, 52 + bassRoll + midWave + hiHat));
-            } else {
-              // Calm idle breathing wave
-              magnitude = 10 + Math.sin(nowSec * 1.8 + i * 0.3) * 6;
-            }
-
-            const barH = Math.max(3, (magnitude / 255) * maxBarHeight);
-            const x = i * (barWidth + gap);
-            const y = baselineY - barH;
-
-            // Peak cap physics (fast rise, smooth gravity decay)
-            if (barH >= peaksRef.current[i]) {
-              peaksRef.current[i] = barH;
-              peakDecayRef.current[i] = 0;
-            } else {
-              peakDecayRef.current[i] += 0.22;
-              peaksRef.current[i] = Math.max(barH, peaksRef.current[i] - peakDecayRef.current[i]);
-            }
-
-            // Upward Main Frequency Bar (Amber to Hot Coral gradient)
-            const barGrad = ctx.createLinearGradient(0, baselineY, 0, y);
-            barGrad.addColorStop(0, 'rgba(242, 163, 60, 0.45)');
-            barGrad.addColorStop(0.55, '#f2a33c');
-            barGrad.addColorStop(0.85, '#ff5722');
-            barGrad.addColorStop(1, '#ff2a55');
-
-            ctx.fillStyle = barGrad;
-            ctx.beginPath();
-            ctx.roundRect(x, y, barWidth, barH, [3, 3, 0, 0]);
-            ctx.fill();
-
-            // Floating Peak Cap (Neon dot above the bar)
-            const peakY = Math.max(2, baselineY - peaksRef.current[i] - 2);
-            ctx.fillStyle = isPlaying ? '#fff7ed' : 'rgba(237, 232, 221, 0.4)';
-            ctx.fillRect(x, peakY, barWidth, 1.5);
-
-            // Downward Mirrored Reflection (Glassmorphism look)
-            const reflectH = barH * 0.32;
-            const refGrad = ctx.createLinearGradient(0, baselineY, 0, baselineY + reflectH);
-            refGrad.addColorStop(0, 'rgba(242, 163, 60, 0.3)');
-            refGrad.addColorStop(1, 'rgba(242, 163, 60, 0.0)');
-            ctx.fillStyle = refGrad;
-            ctx.beginPath();
-            ctx.roundRect(x, baselineY + 2, barWidth, reflectH, [0, 0, 2, 2]);
-            ctx.fill();
-
-            crestPoints.push({ x: x + barWidth / 2, y });
-          }
-
-          // Glowing Envelope Crest Line over the peaks
-          if (isPlaying && crestPoints.length > 1) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(crestPoints[0].x, crestPoints[0].y);
-            for (let j = 1; j < crestPoints.length; j++) {
-              const prev = crestPoints[j - 1];
-              const curr = crestPoints[j];
-              const midX = (prev.x + curr.x) / 2;
-              const midY = (prev.y + curr.y) / 2;
-              ctx.quadraticCurveTo(prev.x, prev.y, midX, midY);
-            }
-            ctx.lineTo(crestPoints[crestPoints.length - 1].x, crestPoints[crestPoints.length - 1].y);
-            ctx.strokeStyle = 'rgba(255, 230, 180, 0.55)';
-            ctx.lineWidth = 1.5;
-            ctx.shadowColor = '#f2a33c';
-            ctx.shadowBlur = 8;
-            ctx.stroke();
-            ctx.restore();
-          }
-        }
-      }
-
-      // 2. Compact Dock Pill Mini EQ (14 bars)
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          const barCount = 14;
-          const barWidth = 3;
-          const gap = 3;
-
-          let dataArray: Uint8Array | null = null;
-          let hasRealEnergy = false;
-
-          if (analyser) {
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-            analyser.getByteFrequencyData(dataArray as any);
-            let sum = 0;
-            for (let k = 0; k < dataArray.length; k++) sum += dataArray[k];
-            hasRealEnergy = isPlaying && sum / dataArray.length > 1.5;
-          }
-
-          const nowSec = performance.now() / 1000;
-
-          for (let i = 0; i < barCount; i++) {
-            let val = 0;
-            if (hasRealEnergy && dataArray) {
-              const bin = Math.min(dataArray.length - 1, i * 4);
-              val = dataArray[bin] || 0;
-            } else if (isPlaying) {
-              val = 60 + Math.sin(nowSec * 6 + i * 0.5) * 45 + Math.cos(nowSec * 3 + i * 0.3) * 30;
-            } else {
-              val = 15;
-            }
-
-            const barHeight = Math.max(2, (val / 255) * canvas.height);
-            const x = i * (barWidth + gap);
-            const y = canvas.height - barHeight;
-
-            ctx.fillStyle = isPlaying ? '#f2a33c' : 'rgba(237, 232, 221, 0.2)';
-            ctx.beginPath();
-            ctx.roundRect(x, y, barWidth, barHeight, [1.5, 1.5, 0, 0]);
-            ctx.fill();
-          }
-        }
-      }
-
-      animFrameRef.current = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
-  }, [isPlaying]);
 
   const handleVolumeChange = (newVol: number) => {
     audioEngine.setVolume(newVol);
@@ -234,16 +33,6 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
   const toggleMute = () => {
     audioEngine.toggleMute();
-  };
-
-  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const ratio = Math.max(0, Math.min(1, clickX / rect.width));
-    const targetDuration = playerState.duration || 0;
-    if (targetDuration > 0) {
-      audioEngine.seek(ratio * targetDuration);
-    }
   };
 
   const formatTime = (seconds: number) => {
@@ -256,8 +45,168 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
   const currentTrack = playerState.currentTrack;
   const currentDuration =
     playerState.duration > 0 ? formatTime(playerState.duration) : currentTrack.defaultDuration;
-  const progressPercent =
-    playerState.duration > 0 ? (playerState.currentTime / playerState.duration) * 100 : 0;
+  const progressRatio =
+    playerState.duration > 0 ? Math.min(1, playerState.currentTime / playerState.duration) : 0;
+
+  // Real SoundCloud / Apple Music style interactive waveform canvas loop
+  useEffect(() => {
+    const draw = () => {
+      const canvas = waveformCanvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.clearRect(0, 0, width, height);
+
+      const waveform = currentTrack.waveform || [];
+      const barCount = waveform.length || 42;
+      const gap = 3;
+      const totalGap = gap * (barCount - 1);
+      const barWidth = Math.max(3, (width - totalGap) / barCount);
+      const midY = height / 2;
+
+      // Extract real audio frequency energy if playing
+      const analyser = audioEngine.getAnalyser();
+      let energy = 0;
+      if (analyser && isPlaying) {
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(data as any);
+        let sum = 0;
+        for (let k = 0; k < data.length; k++) sum += data[k];
+        energy = sum / (data.length * 255);
+      }
+
+      const nowSec = performance.now() / 1000;
+      const activeBarIndex = Math.floor(progressRatio * barCount);
+      const hoverBarIndex = hoverRatio !== null ? Math.floor(hoverRatio * barCount) : null;
+
+      for (let i = 0; i < barCount; i++) {
+        const baseH = waveform[i] || 0.5;
+        // Subtle organic bounce on currently playing and nearby bars
+        let bounce = 0;
+        if (isPlaying) {
+          const distToHead = Math.abs(i - activeBarIndex);
+          if (distToHead <= 4) {
+            const beatPulse = Math.sin(nowSec * 8 + i * 0.4) * 0.15;
+            bounce = (beatPulse + energy * 0.25) * (1 - distToHead / 5);
+          } else {
+            bounce = Math.sin(nowSec * 3 + i * 0.3) * 0.04;
+          }
+        }
+
+        const barFraction = Math.max(0.18, Math.min(1.0, baseH + bounce));
+        const barH = Math.max(6, barFraction * (height - 8));
+        const x = i * (barWidth + gap);
+        const y = midY - barH / 2;
+
+        const isPlayed = i <= activeBarIndex;
+        const isHovered = hoverBarIndex !== null && i <= hoverBarIndex;
+
+        // SoundCloud / Apple Music color scheme:
+        // Played = vibrant warm amber/orange gradient; Unplayed = muted translucent cream
+        if (isPlayed) {
+          const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+          grad.addColorStop(0, '#f2a33c');
+          grad.addColorStop(1, '#ff6b3d');
+          ctx.fillStyle = grad;
+        } else if (isHovered) {
+          ctx.fillStyle = 'rgba(242, 163, 60, 0.45)';
+        } else {
+          ctx.fillStyle = 'rgba(237, 232, 221, 0.2)';
+        }
+
+        ctx.beginPath();
+        ctx.roundRect(x, y, barWidth, barH, barWidth / 2);
+        ctx.fill();
+      }
+
+      // Draw subtle playhead needle at exact position
+      if (progressRatio > 0 && progressRatio < 1) {
+        const needleX = progressRatio * width;
+        ctx.fillStyle = '#fff4e6';
+        ctx.shadowColor = '#f2a33c';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.roundRect(Math.max(0, needleX - 1), 2, 2, height - 4, 1);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      animFrameRef.current = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+  }, [currentTrack, progressRatio, isPlaying, hoverRatio]);
+
+  const handleWaveformClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+    const targetDuration = playerState.duration || 0;
+    if (targetDuration > 0) {
+      audioEngine.seek(ratio * targetDuration);
+    }
+  };
+
+  const handleWaveformMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const ratio = Math.max(0, Math.min(1, mouseX / rect.width));
+    setHoverRatio(ratio);
+  };
+
+  // Distinctive, human-crafted EP Cover Artwork for each track
+  const renderAlbumCover = (trackId: string) => {
+    switch (trackId) {
+      case 'dear-black':
+        return (
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#22222a] via-[#121216] to-[#070709] border border-white/10 flex flex-col justify-between p-2 shadow-lg shrink-0 overflow-hidden select-none">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[7px] text-[#f2a33c] tracking-widest uppercase font-bold">ARES</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#f2a33c]" />
+            </div>
+            <div className="font-display font-black text-[9px] tracking-tight leading-none text-[#ede8dd]">
+              DEAR<br /><span className="text-[#837e6f]">BLACK</span>
+            </div>
+            <span className="font-mono text-[7px] text-white/30">01</span>
+          </div>
+        );
+      case 'jane-your-early':
+        return (
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#2e1a12] via-[#160c08] to-[#070709] border border-white/10 flex flex-col justify-between p-2 shadow-lg shrink-0 overflow-hidden select-none">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[7px] text-[#ff7a45] tracking-widest uppercase font-bold">ARES</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff7a45]" />
+            </div>
+            <div className="font-display font-black text-[9px] tracking-tight leading-none text-[#ede8dd]">
+              JANE<br /><span className="text-[#ff7a45]">EARLY</span>
+            </div>
+            <span className="font-mono text-[7px] text-white/30">02</span>
+          </div>
+        );
+      case 'sega':
+        return (
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#0e1d2c] via-[#070e17] to-[#070709] border border-white/10 flex flex-col justify-between p-2 shadow-lg shrink-0 overflow-hidden select-none">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[7px] text-[#38bdf8] tracking-widest uppercase font-bold">ARES</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]" />
+            </div>
+            <div className="font-display font-black text-[9px] tracking-tight leading-none text-[#ede8dd]">
+              SEGA<br /><span className="text-[#38bdf8]">1994</span>
+            </div>
+            <span className="font-mono text-[7px] text-white/30">03</span>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <aside
@@ -273,21 +222,12 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 15, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="w-[340px] sm:w-[380px] p-4 rounded-2xl bg-[#0a0a0ce6] border border-[rgba(237,232,221,0.14)] backdrop-blur-2xl shadow-2xl shadow-black/90 flex flex-col gap-3.5 font-sans text-left"
+            className="w-[340px] sm:w-[380px] p-4 rounded-2xl bg-[#0d0d10f2] border border-[rgba(237,232,221,0.14)] backdrop-blur-2xl shadow-2xl shadow-black/95 flex flex-col gap-4 font-sans text-left"
           >
-            {/* Header info with rotating vinyl disc */}
+            {/* Header info with authentic EP cover art */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#18181b] to-[#09090b] border border-white/10 flex items-center justify-center overflow-hidden shadow-inner">
-                  <div
-                    className={`w-7 h-7 rounded-full border-2 border-[rgba(237,232,221,0.8)] relative flex items-center justify-center ${
-                      isPlaying ? 'animate-spin' : ''
-                    }`}
-                    style={{ animationDuration: '3s' }}
-                  >
-                    <div className="w-2 h-2 rounded-full bg-[#ff3d2e]" />
-                  </div>
-                </div>
+                {renderAlbumCover(currentTrack.id)}
                 <div>
                   <h4 className="text-sm font-semibold text-[#ede8dd] tracking-tight">
                     {currentTrack.title}
@@ -306,73 +246,39 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
               </button>
             </div>
 
-            {/* High-Tech Spectrum Analyzer Deck */}
-            <div className="w-full rounded-xl bg-gradient-to-b from-[#121218]/95 via-[#09090e]/95 to-[#050508] border border-white/10 p-2.5 overflow-hidden flex flex-col gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.6)]">
-              {/* Header metrics */}
-              <div className="flex items-center justify-between text-[9px] font-mono select-none px-0.5">
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                      isPlaying
-                        ? 'bg-[#22c55e] shadow-[0_0_6px_#22c55e]'
-                        : 'bg-[#837e6f]'
-                    }`}
-                  />
-                  <span className={`tracking-wider uppercase font-semibold ${isPlaying ? 'text-[#f2a33c]' : 'text-[#837e6f]'}`}>
-                    {isPlaying ? 'SPECTRUM ANALYZER' : 'STANDBY'}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-[#837e6f] tracking-widest uppercase">
-                  <span className="hidden sm:inline text-white/30">36 BANDS</span>
-                  <span className="text-[#f2a33c]/90 font-bold bg-[#f2a33c]/10 px-1.5 py-0.5 rounded border border-[#f2a33c]/20">
-                    REALTIME
-                  </span>
-                </div>
-              </div>
-
-              {/* Canvas Spectrum Display */}
-              <div className="h-16 w-full overflow-hidden flex items-center justify-center">
+            {/* Interactive SoundCloud / Apple Music Waveform Player */}
+            <div className="flex flex-col gap-1.5">
+              <div
+                onClick={handleWaveformClick}
+                onMouseMove={handleWaveformMouseMove}
+                onMouseLeave={() => setHoverRatio(null)}
+                className="relative w-full h-14 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 transition-colors p-2 flex items-center justify-center cursor-pointer select-none group"
+                role="slider"
+                aria-label="Progression du morceau"
+                aria-valuemin={0}
+                aria-valuemax={playerState.duration || 100}
+                aria-valuenow={playerState.currentTime}
+                tabIndex={0}
+              >
                 <canvas
-                  ref={panelCanvasRef}
+                  ref={waveformCanvasRef}
                   width={340}
-                  height={64}
+                  height={56}
                   className="w-full h-full"
                 />
               </div>
-            </div>
 
-            {/* Interactive Progress Bar */}
-            <div
-              className="w-full py-1 cursor-pointer group"
-              onClick={handleSeek}
-              role="slider"
-              aria-label="Position de lecture"
-              aria-valuemin={0}
-              aria-valuemax={playerState.duration || 100}
-              aria-valuenow={playerState.currentTime}
-              tabIndex={0}
-            >
-              <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden relative group-hover:h-2 transition-all">
-                <div
-                  className="h-full bg-gradient-to-r from-[#f2a33c] to-[#ff3d2e] rounded-full relative"
-                  style={{ width: `${progressPercent}%` }}
-                />
+              {/* Time display: Elapsed and Total */}
+              <div className="flex items-center justify-between text-[11px] font-mono text-[#837e6f] px-1 select-none">
+                <span className="text-[#ede8dd] font-medium">{formatTime(playerState.currentTime)}</span>
+                <span>{currentDuration}</span>
               </div>
-            </div>
-
-            {/* Time progress */}
-            <div className="flex items-center justify-between text-[11px] font-mono text-[#837e6f]">
-              <span>{formatTime(playerState.currentTime)}</span>
-              <span className="text-[#f2a33c] text-[10px] tracking-wider uppercase font-semibold">
-                {isPlaying ? 'NOW PLAYING' : 'AUDIO TRACK'}
-              </span>
-              <span>{currentDuration}</span>
             </div>
 
             {/* Controls Bar */}
             <div className="flex items-center justify-between pt-1">
               {/* Prev / Play / Next Track */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => audioEngine.previous()}
                   className="p-2 text-[#b9b3a4] hover:text-[#ede8dd] rounded-full transition-colors active:scale-90"
@@ -383,7 +289,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
                 <button
                   onClick={onTogglePlay}
-                  className="w-10 h-10 rounded-full bg-[#ede8dd] hover:bg-[#f2a33c] text-black flex items-center justify-center shadow-lg transition-transform active:scale-95"
+                  className="w-11 h-11 rounded-full bg-[#ede8dd] hover:bg-[#f2a33c] text-black flex items-center justify-center shadow-lg transition-all active:scale-95"
                   aria-label={isPlaying ? 'Pause' : 'Lecture'}
                 >
                   {isPlaying ? (
@@ -429,38 +335,32 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
             </div>
 
             {/* Tracklist selection */}
-            <div className="border-t border-white/10 pt-2 space-y-1">
+            <div className="border-t border-white/10 pt-2.5 space-y-1">
               {TRACKS.map((t, idx) => {
                 const isCurrent = playerState.currentTrackIndex === idx;
                 return (
                   <button
                     key={t.id}
-                    onClick={() => {
-                      audioEngine.setTrack(idx, true);
-                    }}
-                    className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
+                    onClick={() => audioEngine.setTrack(idx, true)}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors ${
                       isCurrent
-                        ? 'bg-white/10 text-[#f2a33c]'
-                        : 'text-[#b9b3a4] hover:bg-white/5'
+                        ? 'bg-white/10 text-[#f2a33c] font-medium'
+                        : 'text-[#b9b3a4] hover:bg-white/5 hover:text-[#ede8dd]'
                     }`}
                   >
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0">
                       <span className="font-mono text-[10px] text-[#837e6f]">0{idx + 1}</span>
-                      <span className="font-medium truncate max-w-[200px]">{t.title}</span>
+                      <span className="truncate">{t.title}</span>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       {isCurrent && isPlaying && (
-                        <span className="flex items-end gap-0.5 h-3">
-                          <span className="w-0.5 h-full bg-[#f2a33c] animate-pulse" />
-                          <span className="w-0.5 h-2/3 bg-[#f2a33c] animate-pulse delay-75" />
-                          <span className="w-0.5 h-4/5 bg-[#f2a33c] animate-pulse delay-150" />
+                        <span className="flex items-end gap-[2px] h-3">
+                          <span className="w-[2px] h-full bg-[#f2a33c] animate-pulse" />
+                          <span className="w-[2px] h-2/3 bg-[#f2a33c] animate-pulse delay-75" />
+                          <span className="w-[2px] h-4/5 bg-[#f2a33c] animate-pulse delay-150" />
                         </span>
                       )}
-                      <span className="font-mono text-[10px] text-[#837e6f]">
-                        {isCurrent && playerState.duration > 0
-                          ? formatTime(playerState.duration)
-                          : t.defaultDuration}
-                      </span>
+                      <span className="font-mono text-[10px] text-[#837e6f]">{t.defaultDuration}</span>
                     </div>
                   </button>
                 );
@@ -472,7 +372,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
       {/* Compact Dock Pill */}
       <div
-        className={`flex items-center gap-3 p-1.5 pr-3 rounded-full bg-[#0a0a0ce0] border backdrop-blur-xl transition-all shadow-xl shadow-black/70 ${
+        className={`flex items-center gap-3 p-1.5 pr-4 rounded-full bg-[#0a0a0ce6] border backdrop-blur-xl transition-all shadow-xl shadow-black/80 ${
           isPlaying
             ? 'border-[#f2a33c80] shadow-[0_0_24px_rgba(242,163,60,0.18)]'
             : 'border-[rgba(237,232,221,0.14)] hover:border-[#f2a33c80]'
@@ -491,30 +391,41 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
           )}
         </button>
 
-        {/* Track info & mini EQ canvas */}
+        {/* Track info & subtle 4-bar equalizer wave */}
         <div
           onClick={() => setIsExpanded(!isExpanded)}
-          className="cursor-pointer flex flex-col justify-center min-w-0 pr-1 select-none"
+          className="cursor-pointer flex items-center gap-3 min-w-0 pr-1 select-none"
         >
-          <div className="font-mono text-[10px] tracking-wider uppercase text-[#ede8dd] flex items-center gap-1.5">
-            <span className="truncate max-w-[110px] sm:max-w-[140px] font-semibold">
+          <div className="flex flex-col justify-center min-w-0">
+            <span className="font-mono text-[11px] font-bold tracking-wider uppercase text-[#ede8dd] truncate max-w-[110px] sm:max-w-[130px]">
               {currentTrack.title}
             </span>
+            <span className="font-mono text-[9px] text-[#837e6f]">
+              {currentTrack.artist}
+            </span>
           </div>
-          <div className="flex items-center gap-2 mt-0.5">
-            <canvas
-              ref={canvasRef}
-              width={90}
-              height={12}
-              className="h-3 w-[90px]"
-            />
+
+          {/* Mini 4-bar equalizer indicator */}
+          <div className="flex items-end gap-[2px] h-3.5 px-0.5">
+            {[0.65, 1, 0.45, 0.85].map((h, i) => (
+              <span
+                key={i}
+                className={`w-[2px] rounded-full transition-all duration-200 ${
+                  isPlaying ? 'bg-[#f2a33c] animate-pulse' : 'bg-white/20'
+                }`}
+                style={{
+                  height: isPlaying ? `${Math.max(25, h * 100)}%` : '30%',
+                  animationDelay: `${i * 120}ms`,
+                }}
+              />
+            ))}
           </div>
         </div>
 
         {/* Expand toggle */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-7 h-7 rounded-full border border-[rgba(237,232,221,0.12)] flex items-center justify-center text-[#b9b3a4] hover:text-[#f2a33c] hover:border-[#f2a33c80] transition-colors"
+          className="w-6 h-6 rounded-full flex items-center justify-center text-[#837e6f] hover:text-[#f2a33c] transition-colors"
           aria-label="Afficher les contrôles audio"
         >
           {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
