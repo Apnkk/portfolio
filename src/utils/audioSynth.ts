@@ -142,8 +142,10 @@ class PortfolioAudioEngine {
       }
       if (!this.analyser) {
         this.analyser = this.ctx.createAnalyser();
-        this.analyser.fftSize = 64;
-        this.analyser.smoothingTimeConstant = 0.8;
+        this.analyser.fftSize = 256;
+        this.analyser.smoothingTimeConstant = 0.78;
+        this.analyser.minDecibels = -85;
+        this.analyser.maxDecibels = -10;
       }
       if (!this.gainNode) {
         this.gainNode = this.ctx.createGain();
@@ -160,6 +162,16 @@ class PortfolioAudioEngine {
     } catch (e) {
       console.warn('Web Audio Graph initialization note:', e);
     }
+  }
+
+  public resumeContext(): void {
+    if (this.ctx && this.ctx.state === 'suspended') {
+      void this.ctx.resume();
+    }
+  }
+
+  public getAudioElement(): HTMLAudioElement | null {
+    return this.audio;
   }
 
   public getAnalyser(): AnalyserNode | null {
