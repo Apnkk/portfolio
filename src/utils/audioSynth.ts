@@ -63,7 +63,7 @@ class PortfolioAudioEngine {
   private tracks: Track[] = TRACKS;
   private currentTrackIndex = 0;
   private isPlaying = false;
-  private volume = 0.5;
+  private volume = 0.25;
   private isMuted = false;
 
   private audio: HTMLAudioElement | null = null;
