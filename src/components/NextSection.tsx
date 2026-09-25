@@ -121,11 +121,11 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
           )}
         </p>
 
-        {/* Audio Engine Hint */}
+        {/* Audio Player Hint */}
         <p className="mono text-xs text-[#837e6f] mt-4">
           {language === 'fr'
-            ? 'Le synthétiseur Web Audio en bas à droite est le premier prototype — testez-le.'
-            : 'The Web Audio synthesizer in the bottom dock is the live prototype — try it.'}
+            ? 'Le lecteur audio en bas à droite diffuse mes morceaux — testez-le.'
+            : 'The audio player in the bottom dock plays my original tracks — check it out.'}
         </p>
 
         {/* Play CTA */}

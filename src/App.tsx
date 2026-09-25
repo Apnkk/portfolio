@@ -18,9 +18,14 @@ function PortfolioApp() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
 
+  useEffect(() => {
+    return audioEngine.subscribe((state) => {
+      setIsPlaying(state.isPlaying);
+    });
+  }, []);
+
   const handleTogglePlay = () => {
-    const nextState = audioEngine.toggle();
-    setIsPlaying(nextState);
+    audioEngine.toggle();
   };
 
   useEffect(() => {

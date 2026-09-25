@@ -60,6 +60,7 @@ export const TerminalDrawer = ({ isOpen, onClose }: TerminalDrawerProps) => {
             <p><span className="text-cyan-400 font-bold">bio</span> - {language === 'fr' ? 'Présentation personnelle' : 'Short bio'}</p>
             <p><span className="text-cyan-400 font-bold">projects</span> - {language === 'fr' ? 'Liste des réalisations' : 'List featured projects'}</p>
             <p><span className="text-cyan-400 font-bold">skills</span> - {language === 'fr' ? 'Stack technique' : 'Technical stack'}</p>
+            <p><span className="text-cyan-400 font-bold">music</span> - {language === 'fr' ? 'Morceaux audio' : 'Original tracks'}</p>
             <p><span className="text-cyan-400 font-bold">contact</span> - {language === 'fr' ? 'Canaux de communication' : 'Get contact channels'}</p>
             <p><span className="text-cyan-400 font-bold">email</span> - {language === 'fr' ? "Copie l'email" : 'Copy email to clipboard'}</p>
             <p><span className="text-cyan-400 font-bold">clear</span> - {language === 'fr' ? "Efface l'écran" : 'Clear screen'}</p>
@@ -98,6 +99,29 @@ export const TerminalDrawer = ({ isOpen, onClose }: TerminalDrawerProps) => {
                 <span className="text-neutral-300">{c.skills.map(s => s.name).join(' • ')}</span>
               </div>
             ))}
+          </div>
+        );
+        break;
+
+      case 'music':
+      case 'audio':
+      case 'songs':
+      case 'tracks':
+        res = (
+          <div className="space-y-1.5 text-xs text-neutral-300">
+            <p className="text-amber-400 font-bold font-mono">
+              &gt; Ares Soundlab ~ Tracks
+            </p>
+            <div className="space-y-1 pl-2">
+              <p className="text-neutral-200">01. <span className="text-white font-semibold">DEAR BLACK</span> <span className="text-neutral-500 font-mono">(0:21)</span></p>
+              <p className="text-neutral-200">02. <span className="text-white font-semibold">JANE YOUR EARLY</span> <span className="text-neutral-500 font-mono">(0:23)</span></p>
+              <p className="text-neutral-200">03. <span className="text-white font-semibold">SEGA</span> <span className="text-neutral-500 font-mono">(0:12)</span></p>
+            </div>
+            <p className="text-neutral-400 text-[11px] pt-1">
+              {language === 'fr'
+                ? '🎧 Écoutez les morceaux via le lecteur audio en bas à droite.'
+                : '🎧 Listen to tracks via the audio dock player at bottom right.'}
+            </p>
           </div>
         );
         break;

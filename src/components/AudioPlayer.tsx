@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { audioEngine } from '../utils/audioSynth';
+import { audioEngine, TRACKS, type AudioPlayerState } from '../utils/audioSynth';
 import { Volume2, VolumeX, ChevronUp, ChevronDown, Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 
 interface AudioPlayerProps {
@@ -10,22 +10,20 @@ interface AudioPlayerProps {
 
 export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [volume, setVolume] = useState(0.5);
-  const [isMuted, setIsMuted] = useState(false);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
+  const [playerState, setPlayerState] = useState<AudioPlayerState>(() => audioEngine.getState());
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const panelCanvasRef = useRef<HTMLCanvasElement>(null);
   const animFrameRef = useRef<number | null>(null);
 
-  const tracks = [
-    { title: "Midnight Synthesis", artist: "Ares Soundlab", duration: "3:42" },
-    { title: "Deep Vibe Coding", artist: "Lo-Fi Beats", duration: "2:58" },
-    { title: "Neon Skyline", artist: "Chillwave Studio", duration: "4:15" },
-  ];
+  // Subscribe to audio engine updates
+  useEffect(() => {
+    return audioEngine.subscribe((next) => {
+      setPlayerState({ ...next });
+    });
+  }, []);
 
-  // Visualizer loop for canvas
+  // Visualizer loop for canvas (both compact dock EQ and expanded waveform)
   useEffect(() => {
     const draw = () => {
       const analyser = audioEngine.getAnalyser();
@@ -80,6 +78,14 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
               x += sliceWidth;
             }
             ctx.stroke();
+          } else {
+            // Idle flat wave with subtle center pulse
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(242, 163, 60, 0.25)';
+            ctx.beginPath();
+            ctx.moveTo(0, panelCanvas.height / 2);
+            ctx.lineTo(panelCanvas.width, panelCanvas.height / 2);
+            ctx.stroke();
           }
         }
       }
@@ -94,42 +100,36 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
     };
   }, [isPlaying]);
 
-  // Elapsed time increment
-  useEffect(() => {
-    let interval: number | null = null;
-    if (isPlaying) {
-      interval = window.setInterval(() => {
-        setElapsed((prev) => prev + 1);
-      }, 1000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isPlaying]);
-
   const handleVolumeChange = (newVol: number) => {
-    setVolume(newVol);
     audioEngine.setVolume(newVol);
-    if (newVol > 0 && isMuted) setIsMuted(false);
   };
 
   const toggleMute = () => {
-    if (isMuted) {
-      setIsMuted(false);
-      audioEngine.setVolume(volume || 0.5);
-    } else {
-      setIsMuted(true);
-      audioEngine.setVolume(0);
+    audioEngine.toggleMute();
+  };
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+    const targetDuration = playerState.duration || 0;
+    if (targetDuration > 0) {
+      audioEngine.seek(ratio * targetDuration);
     }
   };
 
   const formatTime = (seconds: number) => {
+    if (!seconds || isNaN(seconds)) return '0:00';
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+    const secs = Math.floor(seconds % 60);
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  const currentTrack = tracks[currentTrackIndex];
+  const currentTrack = playerState.currentTrack;
+  const currentDuration =
+    playerState.duration > 0 ? formatTime(playerState.duration) : currentTrack.defaultDuration;
+  const progressPercent =
+    playerState.duration > 0 ? (playerState.currentTime / playerState.duration) * 100 : 0;
 
   return (
     <aside
@@ -149,7 +149,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
             {/* Header info with rotating vinyl disc */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#18181b] to-[#09090b] border border-white/10 flex items-center justify-center overflow-hidden">
+                <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#18181b] to-[#09090b] border border-white/10 flex items-center justify-center overflow-hidden shadow-inner">
                   <div
                     className={`w-7 h-7 rounded-full border-2 border-[rgba(237,232,221,0.8)] relative flex items-center justify-center ${
                       isPlaying ? 'animate-spin' : ''
@@ -164,7 +164,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                     {currentTrack.title}
                   </h4>
                   <p className="text-[11px] font-mono text-[#837e6f]">
-                    {currentTrack.artist}
+                    {currentTrack.artist} • Track 0{playerState.currentTrackIndex + 1}
                   </p>
                 </div>
               </div>
@@ -187,25 +187,42 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
               />
             </div>
 
+            {/* Interactive Progress Bar */}
+            <div
+              className="w-full py-1 cursor-pointer group"
+              onClick={handleSeek}
+              role="slider"
+              aria-label="Position de lecture"
+              aria-valuemin={0}
+              aria-valuemax={playerState.duration || 100}
+              aria-valuenow={playerState.currentTime}
+              tabIndex={0}
+            >
+              <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden relative group-hover:h-2 transition-all">
+                <div
+                  className="h-full bg-gradient-to-r from-[#f2a33c] to-[#ff3d2e] rounded-full relative"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            </div>
+
             {/* Time progress */}
             <div className="flex items-center justify-between text-[11px] font-mono text-[#837e6f]">
-              <span>{formatTime(elapsed)}</span>
-              <span className="text-[#f2a33c]">LIVE SYNTH</span>
-              <span>{currentTrack.duration}</span>
+              <span>{formatTime(playerState.currentTime)}</span>
+              <span className="text-[#f2a33c] text-[10px] tracking-wider uppercase font-semibold">
+                {isPlaying ? 'NOW PLAYING' : 'AUDIO TRACK'}
+              </span>
+              <span>{currentDuration}</span>
             </div>
 
             {/* Controls Bar */}
             <div className="flex items-center justify-between pt-1">
-              {/* Prev / Next Track */}
+              {/* Prev / Play / Next Track */}
               <div className="flex items-center gap-1">
                 <button
-                  onClick={() =>
-                    setCurrentTrackIndex(
-                      (prev) => (prev - 1 + tracks.length) % tracks.length
-                    )
-                  }
-                  className="p-2 text-[#b9b3a4] hover:text-[#ede8dd] rounded-full transition-colors"
-                  aria-label="Piste précédente"
+                  onClick={() => audioEngine.previous()}
+                  className="p-2 text-[#b9b3a4] hover:text-[#ede8dd] rounded-full transition-colors active:scale-90"
+                  aria-label="Morceau précédent"
                 >
                   <SkipBack className="w-4 h-4" />
                 </button>
@@ -223,11 +240,9 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                 </button>
 
                 <button
-                  onClick={() =>
-                    setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
-                  }
-                  className="p-2 text-[#b9b3a4] hover:text-[#ede8dd] rounded-full transition-colors"
-                  aria-label="Piste suivante"
+                  onClick={() => audioEngine.next()}
+                  className="p-2 text-[#b9b3a4] hover:text-[#ede8dd] rounded-full transition-colors active:scale-90"
+                  aria-label="Morceau suivant"
                 >
                   <SkipForward className="w-4 h-4" />
                 </button>
@@ -238,8 +253,9 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                 <button
                   onClick={toggleMute}
                   className="text-[#837e6f] hover:text-[#ede8dd] transition-colors"
+                  aria-label={playerState.isMuted || playerState.volume === 0 ? 'Activer le son' : 'Couper le son'}
                 >
-                  {isMuted || volume === 0 ? (
+                  {playerState.isMuted || playerState.volume === 0 ? (
                     <VolumeX className="w-4 h-4" />
                   ) : (
                     <Volume2 className="w-4 h-4" />
@@ -250,7 +266,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                   min="0"
                   max="1"
                   step="0.05"
-                  value={isMuted ? 0 : volume}
+                  value={playerState.isMuted ? 0 : playerState.volume}
                   onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
                   className="w-20 accent-[#f2a33c] h-1.5 bg-white/10 rounded-lg cursor-pointer"
                   aria-label="Volume"
@@ -260,24 +276,41 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
             {/* Tracklist selection */}
             <div className="border-t border-white/10 pt-2 space-y-1">
-              {tracks.map((t, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setCurrentTrackIndex(idx);
-                    if (!isPlaying) onTogglePlay();
-                  }}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
-                    currentTrackIndex === idx
-                      ? 'bg-white/10 text-[#f2a33c]'
-                      : 'text-[#b9b3a4] hover:bg-white/5'
-                  }`}
-                >
-                  <span className="font-mono text-[10px]">0{idx + 1}</span>
-                  <span className="font-medium truncate max-w-[200px]">{t.title}</span>
-                  <span className="font-mono text-[10px] text-[#837e6f]">{t.duration}</span>
-                </button>
-              ))}
+              {TRACKS.map((t, idx) => {
+                const isCurrent = playerState.currentTrackIndex === idx;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => {
+                      audioEngine.setTrack(idx, true);
+                    }}
+                    className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
+                      isCurrent
+                        ? 'bg-white/10 text-[#f2a33c]'
+                        : 'text-[#b9b3a4] hover:bg-white/5'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="font-mono text-[10px] text-[#837e6f]">0{idx + 1}</span>
+                      <span className="font-medium truncate max-w-[200px]">{t.title}</span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {isCurrent && isPlaying && (
+                        <span className="flex items-end gap-0.5 h-3">
+                          <span className="w-0.5 h-full bg-[#f2a33c] animate-pulse" />
+                          <span className="w-0.5 h-2/3 bg-[#f2a33c] animate-pulse delay-75" />
+                          <span className="w-0.5 h-4/5 bg-[#f2a33c] animate-pulse delay-150" />
+                        </span>
+                      )}
+                      <span className="font-mono text-[10px] text-[#837e6f]">
+                        {isCurrent && playerState.duration > 0
+                          ? formatTime(playerState.duration)
+                          : t.defaultDuration}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </motion.div>
         )}
@@ -310,7 +343,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
           className="cursor-pointer flex flex-col justify-center min-w-0 pr-1 select-none"
         >
           <div className="font-mono text-[10px] tracking-wider uppercase text-[#ede8dd] flex items-center gap-1.5">
-            <span className="truncate max-w-[110px] sm:max-w-[130px]">
+            <span className="truncate max-w-[110px] sm:max-w-[140px] font-semibold">
               {currentTrack.title}
             </span>
           </div>
