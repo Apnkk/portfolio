@@ -54,22 +54,29 @@ class AmbientAudioEngine {
       this.pause();
       return false;
     } else {
-      this.play();
+      void this.play();
       return true;
     }
   }
 
-  public play() {
+  public async play(): Promise<boolean> {
     this.init();
-    if (!this.ctx) return;
+    if (!this.ctx) return false;
 
     if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      try {
+        await this.ctx.resume();
+      } catch {
+        // Suspended pending user interaction
+      }
     }
+
+    if (this.isPlaying) return true;
 
     this.isPlaying = true;
     document.body.classList.add('is-playing');
     this.scheduleNextChord();
+    return true;
   }
 
   public pause() {

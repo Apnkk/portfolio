@@ -295,7 +295,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
         <button
           onClick={onTogglePlay}
           className="w-10 h-10 rounded-full bg-[#f2a33c] text-black flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-md"
-          aria-label={isPlaying ? 'Pause' : 'Écouter en naviguant'}
+          aria-label={isPlaying ? 'Pause' : 'Lecture'}
         >
           {isPlaying ? (
             <Pause className="w-4 h-4 fill-current" />

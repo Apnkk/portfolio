@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
 import { CustomCursor } from './components/CustomCursor';
 import { AudioPlayer } from './components/AudioPlayer';
@@ -23,6 +23,46 @@ function PortfolioApp() {
     setIsPlaying(nextState);
   };
 
+  useEffect(() => {
+    let active = true;
+
+    const startAudio = async () => {
+      if (!active) return;
+      try {
+        const started = await audioEngine.play();
+        if (started && active) {
+          setIsPlaying(true);
+          cleanup();
+        }
+      } catch {
+        // Awaiting browser gesture
+      }
+    };
+
+    const cleanup = () => {
+      const events = ['click', 'pointerdown', 'touchstart', 'keydown', 'wheel', 'scroll'];
+      events.forEach((evt) => {
+        window.removeEventListener(evt, startAudio);
+        document.removeEventListener(evt, startAudio);
+      });
+    };
+
+    // 1. Immediate autoplay on site entrance
+    void startAudio();
+
+    // 2. Gesture fallback in case browser policy requires first interaction
+    const events = ['click', 'pointerdown', 'touchstart', 'keydown', 'wheel', 'scroll'];
+    events.forEach((evt) => {
+      window.addEventListener(evt, startAudio, { once: true, passive: true });
+      document.addEventListener(evt, startAudio, { once: true, passive: true });
+    });
+
+    return () => {
+      active = false;
+      cleanup();
+    };
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-black text-[#ede8dd] selection:bg-[#f2a33c] selection:text-black">
       {/* Magnetic Creative Cursor */}
@@ -39,7 +79,7 @@ function PortfolioApp() {
 
       {/* Main Editorial Content */}
       <main id="main">
-        <Hero isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
+        <Hero />
         <MarqueeTicker />
         <WorkSection />
         <NextSection isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />

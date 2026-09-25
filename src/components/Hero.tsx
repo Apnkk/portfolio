@@ -1,14 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { Play, Pause, ArrowDownRight } from 'lucide-react';
+import { ArrowDownRight } from 'lucide-react';
 
-interface HeroProps {
-  isPlaying: boolean;
-  onTogglePlay: () => void;
-}
-
-export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
+export const Hero = () => {
   const { language } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrame = useRef<number | null>(null);
@@ -47,7 +42,7 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        p.y -= p.speedY * (isPlaying ? 1.6 : 1);
+        p.y -= p.speedY;
         if (p.y < 0) {
           p.y = height;
           p.x = Math.random() * width;
@@ -55,7 +50,7 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(242, 163, 60, ${p.opacity * (isPlaying ? 1.3 : 1)})`;
+        ctx.fillStyle = `rgba(242, 163, 60, ${p.opacity})`;
         ctx.fill();
       }
 
@@ -68,7 +63,7 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
       window.removeEventListener('resize', onResize);
       if (animFrame.current) cancelAnimationFrame(animFrame.current);
     };
-  }, [isPlaying]);
+  }, []);
 
   return (
     <section
@@ -166,29 +161,6 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
           <a href="#contact" className="btn btn--ghost">
             <span>{language === 'fr' ? 'Me contacter' : 'Contact me'}</span>
           </a>
-
-          <button
-            onClick={onTogglePlay}
-            className={`btn btn--play ${isPlaying ? 'is-playing' : ''}`}
-            aria-label={isPlaying ? 'Mettre en pause' : 'Écouter la musique'}
-          >
-            <span className="play-icon-box">
-              {isPlaying ? (
-                <Pause className="w-3.5 h-3.5 fill-current" />
-              ) : (
-                <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-              )}
-            </span>
-            <span>
-              {isPlaying
-                ? language === 'fr'
-                  ? 'Ambiance audio active'
-                  : 'Music playing'
-                : language === 'fr'
-                ? 'Écouter en naviguant'
-                : 'Listen while browsing'}
-            </span>
-          </button>
         </motion.div>
       </div>
 
