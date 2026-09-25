@@ -73,7 +73,7 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
   return (
     <section
       id="hero"
-      className="relative min-h-[95vh] sm:min-h-screen flex flex-col justify-end overflow-hidden pt-28 pb-0 text-left bg-black"
+      className="relative min-h-[95vh] sm:min-h-screen flex flex-col justify-between overflow-hidden pt-28 pb-0 text-center bg-black"
       aria-label="Introduction"
     >
       {/* Ambient Floating Particles Canvas */}
@@ -88,8 +88,8 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           background: `
-            radial-gradient(circle at 68% 32%, rgba(242, 163, 60, 0.065), transparent 48%),
-            radial-gradient(circle at 22% 68%, rgba(255, 61, 46, 0.035), transparent 52%),
+            radial-gradient(circle at 50% 38%, rgba(242, 163, 60, 0.08), transparent 52%),
+            radial-gradient(circle at 50% 64%, rgba(255, 61, 46, 0.04), transparent 56%),
             radial-gradient(ellipse 90% 80% at 50% 50%, transparent 25%, #000000 92%),
             linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 35%, #000000 100%)
           `,
@@ -97,13 +97,13 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 px-6 sm:px-12 md:px-16 mb-8 sm:mb-14">
+      <div className="relative z-10 px-6 sm:px-12 md:px-16 my-auto py-10 sm:py-14 flex flex-col items-center text-center max-w-5xl mx-auto w-full">
         {/* Status Kicker */}
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mono text-[#b9b3a4] flex items-center gap-2 mb-4 sm:mb-6"
+          className="mono text-[#b9b3a4] flex items-center justify-center gap-2 mb-4 sm:mb-6 text-center text-xs sm:text-[0.82rem] tracking-wider uppercase"
         >
           <span className="status-dot" aria-hidden="true" />
           <span>
@@ -118,7 +118,7 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display font-bold uppercase tracking-[-0.035em] leading-[0.82] select-none text-[clamp(4.8rem,18vw,14rem)] mb-6 sm:mb-8"
+          className="font-display font-bold uppercase tracking-[-0.035em] leading-[0.82] select-none text-[clamp(4.8rem,18vw,14rem)] mb-6 sm:mb-8 text-center"
         >
           <span className="block text-[#ede8dd] drop-shadow-[0_12px_40px_rgba(0,0,0,0.9)]">
             ARES
@@ -130,9 +130,9 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-xl text-left"
+          className="max-w-2xl text-center mx-auto flex flex-col items-center"
         >
-          <p className="font-display font-medium text-[clamp(1.15rem,2.4vw,1.6rem)] text-[#ede8dd] tracking-tight">
+          <p className="font-display font-medium text-[clamp(1.2rem,2.5vw,1.8rem)] text-[#ede8dd] tracking-tight text-center">
             {language === 'fr' ? (
               <>
                 Développeur full-stack <em className="text-[#f2a33c] not-italic font-serif">&amp;</em> creative builder.
@@ -144,7 +144,7 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
             )}
           </p>
 
-          <p className="text-[#b9b3a4] text-[clamp(0.95rem,1.5vw,1.1rem)] mt-2 font-normal leading-relaxed">
+          <p className="text-[#b9b3a4] text-[clamp(0.95rem,1.5vw,1.15rem)] mt-3 font-normal leading-relaxed max-w-xl text-center mx-auto">
             {language === 'fr'
               ? 'Je conçois des produits web & mobiles haute performance — véloces, soignés et avec du caractère.'
               : 'I build streaming-grade web & mobile products — fast, polished, and a little bit loud.'}
@@ -156,7 +156,7 @@ export const Hero = ({ isPlaying, onTogglePlay }: HeroProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap items-center gap-3.5 sm:gap-4 mt-8 sm:mt-10"
+          className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 mt-8 sm:mt-10"
         >
           <a href="#work" className="btn btn--solid group">
             <span>{language === 'fr' ? 'Voir les projets' : 'View work'}</span>
