@@ -70,6 +70,21 @@
   }
 }
 
+/* Custom Cursor: hide default system Windows cursor when creative cursor is active */
+@media (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active *,
+  html.custom-cursor-active a,
+  html.custom-cursor-active button,
+  html.custom-cursor-active input,
+  html.custom-cursor-active textarea,
+  html.custom-cursor-active select,
+  html.custom-cursor-active [role="button"],
+  html.custom-cursor-active .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
 /* Monospace text helper */
 .mono {
   font-family: var(--font-mono);
