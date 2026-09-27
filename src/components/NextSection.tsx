@@ -132,9 +132,18 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center w-full">
-        {/* Section Index */}
+        {/* Section Index & Cinema Slate */}
+        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-white/[0.08] bg-black/60 backdrop-blur-sm font-mono text-[9px] text-[#797368] tracking-widest uppercase select-none">
+          <span className="text-[#ff2a3b] font-semibold">SCENE 03</span>
+          <span>//</span>
+          <span className="text-[#f4f2ee]">TEASER</span>
+          <span>·</span>
+          <span>WASM AGENTS</span>
+          <span>·</span>
+          <span>UNRELEASED</span>
+        </div>
         <p className="mono text-[#ff2a3b] mb-3 font-semibold">02 / NEXT</p>
-        <h2 className="font-display font-semibold text-[clamp(2.2rem,5vw,4.2rem)] text-[#f4f2ee] tracking-tight leading-none mb-10">
+        <h2 className="font-display font-semibold text-[clamp(2.2rem,5vw,4.2rem)] text-[#f4f2ee] tracking-tight leading-none mb-6">
           {language === 'fr' ? 'La prochaine sortie' : 'The next release'}
         </h2>
 
@@ -156,6 +165,23 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
         >
           SYNTHESIS
         </motion.h3>
+
+        {/* Live Cinema Telemetry Strip */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-3 mb-2 font-mono text-[9px] sm:text-[10px] text-[#797368] uppercase tracking-wider">
+          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff2a3b] animate-ping" />
+            <span className="text-[#f4f2ee]">SYS: RUNTIME ACTIVE</span>
+          </span>
+          <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
+            WASM-64 · MULTI-AGENT
+          </span>
+          <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
+            LATENCY: &lt;4MS
+          </span>
+          <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-[#ff2a3b]">
+            RELEASE: 2026.Q4
+          </span>
+        </div>
 
         {/* Sine Wave Visualizer */}
         <div className="w-full max-w-[680px] h-20 my-6 flex items-center justify-center">

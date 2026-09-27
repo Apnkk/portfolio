@@ -19,40 +19,40 @@ export const MethodSection = () => {
 
   const steps = [
     {
-      num: '01',
-      name: language === 'fr' ? 'Idée' : 'Idea',
+      num: 'ACT 01',
+      name: language === 'fr' ? 'Idée & Script' : 'Idea & Script',
       desc:
         language === 'fr'
           ? "Trouver le problème qui vaut la peine d'être résolu. Si je l'utiliserais tous les jours, ça vaut la peine d'être créé."
           : "Find the itch worth scratching. If I'd use it daily, it's worth building.",
     },
     {
-      num: '02',
-      name: language === 'fr' ? 'Prototype' : 'Prototype',
+      num: 'ACT 02',
+      name: language === 'fr' ? 'Tournage & Vibe Code' : 'Shoot & Vibe Code',
       desc:
         language === 'fr'
           ? "Vibe-coder une version fonctionnelle rapidement avec l'IA comme copilote. L'élan et la vélocité priment au départ."
           : 'Vibe-code a working version fast, AI as copilot. Momentum beats perfection — at first.',
     },
     {
-      num: '03',
-      name: language === 'fr' ? 'Architecture' : 'Architecture',
+      num: 'ACT 03',
+      name: language === 'fr' ? 'Montage & Architecture' : 'Edit & Architecture',
       desc:
         language === 'fr'
           ? 'Puis structurer proprement : typage strict TypeScript, vrais schémas de données, tests et sécurité renforcée.'
           : 'Then get serious: strict types, real data models, tests, security passes.',
     },
     {
-      num: '04',
-      name: language === 'fr' ? 'Finition' : 'Polish',
+      num: 'ACT 04',
+      name: language === 'fr' ? 'Étalonnage & VFX' : 'Color Grade & VFX',
       desc:
         language === 'fr'
           ? 'Micro-interactions, fluidité de navigation, typographie et cas limites. Les 10 derniers % font le produit.'
           : 'Motion, typography, edge cases. The last 10% is the product.',
     },
     {
-      num: '05',
-      name: language === 'fr' ? 'Livraison' : 'Ship',
+      num: 'ACT 05',
+      name: language === 'fr' ? 'Première Mondiale' : 'World Premiere',
       desc:
         language === 'fr'
           ? 'Docker, CDN edge, monitoring en temps réel — en ligne sur un vrai domaine, utilisé par de vraies personnes.'
@@ -70,6 +70,15 @@ export const MethodSection = () => {
       <div className="max-w-7xl mx-auto">
         {/* Section Head */}
         <header className="mb-10 sm:mb-20">
+          <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-white/[0.08] bg-black/60 backdrop-blur-sm font-mono text-[9px] text-[#797368] tracking-widest uppercase select-none">
+            <span className="text-[#ff2a3b] font-semibold">SCENE 05</span>
+            <span>//</span>
+            <span className="text-[#f4f2ee]">PROTOCOL</span>
+            <span>·</span>
+            <span>5-ACT SCREENPLAY</span>
+            <span>·</span>
+            <span>ITERATION</span>
+          </div>
           <p className="mono text-[#ff2a3b] mb-2 sm:mb-3 font-semibold">04 / METHOD</p>
           <h2 id="method-title" className="font-display font-semibold text-[clamp(2.1rem,6vw,4.8rem)] text-[#f4f2ee] tracking-tight leading-none">
             {language === 'fr' ? (

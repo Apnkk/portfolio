@@ -14,6 +14,7 @@ import { MethodSection } from './components/MethodSection';
 import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
 import { TerminalDrawer } from './components/TerminalDrawer';
+import { CinematicHUD } from './components/CinematicHUD';
 import { audioEngine } from './utils/audioSynth';
 
 function PortfolioApp() {
@@ -143,6 +144,9 @@ function PortfolioApp() {
           style={{ scaleX: smoothProgress }}
         />
       </div>
+
+      {/* Director Viewfinder Camera Brackets & Live Scrollytelling Telemetry HUD */}
+      <CinematicHUD />
 
       {/* Magnetic Creative Cursor */}
       <CustomCursor />

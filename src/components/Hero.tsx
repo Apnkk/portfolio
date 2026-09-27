@@ -168,6 +168,20 @@ export const Hero = () => {
         }
       }
 
+      // Draw subtle horizontal anamorphic lens flare beam across screen center on velocity push
+      if (smoothedVelocity > 0.4) {
+        const flareAlpha = Math.min(0.28, (smoothedVelocity - 0.4) * 0.22);
+        const grad = ctx.createLinearGradient(0, cy, width, cy);
+        grad.addColorStop(0, 'rgba(255, 42, 59, 0)');
+        grad.addColorStop(0.35, `rgba(255, 42, 59, ${flareAlpha * 0.5})`);
+        grad.addColorStop(0.5, `rgba(255, 120, 130, ${flareAlpha})`);
+        grad.addColorStop(0.65, `rgba(255, 42, 59, ${flareAlpha * 0.5})`);
+        grad.addColorStop(1, 'rgba(255, 42, 59, 0)');
+
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, cy - 1, width, 2);
+      }
+
       animFrame.current = requestAnimationFrame(render);
     };
 
@@ -234,6 +248,23 @@ export const Hero = () => {
       />
 
       <div className="relative z-10 px-5 sm:px-12 md:px-16 my-auto py-6 sm:py-14 flex flex-col items-center text-center max-w-5xl mx-auto w-full">
+        {/* Cinema Director Slate Tag */}
+        <motion.div
+          style={{ opacity: kickerOpacity, y: kickerY }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="hidden sm:inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-white/[0.08] bg-black/60 backdrop-blur-sm font-mono text-[9px] text-[#797368] tracking-widest uppercase select-none"
+        >
+          <span className="text-[#ff2a3b] font-semibold">SCENE 01</span>
+          <span>//</span>
+          <span className="text-[#f4f2ee]">OVERTURE</span>
+          <span>·</span>
+          <span>CAM A</span>
+          <span>·</span>
+          <span>24 FPS</span>
+        </motion.div>
+
         {/* Status Kicker with Parallax Fade (Responsive concise on mobile) */}
         <motion.p
           style={{ opacity: kickerOpacity, y: kickerY }}
