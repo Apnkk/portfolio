@@ -138,29 +138,15 @@ const ProjectRowItem = ({ project, idx, onSelect, isDesktop }: ProjectRowItemPro
           {/* Scanline Sweep Effect */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(255,42,59,0.12)] to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-out pointer-events-none" />
 
-          {/* Cinema Monitor Viewfinder Crop Marks */}
-          <div className="absolute top-2 left-2 w-2.5 h-2.5 border-t border-l border-white/40 pointer-events-none z-20" />
-          <div className="absolute top-2 right-2 w-2.5 h-2.5 border-t border-r border-white/40 pointer-events-none z-20" />
-          <div className="absolute bottom-2 left-2 w-2.5 h-2.5 border-b border-l border-white/40 pointer-events-none z-20" />
-          <div className="absolute bottom-2 right-2 w-2.5 h-2.5 border-b border-r border-white/40 pointer-events-none z-20" />
-
-          {/* Anamorphic Laser Flare Beam on Hover */}
-          <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#ff2a3b] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_12px_#ff2a3b] pointer-events-none z-20" />
-
           {/* Top Category Badge */}
           <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
             <span className="mono text-[9px] sm:text-[10px] text-[#f4f2ee] tracking-wider py-0.5 sm:py-1 px-2 sm:px-2.5 rounded-md bg-black/80 backdrop-blur-md border border-white/10">
               {project.categoryLabel[language].toUpperCase()}
             </span>
-            <div className="flex items-center gap-1.5">
-              <span className="hidden sm:inline-block mono text-[8px] text-[#797368] bg-black/80 backdrop-blur-md border border-white/10 px-1.5 py-0.5 rounded">
-                TC 00:0{idx + 1}:14:00
-              </span>
-              <span className="mono text-[9px] sm:text-[10px] text-[#ff2a3b] tracking-wider py-0.5 sm:py-1 px-2 rounded-md bg-black/80 backdrop-blur-md border border-[#ff2a3b]/30 flex items-center gap-1.5 shadow-[0_0_8px_rgba(255,42,59,0.25)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ff2a3b] animate-pulse" />
-                <span>{project.statusLabel[language].toUpperCase()}</span>
-              </span>
-            </div>
+            <span className="mono text-[9px] sm:text-[10px] text-[#ff2a3b] tracking-wider py-0.5 sm:py-1 px-2 rounded-md bg-black/80 backdrop-blur-md border border-[#ff2a3b]/30 flex items-center gap-1.5 shadow-[0_0_8px_rgba(255,42,59,0.25)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff2a3b] animate-pulse" />
+              <span>{project.statusLabel[language].toUpperCase()}</span>
+            </span>
           </div>
 
           {/* Bottom Visual Label */}
@@ -254,15 +240,6 @@ export const WorkSection = () => {
     <section id="work" className="py-16 sm:py-32 px-5 sm:px-12 md:px-16 max-w-7xl mx-auto text-left" aria-labelledby="work-title">
       {/* Section Head */}
       <header className="mb-10 sm:mb-20">
-        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-white/[0.08] bg-black/60 backdrop-blur-sm font-mono text-[9px] text-[#797368] tracking-widest uppercase select-none">
-          <span className="text-[#ff2a3b] font-semibold">SCENE 02</span>
-          <span>//</span>
-          <span className="text-[#f4f2ee]">SHOWREEL</span>
-          <span>·</span>
-          <span>ROLL 02</span>
-          <span>·</span>
-          <span>5 REELS</span>
-        </div>
         <p className="mono text-[#ff2a3b] mb-2 sm:mb-3 font-semibold">01 / WORK</p>
         <h2 id="work-title" className="font-display font-semibold text-[clamp(2.1rem,6vw,4.8rem)] text-[#f4f2ee] tracking-tight leading-none">
           {language === 'fr' ? (

@@ -38,15 +38,6 @@ export const StackSection = () => {
     <section id="stack" className="py-16 sm:py-32 px-5 sm:px-12 md:px-16 max-w-7xl mx-auto text-left" aria-labelledby="stack-title">
       {/* Section Head */}
       <header className="mb-10 sm:mb-20">
-        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-white/[0.08] bg-black/60 backdrop-blur-sm font-mono text-[9px] text-[#797368] tracking-widest uppercase select-none">
-          <span className="text-[#ff2a3b] font-semibold">SCENE 04</span>
-          <span>//</span>
-          <span className="text-[#f4f2ee]">MATRIX</span>
-          <span>·</span>
-          <span>RACK UNITS 01-06</span>
-          <span>·</span>
-          <span>PRODUCTION</span>
-        </div>
         <p className="mono text-[#ff2a3b] mb-2 sm:mb-3 font-semibold">03 / STACK</p>
         <h2 id="stack-title" className="font-display font-semibold text-[clamp(2.1rem,6vw,4.8rem)] text-[#f4f2ee] tracking-tight leading-none">
           {language === 'fr' ? (

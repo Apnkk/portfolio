@@ -277,9 +277,3 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
-
-/* Core Web Vitals - Defer layout & paint for offscreen sections */
-#work, #next, #stack, #method, #about, #contact {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 650px;
-}

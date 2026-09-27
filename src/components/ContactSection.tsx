@@ -94,16 +94,7 @@ export const ContactSection = () => {
   return (
     <section id="contact" className="pt-16 sm:pt-32 pb-0 px-5 sm:px-12 md:px-16 bg-black border-t border-white/[0.08] text-center" aria-labelledby="contact-title">
       <div className="max-w-5xl mx-auto">
-        {/* Section Index & Cinema Slate */}
-        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border border-white/[0.08] bg-black/60 backdrop-blur-sm font-mono text-[9px] text-[#797368] tracking-widest uppercase select-none">
-          <span className="text-[#ff2a3b] font-semibold">SCENE 07</span>
-          <span>//</span>
-          <span className="text-[#f4f2ee]">TRANSMISSION</span>
-          <span>·</span>
-          <span>OPEN FREQUENCY</span>
-          <span>·</span>
-          <span>END CREDITS</span>
-        </div>
+        {/* Section Index */}
         <p className="mono text-[#ff2a3b] mb-2 sm:mb-3 font-semibold">06 / CONTACT</p>
 
         {/* Big Impact Title */}
@@ -300,21 +291,15 @@ export const ContactSection = () => {
           </li>
         </ul>
 
-        {/* Cinema Production End Credits Footer */}
-        <footer className="mt-20 sm:mt-32 py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 mono text-xs text-[#797368]">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-center sm:text-left">
-            <span className="text-[#f4f2ee] font-semibold">© 2026 ARES</span>
-            <span className="hidden sm:inline text-white/20">|</span>
-            <span className="text-[10px] text-[#797368]">WRITTEN &amp; DIRECTED IN FRANCE</span>
-          </div>
-          <span className="text-[#b8b3a8] text-[11px] tracking-wider">
-            REACT 19 · LENIS 120HZ · WEB AUDIO · TAILWIND 4
-          </span>
+        {/* Footer Bar */}
+        <footer className="mt-20 sm:mt-32 py-7 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 mono text-xs text-[#797368]">
+          <span>© 2026 ARES</span>
+          <span className="text-[#b8b3a8]">REACT 19 · TAILWIND 4 · WEB AUDIO</span>
           <button
             onClick={scrollToTop}
-            className="hover:text-[#ff2a3b] transition-colors flex items-center gap-1.5 cursor-pointer text-xs"
+            className="hover:text-[#ff2a3b] transition-colors flex items-center gap-1.5 cursor-pointer"
           >
-            <span>REPLAY REEL</span>
+            <span>BACK TO TOP</span>
             <ArrowUp className="w-3.5 h-3.5" />
           </button>
         </footer>
