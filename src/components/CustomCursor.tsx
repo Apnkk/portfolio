@@ -17,7 +17,7 @@ export const CustomCursor = () => {
   useEffect(() => {
     if (!isVisible) return;
 
-    // Hide default system Windows cursor
+    // Hide default system cursor
     document.documentElement.classList.add('custom-cursor-active');
 
     const onMouseMove = (e: MouseEvent) => {
@@ -50,12 +50,12 @@ export const CustomCursor = () => {
       }
     };
 
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('mousedown', onMouseDown, { passive: true });
+    window.addEventListener('mouseup', onMouseUp, { passive: true });
     document.addEventListener('mouseleave', onMouseLeave);
     document.addEventListener('mouseenter', onMouseEnter);
-    window.addEventListener('mouseover', onMouseOver);
+    window.addEventListener('mouseover', onMouseOver, { passive: true });
 
     return () => {
       document.documentElement.classList.remove('custom-cursor-active');
@@ -72,9 +72,9 @@ export const CustomCursor = () => {
 
   return (
     <div className="hidden md:block pointer-events-none fixed inset-0 z-[9999]" aria-hidden="true">
-      {/* Center Amber Dot */}
+      {/* Center Radiant Crimson Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-[5px] h-[5px] rounded-full bg-[#f2a33c] pointer-events-none shadow-[0_0_8px_#f2a33ccc]"
+        className="fixed top-0 left-0 w-[5px] h-[5px] rounded-full bg-[#ff2a3b] pointer-events-none shadow-[0_0_10px_rgba(255,42,59,0.95)]"
         style={{
           x: mouseX,
           y: mouseY,
@@ -83,22 +83,25 @@ export const CustomCursor = () => {
         }}
       />
 
-      {/* Trailing Ring */}
+      {/* Trailing Ring with Crimson Neon Glow */}
       <motion.div
-        className="fixed top-0 left-0 rounded-full border pointer-events-none transition-[width,height,border-color,background-color] duration-200"
+        className="fixed top-0 left-0 rounded-full border pointer-events-none transition-[width,height,border-color,background-color,box-shadow] duration-200"
         style={{
           x: ringX,
           y: ringY,
           translateX: '-50%',
           translateY: '-50%',
-          width: isHovered ? 48 : isPressed ? 20 : 30,
-          height: isHovered ? 48 : isPressed ? 20 : 30,
+          width: isHovered ? 46 : isPressed ? 18 : 28,
+          height: isHovered ? 46 : isPressed ? 18 : 28,
           borderColor: isHovered
-            ? 'rgba(242, 163, 60, 0.9)'
-            : 'rgba(242, 163, 60, 0.35)',
+            ? 'rgba(255, 42, 59, 0.95)'
+            : 'rgba(255, 42, 59, 0.35)',
           backgroundColor: isHovered
-            ? 'rgba(242, 163, 60, 0.08)'
+            ? 'rgba(255, 42, 59, 0.1)'
             : 'transparent',
+          boxShadow: isHovered
+            ? '0 0 16px rgba(255, 42, 59, 0.4)'
+            : 'none',
         }}
       />
     </div>

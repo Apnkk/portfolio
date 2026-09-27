@@ -3,28 +3,20 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { ArrowDownRight } from 'lucide-react';
 
-interface HeroProps {
-  scrollVelocity?: number;
-}
-
-export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
+export const Hero = () => {
   const { language } = useLanguage();
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrame = useRef<number | null>(null);
   const velocityRef = useRef(0);
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 640);
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640);
-    window.addEventListener('resize', check);
+    window.addEventListener('resize', check, { passive: true });
     return () => window.removeEventListener('resize', check);
   }, []);
-
-  // Keep velocityRef in sync with prop and event
-  useEffect(() => {
-    velocityRef.current = scrollVelocity;
-  }, [scrollVelocity]);
 
   // Framer Motion Scrollytelling Dolly-Zoom Camera Push
   const { scrollYProgress } = useScroll({
@@ -33,22 +25,26 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
   });
 
   // Monumental Title Dolly Zoom - toned down on mobile to avoid overwhelming small displays
-  const titleScale = useTransform(scrollYProgress, [0, 0.8], [1, isMobile ? 1.14 : 1.38]);
-  const titleY = useTransform(scrollYProgress, [0, 0.8], [0, isMobile ? 45 : 130]);
+  const titleScale = useTransform(scrollYProgress, [0, 0.8], [1, isMobile ? 1.12 : 1.35]);
+  const titleY = useTransform(scrollYProgress, [0, 0.8], [0, isMobile ? 40 : 120]);
   const titleOpacity = useTransform(scrollYProgress, [0, 0.55, 0.85], [1, 0.85, 0]);
-  const titleBlur = useTransform(scrollYProgress, [0, 0.55, 0.85], ['blur(0px)', 'blur(1px)', 'blur(8px)']);
+  const titleBlur = useTransform(
+    scrollYProgress,
+    [0, 0.55, 0.85],
+    isMobile ? ['none', 'none', 'none'] : ['blur(0px)', 'blur(1px)', 'blur(8px)']
+  );
 
   // Foregrounds / Subtitle Parallax Separation
   const kickerOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
-  const kickerY = useTransform(scrollYProgress, [0, 0.25], [0, isMobile ? -12 : -25]);
+  const kickerY = useTransform(scrollYProgress, [0, 0.25], [0, isMobile ? -10 : -22]);
 
-  const subY = useTransform(scrollYProgress, [0, 0.65], [0, isMobile ? -20 : -45]);
+  const subY = useTransform(scrollYProgress, [0, 0.65], [0, isMobile ? -18 : -40]);
   const subOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
 
-  const ctaY = useTransform(scrollYProgress, [0, 0.5], [0, isMobile ? 15 : 25]);
+  const ctaY = useTransform(scrollYProgress, [0, 0.5], [0, isMobile ? 12 : 22]);
   const ctaOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
 
-  // 3D Cinematic Starfield Warp & Hyperspace Speed Lines
+  // 3D Cinematic Starfield Warp & Hyperspace Speed Lines in OLED Crimson & Titanium
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -63,7 +59,7 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', onResize, { passive: true });
 
     // High frequency scroll event listener
     const onScrollEvent = (e: Event) => {
@@ -72,10 +68,10 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
         velocityRef.current = custom.detail.velocity;
       }
     };
-    window.addEventListener('portfolio-scroll', onScrollEvent);
+    window.addEventListener('portfolio-scroll', onScrollEvent, { passive: true });
 
     // 3D Starfield particles with depth Z (lighter on mobile for battery and smoothness)
-    const numStars = width < 640 ? 55 : 110;
+    const numStars = width < 640 ? 50 : 110;
     const maxZ = 1200;
     const focalLength = width < 640 ? 280 : 360;
 
@@ -85,7 +81,7 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
       z: number;
       prevZ: number;
       size: number;
-      colorType: number; // 0: amber, 1: red, 2: cream
+      colorType: number; // 0: crimson red, 1: ruby coral, 2: titanium white
       baseAlpha: number;
     }
 
@@ -98,14 +94,16 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
         z,
         prevZ: z,
         size: Math.random() * 1.5 + 0.8,
-        colorType: Math.random() > 0.35 ? 0 : Math.random() > 0.4 ? 1 : 2,
-        baseAlpha: Math.random() * 0.5 + 0.3,
+        colorType: Math.random() > 0.4 ? 0 : Math.random() > 0.5 ? 1 : 2,
+        baseAlpha: Math.random() * 0.5 + 0.35,
       });
     }
 
     let smoothedVelocity = 0;
 
     const render = () => {
+      if (!isVisibleRef.current) return;
+
       // Gentle decay of velocity
       smoothedVelocity += (Math.abs(velocityRef.current) - smoothedVelocity) * 0.12;
 
@@ -143,9 +141,9 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
         const depthFade = Math.min(1, Math.max(0.1, (1 - star.z / maxZ) * 1.2));
         const alpha = star.baseAlpha * depthFade;
 
-        let color = `rgba(242, 163, 60, ${alpha})`;
-        if (star.colorType === 1) color = `rgba(255, 61, 46, ${alpha * 0.9})`;
-        if (star.colorType === 2) color = `rgba(237, 232, 221, ${alpha * 0.8})`;
+        let color = `rgba(255, 42, 59, ${alpha})`;
+        if (star.colorType === 1) color = `rgba(255, 85, 95, ${alpha * 0.95})`;
+        if (star.colorType === 2) color = `rgba(244, 242, 238, ${alpha * 0.85})`;
 
         if (isWarping) {
           // Draw motion blur / warp light streak towards camera
@@ -173,9 +171,34 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
       animFrame.current = requestAnimationFrame(render);
     };
 
+    // Pause canvas animation when hero is off-screen using IntersectionObserver
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisibleRef.current = entry.isIntersecting;
+          if (entry.isIntersecting) {
+            if (!animFrame.current) {
+              animFrame.current = requestAnimationFrame(render);
+            }
+          } else {
+            if (animFrame.current) {
+              cancelAnimationFrame(animFrame.current);
+              animFrame.current = null;
+            }
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
     render();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', onResize);
       window.removeEventListener('portfolio-scroll', onScrollEvent);
       if (animFrame.current) cancelAnimationFrame(animFrame.current);
@@ -196,13 +219,13 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
         aria-hidden="true"
       />
 
-      {/* Nuanced OLED Dark Gradients & Atmospheric Vignette */}
+      {/* OLED Pure Dark Gradients & Crimson Atmospheric Vignette */}
       <div
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           background: `
-            radial-gradient(circle at 50% 38%, rgba(242, 163, 60, 0.08), transparent 52%),
-            radial-gradient(circle at 50% 64%, rgba(255, 61, 46, 0.04), transparent 56%),
+            radial-gradient(circle at 50% 36%, rgba(255, 42, 59, 0.12), transparent 52%),
+            radial-gradient(circle at 50% 64%, rgba(184, 20, 36, 0.05), transparent 58%),
             radial-gradient(ellipse 90% 80% at 50% 50%, transparent 25%, #000000 92%),
             linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 35%, #000000 100%)
           `,
@@ -217,7 +240,7 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mono text-[#b9b3a4] flex items-center justify-center gap-2 mb-3 sm:mb-6 text-center text-[0.7rem] sm:text-[0.82rem] tracking-wider uppercase will-change-transform"
+          className="mono text-[#b8b3a8] flex items-center justify-center gap-2 mb-3 sm:mb-6 text-center text-[0.7rem] sm:text-[0.82rem] tracking-wider uppercase will-change-transform"
         >
           <span className="status-dot shrink-0" aria-hidden="true" />
           <span>
@@ -235,7 +258,7 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
           </span>
         </motion.p>
 
-        {/* Monumental Title Dolly-Zoom Camera Push: ONLY "ARES" */}
+        {/* Monumental Title Dolly-Zoom Camera Push: "ARES" */}
         <motion.h1
           style={{
             scale: titleScale,
@@ -248,7 +271,7 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="font-display font-bold uppercase tracking-[-0.035em] leading-[0.86] sm:leading-[0.82] select-none text-[clamp(3.6rem,19vw,14rem)] mb-4 sm:mb-8 text-center origin-center will-change-transform"
         >
-          <span className="block text-[#ede8dd] drop-shadow-[0_12px_40px_rgba(0,0,0,0.9)]">
+          <span className="block text-[#f4f2ee] drop-shadow-[0_12px_45px_rgba(0,0,0,0.95)]">
             ARES
           </span>
         </motion.h1>
@@ -264,19 +287,19 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-2xl text-center mx-auto flex flex-col items-center will-change-transform"
         >
-          <p className="font-display font-medium text-[clamp(1.1rem,2.5vw,1.8rem)] text-[#ede8dd] tracking-tight text-center">
+          <p className="font-display font-medium text-[clamp(1.1rem,2.5vw,1.8rem)] text-[#f4f2ee] tracking-tight text-center">
             {language === 'fr' ? (
               <>
-                Développeur full-stack <em className="text-[#f2a33c] not-italic font-serif">&amp;</em> creative builder.
+                Développeur full-stack <em className="text-[#ff2a3b] not-italic font-serif">&amp;</em> creative builder.
               </>
             ) : (
               <>
-                Full-stack developer <em className="text-[#f2a33c] not-italic font-serif">&amp;</em> creative builder.
+                Full-stack developer <em className="text-[#ff2a3b] not-italic font-serif">&amp;</em> creative builder.
               </>
             )}
           </p>
 
-          <p className="text-[#b9b3a4] text-[clamp(0.85rem,1.5vw,1.15rem)] mt-2 sm:mt-3 font-normal leading-relaxed max-w-xl text-center mx-auto">
+          <p className="text-[#b8b3a8] text-[clamp(0.85rem,1.5vw,1.15rem)] mt-2 sm:mt-3 font-normal leading-relaxed max-w-xl text-center mx-auto">
             {language === 'fr'
               ? 'Je conçois des produits web & mobiles haute performance — véloces, soignés et avec du caractère.'
               : 'I build streaming-grade web & mobile products — fast, polished, and a little bit loud.'}
@@ -306,15 +329,15 @@ export const Hero = ({ scrollVelocity = 0 }: HeroProps) => {
       </div>
 
       {/* Hero Bottom Meta Bar - Clean Single-line Bar on Mobile */}
-      <div className="relative z-10 flex items-center justify-between gap-3 px-5 sm:px-12 md:px-16 py-3 sm:py-4 border-t border-[rgba(237,232,221,0.08)] text-[#837e6f] font-mono text-[0.66rem] sm:text-[0.72rem] tracking-wider uppercase bg-black/60 backdrop-blur-sm select-none">
+      <div className="relative z-10 flex items-center justify-between gap-3 px-5 sm:px-12 md:px-16 py-3 sm:py-4 border-t border-white/[0.08] text-[#797368] font-mono text-[0.66rem] sm:text-[0.72rem] tracking-wider uppercase bg-black/75 backdrop-blur-sm select-none">
         <span>{language === 'fr' ? 'EN PROD DEPUIS 2023 →' : 'SHIPPING SINCE 2023 →'}</span>
-        <span className="hidden sm:inline-block text-[#b9b3a4]">
+        <span className="hidden sm:inline-block text-[#b8b3a8]">
           SHOPCORE · Z-FLIX · Z-LAUNCHER · Z-MUSIC · SPOTI
         </span>
         <span className="inline-flex items-center gap-2">
           <span>SCROLL</span>
-          <span className="w-8 sm:w-10 h-[1px] bg-[rgba(237,232,221,0.2)] relative overflow-hidden inline-block">
-            <span className="absolute inset-0 bg-[#f2a33c] animate-[scrollhint_2.2s_cubic-bezier(0.22,1,0.36,1)_infinite]" />
+          <span className="w-8 sm:w-10 h-[1px] bg-white/20 relative overflow-hidden inline-block">
+            <span className="absolute inset-0 bg-[#ff2a3b] animate-[scrollhint_2.2s_cubic-bezier(0.22,1,0.36,1)_infinite]" />
           </span>
         </span>
       </div>

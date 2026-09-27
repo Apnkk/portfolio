@@ -35,26 +35,26 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
       <header
         className={`fixed top-0 left-0 right-0 z-[900] flex items-center justify-between px-6 sm:px-12 py-5 transition-all duration-400 ${
           scrolled
-            ? 'bg-black/75 backdrop-blur-md border-b border-[rgba(237,232,221,0.08)]'
+            ? 'bg-black/80 backdrop-blur-md border-b border-white/[0.08]'
             : 'bg-transparent'
         }`}
       >
-        {/* Logo / Monogram with spinning disc */}
+        {/* Logo / Monogram with spinning disc in Crimson */}
         <a
           href="#hero"
-          className="inline-flex items-center gap-2.5 font-mono text-[0.82rem] tracking-wider text-[#ede8dd] uppercase group select-none"
+          className="inline-flex items-center gap-2.5 font-mono text-[0.82rem] tracking-wider text-[#f4f2ee] uppercase group select-none"
           aria-label="Ares — retour en haut"
         >
           <span
-            className={`w-3.5 h-3.5 rounded-full border-2 border-[#f2a33c] relative flex items-center justify-center ${
+            className={`w-3.5 h-3.5 rounded-full border-2 border-[#ff2a3b] relative flex items-center justify-center shadow-[0_0_8px_rgba(255,42,59,0.5)] ${
               isPlaying ? 'animate-spin' : ''
             }`}
-            style={{ animationDuration: '2.6s' }}
+            style={{ animationDuration: '2.4s' }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff3d2e]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff172d]" />
           </span>
           <span className="font-bold tracking-tight">
-            ares<sup className="text-[#f2a33c] font-normal text-[0.65em] ml-0.5">®</sup>
+            ares<sup className="text-[#ff2a3b] font-normal text-[0.65em] ml-0.5">®</sup>
           </span>
         </a>
 
@@ -66,12 +66,12 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
               href={link.href}
               className={`relative py-1 transition-colors group ${
                 link.isContact
-                  ? 'text-[#f2a33c] font-semibold hover:text-[#f2a33c]'
-                  : 'text-[#b9b3a4] hover:text-[#ede8dd]'
+                  ? 'text-[#ff2a3b] font-semibold hover:text-[#ff2a3b]'
+                  : 'text-[#b8b3a8] hover:text-[#f4f2ee]'
               }`}
             >
               <span>{link.label}</span>
-              <span className="absolute left-0 bottom-0 w-full h-[1px] bg-[#f2a33c] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              <span className="absolute left-0 bottom-0 w-full h-[1px] bg-[#ff2a3b] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left shadow-[0_0_6px_rgba(255,42,59,0.8)]" />
             </a>
           ))}
 
@@ -79,7 +79,7 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
           {onToggleTerminal && (
             <button
               onClick={onToggleTerminal}
-              className="p-1.5 text-[#837e6f] hover:text-[#f2a33c] transition-colors"
+              className="p-1.5 text-[#797368] hover:text-[#ff2a3b] transition-colors cursor-pointer"
               title="CLI Dev"
               aria-label="Terminal CLI"
             >
@@ -88,22 +88,22 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
           )}
 
           {/* Language Switcher: EN / FR */}
-          <div className="flex items-center gap-1.5 text-[#837e6f] font-mono text-[0.72rem] ml-2 border-l border-white/10 pl-4">
+          <div className="flex items-center gap-1.5 text-[#797368] font-mono text-[0.72rem] ml-2 border-l border-white/10 pl-4">
             <button
               type="button"
               onClick={() => setLanguage('en')}
-              className={`transition-colors hover:text-[#ede8dd] ${
-                language === 'en' ? 'text-[#f2a33c] font-bold' : 'text-[#837e6f]'
+              className={`transition-colors hover:text-[#f4f2ee] cursor-pointer ${
+                language === 'en' ? 'text-[#ff2a3b] font-bold' : 'text-[#797368]'
               }`}
             >
               EN
             </button>
-            <span className="text-[rgba(237,232,221,0.2)]">/</span>
+            <span className="text-white/20">/</span>
             <button
               type="button"
               onClick={() => setLanguage('fr')}
-              className={`transition-colors hover:text-[#ede8dd] ${
-                language === 'fr' ? 'text-[#f2a33c] font-bold' : 'text-[#837e6f]'
+              className={`transition-colors hover:text-[#f4f2ee] cursor-pointer ${
+                language === 'fr' ? 'text-[#ff2a3b] font-bold' : 'text-[#797368]'
               }`}
             >
               FR
@@ -114,29 +114,29 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
         {/* Mobile Hamburger Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-2 text-[#ede8dd]"
+          className="md:hidden flex flex-col gap-1.5 p-2 text-[#f4f2ee]"
           aria-label="Menu"
           aria-expanded={mobileMenuOpen}
         >
           <span
-            className={`w-6 h-[2px] bg-[#ede8dd] transition-transform duration-300 ${
-              mobileMenuOpen ? 'translate-y-2 rotate-45' : ''
+            className={`w-6 h-[2px] bg-[#f4f2ee] transition-transform duration-300 ${
+              mobileMenuOpen ? 'translate-y-2 rotate-45 bg-[#ff2a3b]' : ''
             }`}
           />
           <span
-            className={`w-6 h-[2px] bg-[#ede8dd] transition-opacity duration-300 ${
+            className={`w-6 h-[2px] bg-[#f4f2ee] transition-opacity duration-300 ${
               mobileMenuOpen ? 'opacity-0' : ''
             }`}
           />
           <span
-            className={`w-6 h-[2px] bg-[#ede8dd] transition-transform duration-300 ${
-              mobileMenuOpen ? '-translate-y-2 -rotate-45' : ''
+            className={`w-6 h-[2px] bg-[#f4f2ee] transition-transform duration-300 ${
+              mobileMenuOpen ? '-translate-y-2 -rotate-45 bg-[#ff2a3b]' : ''
             }`}
           />
         </button>
       </header>
 
-      {/* Fullscreen Mobile Menu (styled like mysticsaba) */}
+      {/* Fullscreen Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -152,19 +152,19 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="font-display font-semibold text-3xl sm:text-5xl text-[#ede8dd] py-2 border-b border-[rgba(237,232,221,0.08)] hover:text-[#f2a33c] transition-colors"
+                  className="font-display font-semibold text-3xl sm:text-5xl text-[#f4f2ee] py-2 border-b border-white/[0.08] hover:text-[#ff2a3b] transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
             </nav>
 
-            <div className="flex items-center gap-4 mt-8 font-mono text-base text-[#837e6f]">
+            <div className="flex items-center gap-4 mt-8 font-mono text-base text-[#797368]">
               <span>Lang:</span>
               <button
                 type="button"
                 onClick={() => setLanguage('en')}
-                className={language === 'en' ? 'text-[#f2a33c] font-bold' : ''}
+                className={language === 'en' ? 'text-[#ff2a3b] font-bold' : ''}
               >
                 EN
               </button>
@@ -172,13 +172,13 @@ export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
               <button
                 type="button"
                 onClick={() => setLanguage('fr')}
-                className={language === 'fr' ? 'text-[#f2a33c] font-bold' : ''}
+                className={language === 'fr' ? 'text-[#ff2a3b] font-bold' : ''}
               >
                 FR
               </button>
             </div>
 
-            <p className="mt-8 font-mono text-xs text-[#837e6f] flex items-center gap-2">
+            <p className="mt-8 font-mono text-xs text-[#797368] flex items-center gap-2">
               <span className="status-dot" />
               <span>FR — Remote friendly · Open to contracts & builds</span>
             </p>

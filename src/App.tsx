@@ -19,7 +19,6 @@ import { audioEngine } from './utils/audioSynth';
 function PortfolioApp() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
-  const [scrollVelocity, setScrollVelocity] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
 
   // Cinematic Scrubber Timeline (Video Progress Bar)
@@ -30,18 +29,18 @@ function PortfolioApp() {
     restDelta: 0.0005,
   });
 
-  // Initialize Lenis Inertial Smooth Scrolling (like a fluid camera dolly)
+  // Initialize Lenis Inertial Smooth Scrolling with native mobile touch momentum
   useEffect(() => {
     const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
     const lenis = new Lenis({
-      duration: isTouch ? 0.85 : 1.25,
+      duration: isTouch ? 0.9 : 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1.0,
       touchMultiplier: 1.0,
-      syncTouch: true,
+      syncTouch: false, // Preserves hardware-accelerated 120Hz native touch momentum on mobile
     });
     lenisRef.current = lenis;
     (window as unknown as { __lenis: Lenis }).__lenis = lenis;
@@ -53,9 +52,8 @@ function PortfolioApp() {
     }
     rafId = requestAnimationFrame(raf);
 
-    // Track scroll velocity for velocity-linked cinematic effects
+    // Dispatch velocity event directly without triggering React re-renders of the App tree
     lenis.on('scroll', (e: { velocity: number }) => {
-      setScrollVelocity(e.velocity);
       window.dispatchEvent(new CustomEvent('portfolio-scroll', { detail: e }));
     });
 
@@ -68,7 +66,7 @@ function PortfolioApp() {
         const el = document.querySelector(href);
         if (el) {
           e.preventDefault();
-          lenis.scrollTo(el as HTMLElement, { offset: -24, duration: 1.3 });
+          lenis.scrollTo(el as HTMLElement, { offset: -24, duration: 1.2 });
         }
       }
     };
@@ -134,14 +132,14 @@ function PortfolioApp() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-black text-[#ede8dd] selection:bg-[#f2a33c] selection:text-black">
+    <div className="relative min-h-screen bg-black text-[#f4f2ee] selection:bg-[#ff2a3b] selection:text-white">
       {/* 35mm Analog Film Grain Texture */}
       <div className="noise" aria-hidden="true" />
 
-      {/* Cinematic Video Timeline Scrubber Bar (Top) */}
-      <div className="fixed top-0 left-0 right-0 h-[2.5px] z-50 pointer-events-none bg-[rgba(237,232,221,0.06)]">
+      {/* Crimson Laser Video Timeline Scrubber Bar (Top) */}
+      <div className="fixed top-0 left-0 right-0 h-[2.5px] z-50 pointer-events-none bg-white/[0.06]">
         <motion.div
-          className="h-full bg-gradient-to-r from-[#f2a33c] via-[#ff3d2e] to-[#f2a33c] origin-left shadow-[0_0_12px_rgba(242,163,60,0.6)]"
+          className="h-full bg-gradient-to-r from-[#ff2a3b] via-[#ff5e62] to-[#ff2a3b] origin-left shadow-[0_0_14px_rgba(255,42,59,0.85)]"
           style={{ scaleX: smoothProgress }}
         />
       </div>
@@ -160,8 +158,8 @@ function PortfolioApp() {
 
       {/* Main Editorial Scrollytelling Content */}
       <main id="main" className="pb-24 sm:pb-0">
-        <Hero scrollVelocity={scrollVelocity} />
-        <MarqueeTicker scrollVelocity={scrollVelocity} />
+        <Hero />
+        <MarqueeTicker />
         <WorkSection />
         <NextSection isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
         <StackSection />

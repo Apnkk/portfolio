@@ -14,6 +14,7 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrame = useRef<number | null>(null);
   const velocityRef = useRef(0);
+  const isVisibleRef = useRef(false);
 
   // Scrollytelling Dolly & Breathing transforms
   const { scrollYProgress } = useScroll({
@@ -24,7 +25,7 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
   const titleScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.88, 1.08, 0.9]);
   const titleY = useTransform(scrollYProgress, [0, 0.5, 1], [40, 0, -40]);
 
-  // Sine Wave Visualizer with velocity modulation
+  // Sine Wave Visualizer with velocity modulation & IntersectionObserver pause
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -40,9 +41,11 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
         velocityRef.current = custom.detail.velocity;
       }
     };
-    window.addEventListener('portfolio-scroll', onScrollEvent);
+    window.addEventListener('portfolio-scroll', onScrollEvent, { passive: true });
 
     const render = () => {
+      if (!isVisibleRef.current) return;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const width = canvas.width;
       const height = canvas.height;
@@ -54,7 +57,7 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
 
       ctx.beginPath();
       ctx.lineWidth = 1.5;
-      ctx.strokeStyle = isPlaying ? '#f2a33c' : 'rgba(237, 232, 221, 0.35)';
+      ctx.strokeStyle = isPlaying ? '#ff2a3b' : 'rgba(244, 242, 238, 0.35)';
 
       const waves = isPlaying ? 3 : 2;
       const velocityAmpBoost = smoothedSpeed * 35;
@@ -77,9 +80,34 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
       animFrame.current = requestAnimationFrame(render);
     };
 
+    // Pause offscreen
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisibleRef.current = entry.isIntersecting;
+          if (entry.isIntersecting) {
+            if (!animFrame.current) {
+              animFrame.current = requestAnimationFrame(render);
+            }
+          } else {
+            if (animFrame.current) {
+              cancelAnimationFrame(animFrame.current);
+              animFrame.current = null;
+            }
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
     render();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('portfolio-scroll', onScrollEvent);
       if (animFrame.current) cancelAnimationFrame(animFrame.current);
     };
@@ -89,41 +117,41 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
     <section
       ref={sectionRef}
       id="next"
-      className="relative py-16 sm:py-36 px-5 sm:px-12 bg-[#050506] border-y border-[rgba(237,232,221,0.08)] overflow-hidden text-center"
+      className="relative py-16 sm:py-36 px-5 sm:px-12 bg-black border-y border-white/[0.08] overflow-hidden text-center"
     >
-      {/* Background Amber Glow */}
+      {/* Background Crimson Glow */}
       <div
         className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${
-          isPlaying ? 'opacity-100' : 'opacity-40'
+          isPlaying ? 'opacity-100' : 'opacity-35'
         }`}
         style={{
           background:
-            'radial-gradient(ellipse 65% 55% at 50% 60%, rgba(242, 163, 60, 0.12), transparent 65%)',
+            'radial-gradient(ellipse 65% 55% at 50% 60%, rgba(255, 42, 59, 0.14), transparent 65%)',
         }}
         aria-hidden="true"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center w-full">
         {/* Section Index */}
-        <p className="mono text-[#f2a33c] mb-3">02 / NEXT</p>
-        <h2 className="font-display font-semibold text-[clamp(2.2rem,5vw,4.2rem)] text-[#ede8dd] tracking-tight leading-none mb-10">
+        <p className="mono text-[#ff2a3b] mb-3 font-semibold">02 / NEXT</p>
+        <h2 className="font-display font-semibold text-[clamp(2.2rem,5vw,4.2rem)] text-[#f4f2ee] tracking-tight leading-none mb-10">
           {language === 'fr' ? 'La prochaine sortie' : 'The next release'}
         </h2>
 
         {/* Coming Soon Pill */}
-        <p className="mono text-[#f2a33c] tracking-[0.3em] text-xs mb-3">
+        <p className="mono text-[#ff2a3b] tracking-[0.3em] text-xs mb-3 font-medium">
           — {language === 'fr' ? 'BIENTÔT DISPONIBLE' : 'COMING SOON'} —
         </p>
 
-        {/* Giant Outlined Wordmark with Parallax & Dolly Zoom - Responsive clamp to prevent mobile overflow */}
+        {/* Giant Outlined Wordmark with Crimson Glow */}
         <motion.h3
           style={{
             scale: titleScale,
             y: titleY,
-            textShadow: isPlaying ? '0 0 80px rgba(242, 163, 60, 0.35)' : 'none',
+            textShadow: isPlaying ? '0 0 90px rgba(255, 42, 59, 0.5)' : 'none',
           }}
           className={`font-display font-bold text-[clamp(2.2rem,11.5vw,13rem)] leading-[0.92] tracking-tight transition-[color,text-shadow] duration-500 select-none will-change-transform w-full text-center origin-center whitespace-nowrap ${
-            isPlaying ? 'stroke-amber' : 'stroke-cream'
+            isPlaying ? 'stroke-red' : 'stroke-cream'
           }`}
         >
           SYNTHESIS
@@ -141,24 +169,24 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
         </div>
 
         {/* Pitch */}
-        <p className="text-[#ede8dd] font-display text-[clamp(1.05rem,1.8vw,1.35rem)] max-w-2xl font-medium leading-relaxed">
+        <p className="text-[#f4f2ee] font-display text-[clamp(1.05rem,1.8vw,1.35rem)] max-w-2xl font-medium leading-relaxed">
           {language === 'fr' ? (
             <>
               Un espace de travail multi-agents IA autonome dans la lignée de mes précédents produits.
               <br />
-              Streaming temps réel, mémoire locale, des outils que l’on <em className="text-[#f2a33c] not-italic">ressent</em>.
+              Streaming temps réel, mémoire locale, des outils que l’on <em className="text-[#ff2a3b] not-italic">ressent</em>.
             </>
           ) : (
             <>
               An autonomous AI multi-agent workspace in the same bloodline as my core products.
               <br />
-              Realtime streaming, local-first memory, tools you can <em className="text-[#f2a33c] not-italic">feel</em>.
+              Realtime streaming, local-first memory, tools you can <em className="text-[#ff2a3b] not-italic">feel</em>.
             </>
           )}
         </p>
 
         {/* Audio Player Hint */}
-        <p className="mono text-xs text-[#837e6f] mt-4">
+        <p className="mono text-xs text-[#797368] mt-4">
           {language === 'fr'
             ? 'Le lecteur audio en bas à droite diffuse mes morceaux — testez-le.'
             : 'The audio player in the bottom dock plays my original tracks — check it out.'}

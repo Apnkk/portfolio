@@ -1,10 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-interface MarqueeTickerProps {
-  scrollVelocity?: number;
-}
-
-export const MarqueeTicker = ({ scrollVelocity = 0 }: MarqueeTickerProps) => {
+export const MarqueeTicker = () => {
   const stackItems = [
     'REACT 19',
     'TYPESCRIPT',
@@ -22,16 +18,14 @@ export const MarqueeTicker = ({ scrollVelocity = 0 }: MarqueeTickerProps) => {
     'DRIZZLE ORM',
   ];
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const animRef = useRef<number | null>(null);
   const offsetRef = useRef(0);
   const velocityRef = useRef(0);
+  const isVisibleRef = useRef(true);
 
-  useEffect(() => {
-    velocityRef.current = scrollVelocity;
-  }, [scrollVelocity]);
-
-  // Velocity-driven smooth scrubbing loop
+  // Velocity-driven smooth scrubbing loop with IntersectionObserver
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -45,9 +39,11 @@ export const MarqueeTicker = ({ scrollVelocity = 0 }: MarqueeTickerProps) => {
         velocityRef.current = custom.detail.velocity;
       }
     };
-    window.addEventListener('portfolio-scroll', onScrollEvent);
+    window.addEventListener('portfolio-scroll', onScrollEvent, { passive: true });
 
     const update = () => {
+      if (!isVisibleRef.current) return;
+
       // Smoothly interpolate scroll velocity contribution
       smoothedExtra += (velocityRef.current * 1.8 - smoothedExtra) * 0.12;
 
@@ -71,28 +67,54 @@ export const MarqueeTicker = ({ scrollVelocity = 0 }: MarqueeTickerProps) => {
       animRef.current = requestAnimationFrame(update);
     };
 
+    // Pause when offscreen
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisibleRef.current = entry.isIntersecting;
+          if (entry.isIntersecting) {
+            if (!animRef.current) {
+              animRef.current = requestAnimationFrame(update);
+            }
+          } else {
+            if (animRef.current) {
+              cancelAnimationFrame(animRef.current);
+              animRef.current = null;
+            }
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
     animRef.current = requestAnimationFrame(update);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('portfolio-scroll', onScrollEvent);
       if (animRef.current) cancelAnimationFrame(animRef.current);
     };
   }, []);
 
   const content = stackItems.map((item, idx) => (
-    <span key={idx} className="mono text-[0.78rem] tracking-[0.14em] text-[#837e6f] px-3 shrink-0">
-      <strong className="text-[#f2a33c] font-normal mr-3">{item}</strong>—
+    <span key={idx} className="mono text-[0.78rem] tracking-[0.14em] text-[#797368] px-3 shrink-0">
+      <strong className="text-[#ff2a3b] font-normal mr-3">{item}</strong>—
     </span>
   ));
 
   return (
     <div
-      className="overflow-hidden border-y border-[rgba(237,232,221,0.08)] py-3.5 bg-[#050506] select-none relative"
+      ref={containerRef}
+      className="overflow-hidden border-y border-white/[0.08] py-3.5 bg-black select-none relative"
       aria-hidden="true"
     >
       {/* Edge gradient masks for film reel fade */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#050506] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#050506] to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
       <div
         ref={trackRef}
