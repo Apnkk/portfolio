@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Lenis from 'lenis';
-import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { LanguageProvider } from './context/LanguageContext';
 import { CustomCursor } from './components/CustomCursor';
 import { AudioPlayer } from './components/AudioPlayer';
@@ -13,13 +13,11 @@ import { NextSection } from './components/NextSection';
 import { MethodSection } from './components/MethodSection';
 import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
-import { TerminalDrawer } from './components/TerminalDrawer';
 import { audioEngine } from './utils/audioSynth';
 import { ArrowUp } from 'lucide-react';
 
 function PortfolioApp() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [terminalOpen, setTerminalOpen] = useState(false);
   const [scrollPercent, setScrollPercent] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
 
@@ -164,12 +162,11 @@ function PortfolioApp() {
       <Navbar
         isPlaying={isPlaying}
         onTogglePlay={handleTogglePlay}
-        onToggleTerminal={() => setTerminalOpen((prev) => !prev)}
       />
 
       {/* Main Scrollytelling Content */}
       <main id="main" className="pb-24 sm:pb-0">
-        <Hero onOpenTerminal={() => setTerminalOpen(true)} />
+        <Hero />
         <MarqueeTicker />
         <WorkSection />
         <LabBentoSection />
@@ -178,16 +175,6 @@ function PortfolioApp() {
         <AboutSection />
         <ContactSection />
       </main>
-
-      {/* Full Developer Terminal Drawer with AnimatePresence */}
-      <AnimatePresence>
-        {terminalOpen && (
-          <TerminalDrawer
-            isOpen={terminalOpen}
-            onClose={() => setTerminalOpen(false)}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }

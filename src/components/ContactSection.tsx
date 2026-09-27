@@ -312,7 +312,7 @@ export const ContactSection = () => {
 
         {/* Footer Bar */}
         <footer className="mt-20 sm:mt-32 py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 mono text-xs text-[#726d64]">
-          <span>© 2026 ARES — VIBE CODER IN FRANCE</span>
+          <span>© 2026 ARES — FULL-STACK &amp; CREATIVE BUILDER</span>
           <span className="text-[#b8b3a8]">REACT 19 · TAILWIND 4 · OLED NOIR &amp; CRIMSON</span>
           <button
             onClick={scrollToTop}

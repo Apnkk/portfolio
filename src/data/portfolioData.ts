@@ -12,16 +12,16 @@ export const portfolioData: PortfolioData = {
       en: "I build streaming-grade apps, iOS software, reverse-engineered APIs, and fast web products with character."
     },
     fullBio: {
-      fr: "Je traite chaque projet comme un produit vivant. Je vibe-code vite pour sortir des prototypes fonctionnels, puis je consolide proprement : TypeScript strict, architectures scalables, builds iOS propres et pipelines d'automatisation. Pas de blabla inutile, du code qui tourne en prod.",
-      en: "I treat every build like a living product. I vibe-code fast to get working prototypes in users' hands, then engineer it properly: strict TypeScript, scalable architectures, solid iOS builds, and automated pipelines. No corporate fluff, just code running in production."
+      fr: "Je traite chaque projet comme un produit vivant. Je conçois et prototype vite pour sortir des versions fonctionnelles, puis je consolide rigoureusement : TypeScript strict, architectures scalables, builds iOS propres et pipelines d'automatisation. Pas de blabla inutile, du code qui tourne en prod.",
+      en: "I treat every build like a living product. I build and prototype rapidly to get working software in users' hands, then engineer it strictly: strict TypeScript, scalable architectures, solid iOS builds, and automated pipelines. No corporate fluff, just code running in production."
     },
     location: "France (Remote friendly)",
     timezone: "Europe/Paris",
     availability: {
       status: "available",
       text: {
-        fr: "Disponible pour projets & missions — vibe coder en France",
-        en: "Available for contracts & full-stack builds — vibe coder in France"
+        fr: "Disponible pour projets & missions — full-stack builder en France",
+        en: "Available for contracts & full-stack builds — full-stack builder in France"
       }
     },
     email: "contact@shopcore.buzz",

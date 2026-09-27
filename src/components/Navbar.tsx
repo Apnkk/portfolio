@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { Terminal, Volume2 } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 
 interface NavbarProps {
-  onToggleTerminal?: () => void;
   isPlaying?: boolean;
   onTogglePlay?: () => void;
 }
 
-export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProps) => {
+export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
   const { language, setLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -38,7 +37,7 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
 
-      // Simple active section detection
+      // Active section detection
       const sections = ['hero', 'work', 'lab', 'method', 'about', 'contact'];
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
@@ -56,18 +55,6 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Listen to keyboard shortcut Ctrl+K / Cmd+K to open terminal
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        onToggleTerminal?.();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onToggleTerminal]);
-
   const navLinks = [
     { href: '#work', id: 'work', label: language === 'fr' ? 'Projets' : 'Work' },
     { href: '#lab', id: 'lab', label: language === 'fr' ? 'Le Lab' : 'The Lab' },
@@ -79,12 +66,12 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-[900] transition-all duration-500 py-3 sm:py-4 px-4 sm:px-8 flex items-center justify-between pointer-events-none ${
+        className={`fixed top-0 left-0 right-0 z-[900] transition-all duration-500 py-3 sm:py-4 px-4 sm:px-8 lg:px-10 flex items-center pointer-events-none ${
           scrolled ? 'pt-2.5 sm:pt-3' : 'pt-4 sm:pt-6'
         }`}
       >
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
-          {/* Logo / Monogram Brand with Glowing Disc */}
+        <div className="w-full relative flex items-center justify-between">
+          {/* Top Left: Logo / Monogram Brand with Glowing Disc */}
           <a
             href="#hero"
             className="pointer-events-auto inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.8)] font-mono text-[0.82rem] tracking-wider text-[#f5f3ef] uppercase group select-none hover:border-[#ff1e38]/50 transition-all duration-300"
@@ -103,9 +90,9 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
             </span>
           </a>
 
-          {/* Center Floating Navigation Pill (Desktop) */}
+          {/* Perfectly Centered: Floating Navigation Pill (Desktop PC >= lg) */}
           <nav
-            className="pointer-events-auto hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.9)] font-mono text-[0.72rem] tracking-wider uppercase select-none"
+            className="pointer-events-auto hidden lg:flex items-center gap-1 xl:gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.9)] font-mono text-[0.68rem] xl:text-[0.72rem] tracking-wider uppercase select-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap z-20"
             aria-label="Navigation principale"
           >
             {navLinks.map((link) => {
@@ -114,7 +101,7 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 rounded-full transition-all duration-300 ${
+                  className={`relative px-3.5 xl:px-4 py-1.5 xl:py-2 rounded-full transition-all duration-300 ${
                     isActive
                       ? 'text-[#f5f3ef] font-semibold bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
                       : link.isContact
@@ -135,7 +122,7 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
             })}
           </nav>
 
-          {/* Right Action Tools: Terminal Shortcut + Sound EQ + Language */}
+          {/* Top Right: Sound EQ + Language Switcher */}
           <div className="pointer-events-auto flex items-center gap-2">
             {/* Audio Mini Pulse Trigger */}
             {onTogglePlay && (
@@ -157,23 +144,6 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
                 )}
                 <span className="text-[0.68rem] tracking-wider font-semibold">
                   {isPlaying ? 'AUDIO ON' : 'AUDIO OFF'}
-                </span>
-              </button>
-            )}
-
-            {/* Dev Terminal Button */}
-            {onToggleTerminal && (
-              <button
-                type="button"
-                onClick={onToggleTerminal}
-                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] hover:border-[#ff1e38]/50 text-[#726d64] hover:text-[#f5f3ef] transition-all text-xs font-mono cursor-pointer"
-                title="Terminal Dev (Ctrl+K)"
-                aria-label="Ouvrir le terminal dev"
-              >
-                <Terminal className="w-3.5 h-3.5 text-[#ff1e38]" />
-                <span className="text-[0.66rem] tracking-widest text-[#b8b3a8]">CLI</span>
-                <span className="text-[0.62rem] text-[#726d64] px-1 py-0.5 rounded bg-white/5 border border-white/5">
-                  ⌘K
                 </span>
               </button>
             )}
@@ -204,11 +174,11 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
               </button>
             </div>
 
-            {/* Mobile Hamburger Toggle Button */}
+            {/* Mobile / Tablet Hamburger Toggle Button */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex flex-col items-center justify-center w-9 h-9 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.1] text-[#f5f3ef] cursor-pointer"
+              className="lg:hidden flex flex-col items-center justify-center w-9 h-9 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.1] text-[#f5f3ef] cursor-pointer"
               aria-label="Menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -269,17 +239,23 @@ export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProp
             </nav>
 
             <div className="relative z-10 space-y-4 pt-6 border-t border-white/[0.08]">
-              {onToggleTerminal && (
+              {/* Mobile Audio Toggle */}
+              {onTogglePlay && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onToggleTerminal();
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-white/[0.05] border border-white/10 text-xs font-mono text-[#f5f3ef] hover:border-[#ff1e38]/50"
+                  onClick={onTogglePlay}
+                  className="w-full flex items-center justify-center gap-2.5 py-3 rounded-2xl bg-white/[0.05] border border-white/10 font-mono text-xs text-[#f5f3ef] hover:border-[#ff1e38]/50 transition-colors"
                 >
-                  <Terminal className="w-4 h-4 text-[#ff1e38]" />
-                  <span>{language === 'fr' ? 'Ouvrir la console CLI' : 'Open Developer CLI'}</span>
+                  {isPlaying ? (
+                    <div className="flex items-end gap-[2px] h-3.5 w-3.5 text-[#ff1e38]">
+                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-1" />
+                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-2" />
+                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-3" />
+                    </div>
+                  ) : (
+                    <Volume2 className="w-3.5 h-3.5 text-[#726d64]" />
+                  )}
+                  <span>{isPlaying ? 'AUDIO ON (PLAYING)' : 'AUDIO OFF (MUTED)'}</span>
                 </button>
               )}
 

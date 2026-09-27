@@ -152,7 +152,7 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
 
         {/* Coming Soon Pill */}
         <p className="mono text-[#ff1e38] tracking-[0.25em] text-xs mb-4 font-semibold uppercase">
-          — {language === 'fr' ? 'PROCHAIN ÉCOSYSTÈME IA' : 'NEXT AI ECOSYSTEM'} —
+          — {language === 'fr' ? 'PROCHAINE PRODUCTION' : 'NEXT RELEASE'} —
         </p>
 
         {/* Giant Outlined Wordmark with Crimson Glow */}
@@ -184,13 +184,13 @@ export const NextSection = ({ isPlaying, onTogglePlay }: NextSectionProps) => {
         <p className="text-[#f5f3ef] font-display text-[clamp(1.05rem,1.8vw,1.35rem)] max-w-2xl font-medium leading-relaxed">
           {language === 'fr' ? (
             <>
-              Un espace de travail multi-agents IA autonome dans la lignée de mes précédents produits.
+              Un environnement de travail créatif et autonome dans la lignée de mes précédents produits.
               <br />
               Streaming temps réel, mémoire locale, des outils que l’on <em className="text-[#ff1e38] not-italic">ressent</em>.
             </>
           ) : (
             <>
-              An autonomous AI multi-agent workspace in the same bloodline as my core products.
+              A creative, autonomous workspace in the same bloodline as my core products.
               <br />
               Realtime streaming, local-first memory, tools you can <em className="text-[#ff1e38] not-italic">feel</em>.
             </>

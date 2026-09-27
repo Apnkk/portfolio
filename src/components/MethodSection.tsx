@@ -21,8 +21,8 @@ export const MethodSection = () => {
       name: language === 'fr' ? 'Prototype' : 'Prototype',
       desc:
         language === 'fr'
-          ? "Vibe-coder une version fonctionnelle rapidement avec l'IA comme copilote. L'élan et la vélocité priment au départ."
-          : 'Vibe-code a working version fast with AI copilots. Momentum beats perfection — at first.',
+          ? "Développer une première version fonctionnelle rapidement pour tester et valider l'expérience. L'élan et la vélocité priment au départ."
+          : 'Build a working interactive version fast to test and validate the experience. Momentum beats perfection — at first.',
     },
     {
       num: '03',

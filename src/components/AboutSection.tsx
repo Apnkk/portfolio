@@ -38,11 +38,11 @@ export const AboutSection = () => {
         >
           {language === 'fr' ? (
             <>
-              Je suis un développeur full-stack basé en France qui aborde chaque projet comme un véritable produit vivant. Je suis un <em className="text-[#ff1e38] not-italic">vibe coder</em> — je conçois vite avec l’IA comme copilote — puis j’industrialise sérieusement : typage strict TypeScript, architectures scalables, builds iOS propres et pipelines d’automatisation.
+              Je suis un développeur full-stack basé en France qui aborde chaque projet comme un véritable produit vivant. Je conçois et prototype avec vélocité, puis j’industrialise rigoureusement : typage strict TypeScript, architectures scalables, builds iOS propres et pipelines d’automatisation.
             </>
           ) : (
             <>
-              I'm a full-stack developer based in France who treats software like a living product. I'm a <em className="text-[#ff1e38] not-italic">vibe coder</em> — prototyping rapidly with AI — then engineering strictly: strict TypeScript, scalable architectures, solid iOS builds, and automated delivery pipelines.
+              I'm a full-stack developer based in France who treats software like a living product. I build and prototype rapidly, then engineer strictly: strict TypeScript, scalable architectures, solid iOS builds, and automated delivery pipelines.
             </>
           )}
         </motion.p>

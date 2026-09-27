@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { portfolioData } from '../data/portfolioData';
@@ -9,33 +9,7 @@ import { GithubIcon } from './icons/BrandIcons';
 
 export const WorkSection = () => {
   const { language } = useLanguage();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeProject, setActiveProject] = useState<Project | null>(null);
-
-  const categories = [
-    { id: 'all', label: language === 'fr' ? 'Tous les projets' : 'All Projects' },
-    { id: 'fullstack', label: language === 'fr' ? 'Full-Stack & E-Com' : 'Full-Stack & E-Com' },
-    { id: 'streaming', label: language === 'fr' ? 'Streaming & Médias' : 'Streaming & Media' },
-    { id: 'tools', label: language === 'fr' ? 'Desktop & iOS' : 'Desktop & iOS' },
-  ];
-
-  const filteredProjects = useMemo(() => {
-    if (selectedCategory === 'all') return portfolioData.projects;
-    if (selectedCategory === 'streaming') {
-      return portfolioData.projects.filter(
-        (p) => p.id === 'zflix-desktop' || p.id === 'zmusic'
-      );
-    }
-    if (selectedCategory === 'fullstack') {
-      return portfolioData.projects.filter((p) => p.id === 'shopcore');
-    }
-    if (selectedCategory === 'tools') {
-      return portfolioData.projects.filter(
-        (p) => p.id === 'zflix-launcher' || p.id === 'spoti-liquid-glass'
-      );
-    }
-    return portfolioData.projects;
-  }, [selectedCategory]);
 
   return (
     <section
@@ -44,54 +18,32 @@ export const WorkSection = () => {
       aria-labelledby="work-heading"
     >
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
-            <p className="mono text-[#ff1e38] font-semibold text-xs tracking-widest">
-              01 / SHOWCASE
-            </p>
-          </div>
-          <h2
-            id="work-heading"
-            className="font-display font-semibold text-[clamp(2.4rem,6vw,5rem)] text-[#f5f3ef] tracking-tight leading-none"
-          >
-            {language === 'fr' ? (
-              <>
-                Projets récents <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> live
-              </>
-            ) : (
-              <>
-                Featured work <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> live
-              </>
-            )}
-          </h2>
-          <p className="text-[#b8b3a8] text-sm sm:text-base mt-3 max-w-lg font-normal leading-relaxed">
-            {language === 'fr'
-              ? 'Des applications complètes, de la conception à la mise en production, testées et utilisées en conditions réelles.'
-              : 'End-to-end applications from architecture to production, deployed and running in the wild.'}
+      <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
+          <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
+          <p className="mono text-[#ff1e38] font-semibold text-xs tracking-widest">
+            01 / SHOWCASE
           </p>
         </div>
-
-        {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2 bg-black/60 p-1.5 rounded-2xl border border-white/[0.08] backdrop-blur-xl">
-          {categories.map((cat) => {
-            const isSelected = selectedCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`relative px-3.5 py-1.5 rounded-xl font-mono text-[0.72rem] tracking-wider uppercase transition-all duration-300 cursor-pointer ${
-                  isSelected
-                    ? 'text-white font-bold bg-[#ff1e38] shadow-[0_0_15px_rgba(255,30,56,0.5)]'
-                    : 'text-[#726d64] hover:text-[#f5f3ef] hover:bg-white/[0.04]'
-                }`}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
+        <h2
+          id="work-heading"
+          className="font-display font-semibold text-[clamp(2.4rem,6vw,5rem)] text-[#f5f3ef] tracking-tight leading-none"
+        >
+          {language === 'fr' ? (
+            <>
+              Projets récents <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> live
+            </>
+          ) : (
+            <>
+              Featured work <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> live
+            </>
+          )}
+        </h2>
+        <p className="text-[#b8b3a8] text-sm sm:text-base mt-3 max-w-xl font-normal leading-relaxed">
+          {language === 'fr'
+            ? 'Des applications complètes, de la conception à la mise en production, testées et utilisées en conditions réelles.'
+            : 'End-to-end applications from architecture to production, deployed and running in the wild.'}
+        </p>
       </div>
 
       {/* Projects Grid */}
@@ -100,7 +52,7 @@ export const WorkSection = () => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 sm:gap-8"
       >
         <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, idx) => {
+          {portfolioData.projects.map((project, idx) => {
             // Featured large cards for top projects
             const isWide = idx === 0 || idx === 1;
             const colSpan = isWide ? 'lg:col-span-6' : 'lg:col-span-4';

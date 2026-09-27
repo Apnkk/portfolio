@@ -1,13 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { ArrowDownRight, Terminal, ShieldCheck } from 'lucide-react';
+import { ArrowDownRight, ShieldCheck } from 'lucide-react';
 
-interface HeroProps {
-  onOpenTerminal?: () => void;
-}
-
-export const Hero = ({ onOpenTerminal }: HeroProps) => {
+export const Hero = () => {
   const { language } = useLanguage();
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -236,29 +232,6 @@ export const Hero = ({ onOpenTerminal }: HeroProps) => {
 
       {/* Main Content Area */}
       <div className="relative z-10 px-5 sm:px-12 md:px-16 my-auto py-8 sm:py-12 flex flex-col items-center max-w-5xl mx-auto w-full">
-        {/* Availability Pill with Pulsing LED */}
-        <motion.div
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55 }}
-          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.1] hover:border-[#ff1e38]/50 shadow-[0_4px_20px_rgba(0,0,0,0.8)] mb-6 sm:mb-8 transition-colors cursor-default"
-        >
-          <span className="status-dot shrink-0" aria-hidden="true" />
-          <span className="mono text-[0.68rem] sm:text-[0.74rem] text-[#c2bdb3] tracking-wider uppercase font-medium">
-            {language === 'fr' ? (
-              <>
-                <span className="sm:hidden">Disponible · Vibe Coder en France</span>
-                <span className="hidden sm:inline">Disponible pour missions &amp; builds — vibe coder en France</span>
-              </>
-            ) : (
-              <>
-                <span className="sm:hidden">Available · Vibe Coder in France</span>
-                <span className="hidden sm:inline">Available for contracts &amp; builds — vibe coder in France</span>
-              </>
-            )}
-          </span>
-        </motion.div>
-
         {/* Monumental Sculptural Typography: "ARES" with Backlight Glow */}
         <motion.div
           style={{
@@ -366,18 +339,6 @@ export const Hero = ({ onOpenTerminal }: HeroProps) => {
           >
             <span>{language === 'fr' ? 'Me contacter' : 'Get in Touch'}</span>
           </a>
-
-          {onOpenTerminal && (
-            <button
-              type="button"
-              onClick={onOpenTerminal}
-              className="btn btn--ghost py-3 px-4 sm:py-3.5 text-[0.74rem] sm:text-[0.78rem] text-[#b8b3a8] hover:text-[#ff1e38]"
-              title="Terminal Dev"
-            >
-              <Terminal className="w-3.5 h-3.5 text-[#ff1e38]" />
-              <span className="hidden sm:inline">CLI</span>
-            </button>
-          )}
         </motion.div>
       </div>
 
