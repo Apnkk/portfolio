@@ -101,8 +101,8 @@ export const MarqueeTicker = () => {
   }, []);
 
   const content = stackItems.map((item, idx) => (
-    <span key={idx} className="mono text-[0.78rem] tracking-[0.14em] text-[#797368] px-3 shrink-0">
-      <strong className="text-[#ff2a3b] font-normal mr-3">{item}</strong>—
+    <span key={idx} className="mono text-[0.78rem] tracking-[0.14em] text-[#726d64] px-3 shrink-0">
+      <strong className="text-[#ff1e38] font-normal mr-3">{item}</strong>—
     </span>
   ));
 

@@ -5,7 +5,10 @@ export const CustomCursor = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [isInWindow, setIsInWindow] = useState(false);
-  const [isVisible] = useState(() => typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches);
+  const [isEnabled, setIsEnabled] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(pointer: fine) and (min-width: 768px)').matches;
+  });
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -15,9 +18,25 @@ export const CustomCursor = () => {
   const ringY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    if (!isVisible) return;
+    const mq = window.matchMedia('(pointer: fine) and (min-width: 768px)');
+    const updateEnabled = (e: MediaQueryListEvent | MediaQueryList) => {
+      setIsEnabled(e.matches);
+      if (!e.matches) {
+        document.documentElement.classList.remove('custom-cursor-active');
+      }
+    };
 
-    // Hide default system cursor
+    mq.addEventListener('change', updateEnabled);
+    return () => mq.removeEventListener('change', updateEnabled);
+  }, []);
+
+  useEffect(() => {
+    if (!isEnabled) {
+      document.documentElement.classList.remove('custom-cursor-active');
+      return;
+    }
+
+    // Hide default system cursor only when custom cursor is active
     document.documentElement.classList.add('custom-cursor-active');
 
     const onMouseMove = (e: MouseEvent) => {
@@ -66,15 +85,15 @@ export const CustomCursor = () => {
       document.removeEventListener('mouseenter', onMouseEnter);
       window.removeEventListener('mouseover', onMouseOver);
     };
-  }, [isVisible, mouseX, mouseY]);
+  }, [isEnabled, mouseX, mouseY]);
 
-  if (!isVisible || !isInWindow) return null;
+  if (!isEnabled || !isInWindow) return null;
 
   return (
-    <div className="hidden md:block pointer-events-none fixed inset-0 z-[9999]" aria-hidden="true">
+    <div className="pointer-events-none fixed inset-0 z-[9999]" aria-hidden="true">
       {/* Center Radiant Crimson Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-[5px] h-[5px] rounded-full bg-[#ff2a3b] pointer-events-none shadow-[0_0_10px_rgba(255,42,59,0.95)]"
+        className="fixed top-0 left-0 w-[5px] h-[5px] rounded-full bg-[#ff1e38] pointer-events-none shadow-[0_0_12px_rgba(255,30,56,1)]"
         style={{
           x: mouseX,
           y: mouseY,
@@ -91,16 +110,16 @@ export const CustomCursor = () => {
           y: ringY,
           translateX: '-50%',
           translateY: '-50%',
-          width: isHovered ? 46 : isPressed ? 18 : 28,
-          height: isHovered ? 46 : isPressed ? 18 : 28,
+          width: isHovered ? 48 : isPressed ? 18 : 28,
+          height: isHovered ? 48 : isPressed ? 18 : 28,
           borderColor: isHovered
-            ? 'rgba(255, 42, 59, 0.95)'
-            : 'rgba(255, 42, 59, 0.35)',
+            ? 'rgba(255, 30, 56, 0.95)'
+            : 'rgba(255, 30, 56, 0.35)',
           backgroundColor: isHovered
-            ? 'rgba(255, 42, 59, 0.1)'
+            ? 'rgba(255, 30, 56, 0.1)'
             : 'transparent',
           boxShadow: isHovered
-            ? '0 0 16px rgba(255, 42, 59, 0.4)'
+            ? '0 0 20px rgba(255, 30, 56, 0.45)'
             : 'none',
         }}
       />

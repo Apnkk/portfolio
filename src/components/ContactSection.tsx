@@ -15,18 +15,18 @@ export const ContactSection = () => {
     navigator.clipboard.writeText(portfolioData.personal.email);
     setCopiedEmail(true);
     confetti({
-      particleCount: 55,
-      spread: 75,
+      particleCount: 65,
+      spread: 80,
       origin: { y: 0.8 },
-      colors: ['#ff2a3b', '#ff5e62', '#ffffff', '#ff172d'],
+      colors: ['#ff1e38', '#ff4d61', '#ffffff'],
     });
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
   const scrollToTop = () => {
-    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number) => void } }).__lenis;
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: { duration?: number }) => void } }).__lenis;
     if (lenis) {
-      lenis.scrollTo(0);
+      lenis.scrollTo(0, { duration: 1.2 });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -40,7 +40,6 @@ export const ContactSection = () => {
     setErrorMessage('');
 
     try {
-      // Direct email dispatch to contact@shopcore.buzz via FormSubmit AJAX service
       const response = await fetch('https://formsubmit.co/ajax/contact@shopcore.buzz', {
         method: 'POST',
         headers: {
@@ -62,10 +61,10 @@ export const ContactSection = () => {
       if (response.ok && (data.success === 'true' || data.success === true)) {
         setStatus('success');
         confetti({
-          particleCount: 75,
-          spread: 85,
+          particleCount: 85,
+          spread: 90,
           origin: { y: 0.6 },
-          colors: ['#ff2a3b', '#ff6b78', '#ffffff'],
+          colors: ['#ff1e38', '#ff4d61', '#ffffff'],
         });
         setFormState({ name: '', email: '', message: '' });
       } else if (data.message && data.message.includes('Activation')) {
@@ -92,13 +91,31 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="pt-16 sm:pt-32 pb-0 px-5 sm:px-12 md:px-16 bg-black border-t border-white/[0.08] text-center" aria-labelledby="contact-title">
-      <div className="max-w-5xl mx-auto">
+    <section
+      id="contact"
+      className="pt-20 sm:pt-36 pb-0 px-5 sm:px-10 md:px-14 bg-black border-t border-white/[0.08] text-center select-none relative"
+      aria-labelledby="contact-title"
+    >
+      {/* Background Subtle Red Aurora */}
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#ff1e38]/10 blur-[130px] pointer-events-none"
+        aria-hidden="true"
+      />
+
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Section Index */}
-        <p className="mono text-[#ff2a3b] mb-2 sm:mb-3 font-semibold">06 / CONTACT</p>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
+          <p className="mono text-[#ff1e38] font-semibold text-xs tracking-widest">
+            06 / CONTACT
+          </p>
+        </div>
 
         {/* Big Impact Title */}
-        <h2 id="contact-title" className="font-display font-semibold text-[clamp(2.1rem,7.5vw,6.5rem)] text-[#f4f2ee] tracking-tight leading-[1.05] mb-6 sm:mb-10 select-none">
+        <h2
+          id="contact-title"
+          className="font-display font-semibold text-[clamp(2.4rem,8vw,6.8rem)] text-[#f5f3ef] tracking-tight leading-[1.04] mb-6 sm:mb-10 select-none"
+        >
           <span className="block">{language === 'fr' ? 'Un projet' : 'Got a project'}</span>
           <span className="block">
             {language === 'fr' ? 'qui veut du ' : 'that needs '}
@@ -107,29 +124,31 @@ export const ContactSection = () => {
         </h2>
 
         {/* Large Interactive Email Pill Button */}
-        <div className="flex flex-col items-center max-w-full px-2">
+        <div className="flex flex-col items-center max-w-full px-2 mb-10">
           <button
             onClick={copyEmail}
-            className="group inline-flex items-center justify-center gap-2.5 sm:gap-3 font-mono text-[clamp(0.78rem,3.2vw,1.35rem)] tracking-wider py-3 sm:py-4 px-5 sm:px-9 rounded-full border border-white/20 bg-black/60 hover:border-[#ff2a3b] hover:text-[#ff2a3b] transition-all duration-300 hover:shadow-[0_0_35px_rgba(255,42,59,0.3)] active:scale-[0.98] select-none max-w-full truncate cursor-pointer"
+            className="group inline-flex items-center justify-center gap-2.5 sm:gap-3 font-mono text-[clamp(0.78rem,3.2vw,1.35rem)] tracking-wider py-3.5 sm:py-4 px-6 sm:px-10 rounded-full border border-white/20 bg-black/80 hover:border-[#ff1e38] hover:text-[#ff1e38] transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,30,56,0.35)] active:scale-[0.98] select-none max-w-full truncate cursor-pointer shadow-2xl"
             title="Copier l'adresse email"
           >
             <span className="truncate">{portfolioData.personal.email}</span>
             {copiedEmail ? (
-              <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#ff2a3b] shrink-0" />
+              <Check className="w-4 h-4 text-[#ff1e38] shrink-0" />
             ) : (
-              <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#797368] group-hover:text-[#ff2a3b] transition-colors shrink-0" />
+              <Copy className="w-4 h-4 text-[#726d64] group-hover:text-[#ff1e38] transition-colors shrink-0" />
             )}
           </button>
         </div>
 
-        {/* Direct Message Form (Dispatches to contact@shopcore.buzz) */}
-        <div className="mt-7 sm:mt-8 max-w-lg mx-auto p-5 sm:p-8 rounded-2xl bg-[#060608] border border-white/10 text-left shadow-2xl">
+        {/* Direct Message Form */}
+        <div className="max-w-lg mx-auto p-6 sm:p-8 oled-card text-left shadow-2xl">
+          <div className="vu-bar" aria-hidden="true" />
+          
           {status === 'success' ? (
             <div className="text-center py-6 space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#ff2a3b]/15 text-[#ff2a3b] flex items-center justify-center mx-auto border border-[#ff2a3b]/30 shadow-[0_0_15px_rgba(255,42,59,0.25)]">
+              <div className="w-12 h-12 rounded-full bg-[#ff1e38]/15 text-[#ff1e38] flex items-center justify-center mx-auto border border-[#ff1e38]/30 shadow-[0_0_15px_rgba(255,30,56,0.3)]">
                 <Check className="w-6 h-6" />
               </div>
-              <p className="text-[#f4f2ee] font-display font-semibold text-lg">
+              <p className="text-[#f5f3ef] font-display font-semibold text-lg">
                 {language === 'fr' ? 'Message envoyé avec succès !' : 'Message sent successfully!'}
               </p>
               <p className="text-xs text-[#b8b3a8] leading-relaxed max-w-sm mx-auto">
@@ -139,17 +158,17 @@ export const ContactSection = () => {
               </p>
               <button
                 onClick={() => setStatus('idle')}
-                className="mono text-xs text-[#ff2a3b] hover:underline pt-2 inline-block cursor-pointer font-medium"
+                className="mono text-xs text-[#ff1e38] hover:underline pt-2 inline-block cursor-pointer font-medium"
               >
                 {language === 'fr' ? 'Envoyer un autre message' : 'Send another note'}
               </button>
             </div>
           ) : status === 'needs_activation' ? (
             <div className="text-center py-6 space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#ff2a3b]/15 text-[#ff2a3b] flex items-center justify-center mx-auto border border-[#ff2a3b]/30">
+              <div className="w-12 h-12 rounded-full bg-[#ff1e38]/15 text-[#ff1e38] flex items-center justify-center mx-auto border border-[#ff1e38]/30">
                 <Mail className="w-6 h-6" />
               </div>
-              <p className="text-[#ff2a3b] font-display font-semibold text-lg">
+              <p className="text-[#ff1e38] font-display font-semibold text-lg">
                 {language === 'fr' ? 'Activation requise' : 'Activation required'}
               </p>
               <p className="text-xs text-[#b8b3a8] leading-relaxed max-w-sm mx-auto">
@@ -159,45 +178,45 @@ export const ContactSection = () => {
               </p>
               <button
                 onClick={() => setStatus('idle')}
-                className="mono text-xs text-[#ff2a3b] hover:underline pt-2 inline-block cursor-pointer"
+                className="mono text-xs text-[#ff1e38] hover:underline pt-2 inline-block cursor-pointer"
               >
                 {language === 'fr' ? 'Retour au formulaire' : 'Back to form'}
               </button>
             </div>
           ) : status === 'error' ? (
             <div className="text-center py-6 space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#ff2a3b]/15 text-[#ff2a3b] flex items-center justify-center mx-auto border border-[#ff2a3b]/30">
+              <div className="w-12 h-12 rounded-full bg-[#ff1e38]/15 text-[#ff1e38] flex items-center justify-center mx-auto border border-[#ff1e38]/30">
                 <AlertCircle className="w-6 h-6" />
               </div>
-              <p className="text-[#ff2a3b] font-display font-semibold text-lg">
+              <p className="text-[#ff1e38] font-display font-semibold text-lg">
                 {language === 'fr' ? "Erreur lors de l'envoi" : 'Error sending message'}
               </p>
               <p className="text-xs text-[#b8b3a8] leading-relaxed max-w-sm mx-auto">
                 {errorMessage}
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
                 <a
-                  href={`mailto:contact@shopcore.buzz?subject=${encodeURIComponent(
-                    `Projet Portfolio Ares - ${formState.name}`
-                  )}&body=${encodeURIComponent(formState.message)}`}
-                  className="btn btn--solid text-xs py-2.5 px-4"
+                  href={`mailto:${portfolioData.personal.email}?subject=${encodeURIComponent(
+                    `Contact depuis Portfolio Ares (${formState.name || 'Visiteur'})`
+                  )}&body=${encodeURIComponent(formState.message || '')}`}
+                  className="btn btn--crimson py-2.5 px-4 text-xs font-mono"
                 >
-                  <Mail className="w-3.5 h-3.5 mr-1" />
-                  <span>{language === 'fr' ? 'Ouvrir mon mail' : 'Send via email client'}</span>
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>{language === 'fr' ? 'Écrire directement par email' : 'Open in Email Client'}</span>
                 </a>
                 <button
                   onClick={() => setStatus('idle')}
-                  className="mono text-xs text-[#797368] hover:text-[#f4f2ee] py-2 cursor-pointer"
+                  className="mono text-xs text-[#b8b3a8] hover:text-[#ff1e38] py-2 cursor-pointer transition-colors"
                 >
-                  {language === 'fr' ? 'Réessayer' : 'Try again'}
+                  {language === 'fr' ? 'Modifier le message' : 'Edit message'}
                 </button>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block mono text-[11px] text-[#797368] mb-2 uppercase tracking-wider font-medium">
-                  {language === 'fr' ? 'Nom' : 'Name'}
+                <label className="block mono text-[11px] text-[#726d64] mb-2 uppercase tracking-wider font-medium">
+                  {language === 'fr' ? 'Nom complet' : 'Full Name'}
                 </label>
                 <input
                   type="text"
@@ -206,12 +225,12 @@ export const ContactSection = () => {
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                   placeholder="Alex"
                   disabled={status === 'submitting'}
-                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/10 text-[#f4f2ee] text-xs font-mono focus:border-[#ff2a3b] focus:ring-1 focus:ring-[#ff2a3b]/40 focus:outline-none transition-all disabled:opacity-60"
+                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/10 text-[#f5f3ef] text-xs font-mono focus:border-[#ff1e38] focus:ring-1 focus:ring-[#ff1e38]/40 focus:outline-none transition-all disabled:opacity-60"
                 />
               </div>
 
               <div>
-                <label className="block mono text-[11px] text-[#797368] mb-2 uppercase tracking-wider font-medium">
+                <label className="block mono text-[11px] text-[#726d64] mb-2 uppercase tracking-wider font-medium">
                   Email
                 </label>
                 <input
@@ -221,12 +240,12 @@ export const ContactSection = () => {
                   onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                   placeholder="alex@domain.com"
                   disabled={status === 'submitting'}
-                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/10 text-[#f4f2ee] text-xs font-mono focus:border-[#ff2a3b] focus:ring-1 focus:ring-[#ff2a3b]/40 focus:outline-none transition-all disabled:opacity-60"
+                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/10 text-[#f5f3ef] text-xs font-mono focus:border-[#ff1e38] focus:ring-1 focus:ring-[#ff1e38]/40 focus:outline-none transition-all disabled:opacity-60"
                 />
               </div>
 
               <div>
-                <label className="block mono text-[11px] text-[#797368] mb-2 uppercase tracking-wider font-medium">
+                <label className="block mono text-[11px] text-[#726d64] mb-2 uppercase tracking-wider font-medium">
                   Message
                 </label>
                 <textarea
@@ -240,14 +259,14 @@ export const ContactSection = () => {
                       : 'Your project, scope, estimated timeline...'
                   }
                   disabled={status === 'submitting'}
-                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/10 text-[#f4f2ee] text-xs font-mono focus:border-[#ff2a3b] focus:ring-1 focus:ring-[#ff2a3b]/40 focus:outline-none transition-all resize-none leading-relaxed disabled:opacity-60"
+                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/10 text-[#f5f3ef] text-xs font-mono focus:border-[#ff1e38] focus:ring-1 focus:ring-[#ff1e38]/40 focus:outline-none transition-all resize-none leading-relaxed disabled:opacity-60"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={status === 'submitting'}
-                className="w-full py-3.5 rounded-full bg-[#f4f2ee] hover:bg-[#ff2a3b] text-black hover:text-white font-mono font-bold text-xs tracking-wider flex items-center justify-center gap-2.5 transition-all active:scale-[0.99] shadow-lg hover:shadow-[0_0_25px_rgba(255,42,59,0.5)] disabled:opacity-60 cursor-pointer uppercase mt-2"
+                className="w-full py-3.5 rounded-full btn--crimson font-mono font-bold text-xs tracking-wider flex items-center justify-center gap-2.5 transition-all cursor-pointer uppercase mt-2"
               >
                 {status === 'submitting' ? (
                   <>
@@ -272,9 +291,9 @@ export const ContactSection = () => {
               href="https://github.com/Apnkk"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#ff2a3b] transition-colors flex items-center gap-1"
+              className="hover:text-[#ff1e38] transition-colors flex items-center gap-1.5 p-2 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#ff1e38]/40"
             >
-              <span>GITHUB</span>
+              <span>GITHUB (@Apnkk)</span>
               <span aria-hidden="true">↗</span>
             </a>
           </li>
@@ -283,21 +302,21 @@ export const ContactSection = () => {
               href="https://discord.com/users/498671450996342794"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#ff2a3b] transition-colors flex items-center gap-1"
+              className="hover:text-[#ff1e38] transition-colors flex items-center gap-1.5 p-2 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#ff1e38]/40"
             >
-              <span>DISCORD</span>
+              <span>DISCORD (Ares)</span>
               <span aria-hidden="true">↗</span>
             </a>
           </li>
         </ul>
 
         {/* Footer Bar */}
-        <footer className="mt-20 sm:mt-32 py-7 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 mono text-xs text-[#797368]">
-          <span>© 2026 ARES</span>
-          <span className="text-[#b8b3a8]">REACT 19 · TAILWIND 4 · WEB AUDIO</span>
+        <footer className="mt-20 sm:mt-32 py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 mono text-xs text-[#726d64]">
+          <span>© 2026 ARES — VIBE CODER IN FRANCE</span>
+          <span className="text-[#b8b3a8]">REACT 19 · TAILWIND 4 · OLED NOIR &amp; CRIMSON</span>
           <button
             onClick={scrollToTop}
-            className="hover:text-[#ff2a3b] transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="hover:text-[#ff1e38] transition-colors flex items-center gap-1.5 cursor-pointer"
           >
             <span>BACK TO TOP</span>
             <ArrowUp className="w-3.5 h-3.5" />

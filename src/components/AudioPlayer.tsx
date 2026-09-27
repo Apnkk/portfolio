@@ -169,7 +169,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
         {/* Left: Mini Spinning Vinyl or Play Button */}
         <button
           onClick={onTogglePlay}
-          className="w-10 h-10 rounded-full bg-[#ff2a3b] text-white flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,42,59,0.4)] active:scale-95 transition-transform"
+          className="w-10 h-10 rounded-full bg-[#ff1e38] text-white flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,30,56,0.4)] active:scale-95 transition-transform"
           aria-label={isPlaying ? 'Pause' : 'Lecture'}
         >
           {isPlaying ? (
@@ -199,7 +199,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
               <span
                 key={i}
                 className={`w-[2px] rounded-full transition-all duration-200 ${
-                  isPlaying ? 'bg-[#ff2a3b] animate-pulse' : 'bg-white/20'
+                  isPlaying ? 'bg-[#ff1e38] animate-pulse' : 'bg-white/20'
                 }`}
                 style={{
                   height: isPlaying ? `${Math.max(25, h * 100)}%` : '30%',
@@ -241,7 +241,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
               {/* Sheet Header */}
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#ff2a3b] animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-[#ff1e38] animate-pulse" />
                   <span className="mono text-[11px] text-[#f4f2ee] font-bold tracking-wider uppercase">
                     Ares Soundtrack · 0{playerState.currentTrackIndex + 1}
                   </span>
@@ -261,7 +261,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                   {/* Halo Glow */}
                   <div
                     className={`absolute inset-0 rounded-full transition-opacity duration-500 blur-xl pointer-events-none ${
-                      isPlaying ? 'opacity-80 bg-[#ff2a3b]/30' : 'opacity-0'
+                      isPlaying ? 'opacity-80 bg-[#ff1e38]/30' : 'opacity-0'
                     }`}
                   />
                   {/* Vinyl Record */}
@@ -282,7 +282,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       }}
                     />
                     {/* Center Label */}
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#ff2a3b] to-[#b81424] border-2 border-black flex items-center justify-center shadow-inner relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#ff1e38] to-[#b81424] border-2 border-black flex items-center justify-center shadow-inner relative z-10">
                       <span className="font-mono text-[9px] font-black text-white">
                         0{playerState.currentTrackIndex + 1}
                       </span>
@@ -322,7 +322,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                 >
                   <div className="h-[4px] w-full bg-white/10 rounded-full overflow-hidden relative">
                     <div
-                      className="h-full bg-gradient-to-r from-[#ff2a3b] to-[#ff6b78] rounded-full"
+                      className="h-full bg-gradient-to-r from-[#ff1e38] to-[#ff6b78] rounded-full"
                       style={{ width: `${progressRatio * 100}%` }}
                     />
                   </div>
@@ -345,7 +345,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
                 <button
                   onClick={onTogglePlay}
-                  className="w-14 h-14 rounded-full bg-[#ff2a3b] text-white flex items-center justify-center shadow-[0_0_25px_rgba(255,42,59,0.5)] active:scale-95 transition-transform"
+                  className="w-14 h-14 rounded-full bg-[#ff1e38] text-white flex items-center justify-center shadow-[0_0_25px_rgba(255,30,56,0.5)] active:scale-95 transition-transform"
                   aria-label={isPlaying ? 'Pause' : 'Lecture'}
                 >
                   {isPlaying ? (
@@ -384,7 +384,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                   step="0.05"
                   value={playerState.isMuted ? 0 : playerState.volume}
                   onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
-                  className="w-48 accent-[#ff2a3b] h-1.5 bg-white/15 rounded-lg cursor-pointer"
+                  className="w-48 accent-[#ff1e38] h-1.5 bg-white/15 rounded-lg cursor-pointer"
                   aria-label="Volume"
                 />
               </div>
@@ -399,7 +399,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       onClick={() => audioEngine.setTrack(idx, true)}
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-colors ${
                         isCurrent
-                          ? 'bg-white/10 text-[#ff2a3b] font-medium'
+                          ? 'bg-white/10 text-[#ff1e38] font-medium'
                           : 'text-[#b8b3a8] hover:bg-white/5 hover:text-[#f4f2ee]'
                       }`}
                     >
@@ -410,9 +410,9 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       <div className="flex items-center gap-2 shrink-0">
                         {isCurrent && isPlaying && (
                           <span className="flex items-end gap-[2px] h-3">
-                            <span className="w-[1.5px] h-full bg-[#ff2a3b] animate-pulse" />
-                            <span className="w-[1.5px] h-2/3 bg-[#ff2a3b] animate-pulse delay-75" />
-                            <span className="w-[1.5px] h-4/5 bg-[#ff2a3b] animate-pulse delay-150" />
+                            <span className="w-[1.5px] h-full bg-[#ff1e38] animate-pulse" />
+                            <span className="w-[1.5px] h-2/3 bg-[#ff1e38] animate-pulse delay-75" />
+                            <span className="w-[1.5px] h-4/5 bg-[#ff1e38] animate-pulse delay-150" />
                           </span>
                         )}
                         <span className="font-mono text-[10px] text-[#797368]">{t.defaultDuration}</span>
@@ -452,7 +452,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                     {/* Ambient Halo Glow */}
                     <div
                       className={`absolute inset-0 rounded-full transition-opacity duration-500 blur-md pointer-events-none ${
-                        isPlaying ? 'opacity-70 bg-[#ff2a3b]/30' : 'opacity-0'
+                        isPlaying ? 'opacity-70 bg-[#ff1e38]/30' : 'opacity-0'
                       }`}
                     />
 
@@ -477,7 +477,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       />
 
                       {/* Center Spindle Label with Track Number */}
-                      <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-br from-[#ff2a3b] to-[#b81424] border border-black/40 flex items-center justify-center shadow-inner relative z-10">
+                      <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-br from-[#ff1e38] to-[#b81424] border border-black/40 flex items-center justify-center shadow-inner relative z-10">
                         <span className="font-mono text-[7px] font-black text-white">
                           0{playerState.currentTrackIndex + 1}
                         </span>
@@ -496,9 +496,9 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       </p>
                       {isPlaying && (
                         <span className="flex items-end gap-[2px] h-2.5">
-                          <span className="w-[1.5px] h-full bg-[#ff2a3b] animate-pulse" />
-                          <span className="w-[1.5px] h-2/3 bg-[#ff2a3b] animate-pulse delay-75" />
-                          <span className="w-[1.5px] h-4/5 bg-[#ff2a3b] animate-pulse delay-150" />
+                          <span className="w-[1.5px] h-full bg-[#ff1e38] animate-pulse" />
+                          <span className="w-[1.5px] h-2/3 bg-[#ff1e38] animate-pulse delay-75" />
+                          <span className="w-[1.5px] h-4/5 bg-[#ff1e38] animate-pulse delay-150" />
                         </span>
                       )}
                     </div>
@@ -541,7 +541,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                 >
                   <div className="h-[3px] w-full bg-white/10 group-hover:h-1 rounded-full overflow-hidden relative transition-all">
                     <div
-                      className="h-full bg-gradient-to-r from-[#ff2a3b] to-[#ff6b78] rounded-full relative"
+                      className="h-full bg-gradient-to-r from-[#ff1e38] to-[#ff6b78] rounded-full relative"
                       style={{ width: `${progressRatio * 100}%` }}
                     />
                     {hoverRatio !== null && (
@@ -574,7 +574,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
                   <button
                     onClick={onTogglePlay}
-                    className="w-10 h-10 rounded-full bg-[#ff2a3b] text-white flex items-center justify-center shadow-lg shadow-[#ff2a3b]/30 hover:shadow-[#ff2a3b]/50 transition-all active:scale-95 cursor-pointer"
+                    className="w-10 h-10 rounded-full bg-[#ff1e38] text-white flex items-center justify-center shadow-lg shadow-[#ff1e38]/30 hover:shadow-[#ff1e38]/50 transition-all active:scale-95 cursor-pointer"
                     aria-label={isPlaying ? 'Pause' : 'Lecture'}
                   >
                     {isPlaying ? (
@@ -613,7 +613,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                     step="0.05"
                     value={playerState.isMuted ? 0 : playerState.volume}
                     onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
-                    className="w-20 accent-[#ff2a3b] h-1.5 bg-white/10 rounded-lg cursor-pointer"
+                    className="w-20 accent-[#ff1e38] h-1.5 bg-white/10 rounded-lg cursor-pointer"
                     aria-label="Volume"
                   />
                 </div>
@@ -629,7 +629,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       onClick={() => audioEngine.setTrack(idx, true)}
                       className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs transition-colors cursor-pointer ${
                         isCurrent
-                          ? 'bg-white/10 text-[#ff2a3b] font-medium'
+                          ? 'bg-white/10 text-[#ff1e38] font-medium'
                           : 'text-[#b8b3a8] hover:bg-white/5 hover:text-[#f4f2ee]'
                       }`}
                     >
@@ -640,9 +640,9 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       <div className="flex items-center gap-2 shrink-0">
                         {isCurrent && isPlaying && (
                           <span className="flex items-end gap-[2px] h-3">
-                            <span className="w-[1.5px] h-full bg-[#ff2a3b] animate-pulse" />
-                            <span className="w-[1.5px] h-2/3 bg-[#ff2a3b] animate-pulse delay-75" />
-                            <span className="w-[1.5px] h-4/5 bg-[#ff2a3b] animate-pulse delay-150" />
+                            <span className="w-[1.5px] h-full bg-[#ff1e38] animate-pulse" />
+                            <span className="w-[1.5px] h-2/3 bg-[#ff1e38] animate-pulse delay-75" />
+                            <span className="w-[1.5px] h-4/5 bg-[#ff1e38] animate-pulse delay-150" />
                           </span>
                         )}
                         <span className="font-mono text-[10px] text-[#797368]">{t.defaultDuration}</span>
@@ -659,14 +659,14 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
         <div
           className={`flex items-center gap-3 p-1.5 pr-4 rounded-full bg-[#060608f0] border backdrop-blur-2xl transition-all shadow-xl shadow-black/80 ${
             isPlaying
-              ? 'border-[#ff2a3b]/60 shadow-[0_0_24px_rgba(255,42,59,0.25)]'
-              : 'border-white/[0.14] hover:border-[#ff2a3b]/60'
+              ? 'border-[#ff1e38]/60 shadow-[0_0_24px_rgba(255,30,56,0.25)]'
+              : 'border-white/[0.14] hover:border-[#ff1e38]/60'
           }`}
         >
           {/* Play/Pause round button in Crimson */}
           <button
             onClick={onTogglePlay}
-            className="w-10 h-10 rounded-full bg-[#ff2a3b] text-white flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(255,42,59,0.4)] cursor-pointer"
+            className="w-10 h-10 rounded-full bg-[#ff1e38] text-white flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(255,30,56,0.4)] cursor-pointer"
             aria-label={isPlaying ? 'Pause' : 'Lecture'}
           >
             {isPlaying ? (
@@ -696,7 +696,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                 <span
                   key={i}
                   className={`w-[2px] rounded-full transition-all duration-200 ${
-                    isPlaying ? 'bg-[#ff2a3b] animate-pulse' : 'bg-white/20'
+                    isPlaying ? 'bg-[#ff1e38] animate-pulse' : 'bg-white/20'
                   }`}
                   style={{
                     height: isPlaying ? `${Math.max(25, h * 100)}%` : '30%',
@@ -710,7 +710,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
           {/* Expand toggle */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-6 h-6 rounded-full flex items-center justify-center text-[#797368] hover:text-[#ff2a3b] transition-colors cursor-pointer"
+            className="w-6 h-6 rounded-full flex items-center justify-center text-[#797368] hover:text-[#ff1e38] transition-colors cursor-pointer"
             aria-label="Afficher les contrôles audio"
           >
             {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}

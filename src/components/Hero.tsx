@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { ArrowDownRight } from 'lucide-react';
+import { ArrowDownRight, Terminal, ShieldCheck } from 'lucide-react';
 
-export const Hero = () => {
+interface HeroProps {
+  onOpenTerminal?: () => void;
+}
+
+export const Hero = ({ onOpenTerminal }: HeroProps) => {
   const { language } = useLanguage();
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrame = useRef<number | null>(null);
   const velocityRef = useRef(0);
-  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 640);
+  const mouseRef = useRef({ x: -1000, y: -1000, targetX: -1000, targetY: -1000 });
   const isVisibleRef = useRef(true);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 640);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640);
@@ -18,33 +23,23 @@ export const Hero = () => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Framer Motion Scrollytelling Dolly-Zoom Camera Push
+  // Framer Motion Parallax Camera Push
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   });
 
-  // Monumental Title Dolly Zoom - toned down on mobile to avoid overwhelming small displays
-  const titleScale = useTransform(scrollYProgress, [0, 0.8], [1, isMobile ? 1.12 : 1.35]);
-  const titleY = useTransform(scrollYProgress, [0, 0.8], [0, isMobile ? 40 : 120]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.55, 0.85], [1, 0.85, 0]);
-  const titleBlur = useTransform(
-    scrollYProgress,
-    [0, 0.55, 0.85],
-    isMobile ? ['none', 'none', 'none'] : ['blur(0px)', 'blur(1px)', 'blur(8px)']
-  );
+  const titleScale = useTransform(scrollYProgress, [0, 0.8], [1, isMobile ? 1.08 : 1.25]);
+  const titleY = useTransform(scrollYProgress, [0, 0.8], [0, isMobile ? 30 : 90]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.65, 0.9], [1, 0.85, 0]);
 
-  // Foregrounds / Subtitle Parallax Separation
-  const kickerOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
-  const kickerY = useTransform(scrollYProgress, [0, 0.25], [0, isMobile ? -10 : -22]);
+  const subtitleY = useTransform(scrollYProgress, [0, 0.6], [0, isMobile ? -15 : -35]);
+  const subtitleOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  const subY = useTransform(scrollYProgress, [0, 0.65], [0, isMobile ? -18 : -40]);
-  const subOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
+  const cardsY = useTransform(scrollYProgress, [0, 0.6], [0, isMobile ? 15 : 30]);
+  const cardsOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
 
-  const ctaY = useTransform(scrollYProgress, [0, 0.5], [0, isMobile ? 12 : 22]);
-  const ctaOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
-
-  // 3D Cinematic Starfield Warp & Hyperspace Speed Lines in OLED Crimson & Titanium
+  // High-performance 3D Crimson Constellation & Particle Engine
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -61,7 +56,12 @@ export const Hero = () => {
     };
     window.addEventListener('resize', onResize, { passive: true });
 
-    // High frequency scroll event listener
+    const onMouseMove = (e: MouseEvent) => {
+      mouseRef.current.targetX = e.clientX;
+      mouseRef.current.targetY = e.clientY;
+    };
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+
     const onScrollEvent = (e: Event) => {
       const custom = e as CustomEvent<{ velocity: number }>;
       if (custom.detail?.velocity !== undefined) {
@@ -70,130 +70,119 @@ export const Hero = () => {
     };
     window.addEventListener('portfolio-scroll', onScrollEvent, { passive: true });
 
-    // 3D Starfield particles with depth Z (lighter on mobile for battery and smoothness)
-    const numStars = width < 640 ? 50 : 110;
-    const maxZ = 1200;
-    const focalLength = width < 640 ? 280 : 360;
-
-    interface Star {
+    // Particles tuned for high framerate: 45 on mobile, 90 on desktop
+    const count = width < 640 ? 45 : 90;
+    interface Particle {
       x: number;
       y: number;
-      z: number;
-      prevZ: number;
-      size: number;
-      colorType: number; // 0: crimson red, 1: ruby coral, 2: titanium white
-      baseAlpha: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      color: string;
+      alpha: number;
+      isCrimson: boolean;
     }
 
-    const stars: Star[] = [];
-    for (let i = 0; i < numStars; i++) {
-      const z = Math.random() * maxZ + 1;
-      stars.push({
-        x: (Math.random() - 0.5) * width * 2,
-        y: (Math.random() - 0.5) * height * 2,
-        z,
-        prevZ: z,
-        size: Math.random() * 1.5 + 0.8,
-        colorType: Math.random() > 0.4 ? 0 : Math.random() > 0.5 ? 1 : 2,
-        baseAlpha: Math.random() * 0.5 + 0.35,
+    const particles: Particle[] = [];
+    const colors = ['#ff1e38', '#ff334b', '#ffffff', '#e50914'];
+
+    for (let i = 0; i < count; i++) {
+      const isCrimson = Math.random() > 0.35;
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        radius: isCrimson ? Math.random() * 2 + 1.2 : Math.random() * 1.5 + 0.8,
+        color: isCrimson ? colors[Math.floor(Math.random() * 2)] : colors[2],
+        alpha: Math.random() * 0.6 + 0.25,
+        isCrimson,
       });
     }
 
-    let smoothedVelocity = 0;
+    let smoothedSpeed = 0;
 
     const render = () => {
       if (!isVisibleRef.current) return;
 
-      // Gentle decay of velocity
-      smoothedVelocity += (Math.abs(velocityRef.current) - smoothedVelocity) * 0.12;
+      // Mouse smooth interpolation
+      mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.08;
+      mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.08;
+
+      // Scroll velocity influence
+      smoothedSpeed += (velocityRef.current * 0.8 - smoothedSpeed) * 0.1;
+      velocityRef.current *= 0.92;
 
       ctx.clearRect(0, 0, width, height);
 
-      const cx = width / 2;
-      const cy = height / 2;
-      const speed = 0.7 + smoothedVelocity * (width < 640 ? 4.5 : 7.5);
-      const isWarping = smoothedVelocity > 0.6;
+      const maxConnectDist = width < 640 ? 75 : 110;
 
-      for (let i = 0; i < stars.length; i++) {
-        const star = stars[i];
-        star.prevZ = star.z;
-        star.z -= speed;
+      // Update & draw particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
 
-        // Recycle star when it passes the camera or goes out of bounds
-        if (star.z <= 2) {
-          star.z = maxZ;
-          star.prevZ = maxZ;
-          star.x = (Math.random() - 0.5) * width * 2;
-          star.y = (Math.random() - 0.5) * height * 2;
+        // Move
+        p.x += p.vx;
+        p.y += p.vy - smoothedSpeed * 1.2;
+
+        // Wrap edges
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+        if (p.y < -10) p.y = height + 10;
+        if (p.y > height + 10) p.y = -10;
+
+        // Gentle mouse interaction
+        const dx = mouseRef.current.x - p.x;
+        const dy = mouseRef.current.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 140) {
+          const force = (140 - dist) / 140;
+          p.x -= (dx / dist) * force * 1.2;
+          p.y -= (dy / dist) * force * 1.2;
         }
 
-        // Project 3D coordinates to 2D screen
-        const k = focalLength / star.z;
-        const sx = cx + star.x * k;
-        const sy = cy + star.y * k;
-
-        // Check screen bounds
-        if (sx < -100 || sx > width + 100 || sy < -100 || sy > height + 100) {
-          star.z = maxZ;
-          continue;
-        }
-
-        const depthFade = Math.min(1, Math.max(0.1, (1 - star.z / maxZ) * 1.2));
-        const alpha = star.baseAlpha * depthFade;
-
-        let color = `rgba(255, 42, 59, ${alpha})`;
-        if (star.colorType === 1) color = `rgba(255, 85, 95, ${alpha * 0.95})`;
-        if (star.colorType === 2) color = `rgba(244, 242, 238, ${alpha * 0.85})`;
-
-        if (isWarping) {
-          // Draw motion blur / warp light streak towards camera
-          const prevK = focalLength / Math.max(2, star.prevZ);
-          const prevSx = cx + star.x * prevK;
-          const prevSy = cy + star.y * prevK;
-
+        // Draw particle dot with high-speed halo glow (avoids expensive shadowBlur)
+        if (p.isCrimson) {
           ctx.beginPath();
-          ctx.strokeStyle = color;
-          ctx.lineWidth = Math.min(2.4, star.size * k * 0.9);
-          ctx.lineCap = 'round';
-          ctx.moveTo(prevSx, prevSy);
-          ctx.lineTo(sx, sy);
-          ctx.stroke();
-        } else {
-          // Draw ambient glowing particle
-          const r = Math.max(0.6, star.size * k * 0.6);
-          ctx.beginPath();
-          ctx.arc(sx, sy, r, 0, Math.PI * 2);
-          ctx.fillStyle = color;
+          ctx.arc(p.x, p.y, p.radius * 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = '#ff1e38';
+          ctx.globalAlpha = p.alpha * 0.3;
           ctx.fill();
         }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
+
+        // Connect nearby particles with subtle laser lines
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dist2 = Math.hypot(p.x - p2.x, p.y - p2.y);
+          if (dist2 < maxConnectDist) {
+            const lineAlpha = (1 - dist2 / maxConnectDist) * 0.18;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = p.isCrimson || p2.isCrimson ? '#ff1e38' : 'rgba(255, 255, 255, 0.4)';
+            ctx.globalAlpha = lineAlpha;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
       }
 
-      // Draw subtle horizontal anamorphic lens flare beam across screen center on velocity push
-      if (smoothedVelocity > 0.4) {
-        const flareAlpha = Math.min(0.28, (smoothedVelocity - 0.4) * 0.22);
-        const grad = ctx.createLinearGradient(0, cy, width, cy);
-        grad.addColorStop(0, 'rgba(255, 42, 59, 0)');
-        grad.addColorStop(0.35, `rgba(255, 42, 59, ${flareAlpha * 0.5})`);
-        grad.addColorStop(0.5, `rgba(255, 120, 130, ${flareAlpha})`);
-        grad.addColorStop(0.65, `rgba(255, 42, 59, ${flareAlpha * 0.5})`);
-        grad.addColorStop(1, 'rgba(255, 42, 59, 0)');
-
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, cy - 1, width, 2);
-      }
-
+      ctx.globalAlpha = 1;
       animFrame.current = requestAnimationFrame(render);
     };
 
-    // Pause canvas animation when hero is off-screen using IntersectionObserver
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           isVisibleRef.current = entry.isIntersecting;
           if (entry.isIntersecting) {
-            if (!animFrame.current) {
-              animFrame.current = requestAnimationFrame(render);
-            }
+            if (!animFrame.current) animFrame.current = requestAnimationFrame(render);
           } else {
             if (animFrame.current) {
               cancelAnimationFrame(animFrame.current);
@@ -205,15 +194,13 @@ export const Hero = () => {
       { threshold: 0.05 }
     );
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-    }
-
+    if (heroRef.current) observer.observe(heroRef.current);
     render();
 
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('portfolio-scroll', onScrollEvent);
       if (animFrame.current) cancelAnimationFrame(animFrame.current);
     };
@@ -223,13 +210,13 @@ export const Hero = () => {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-[90vh] sm:min-h-screen flex flex-col justify-between overflow-hidden pt-20 sm:pt-28 pb-0 text-center bg-black"
+      className="relative min-h-[95vh] sm:min-h-screen flex flex-col justify-between overflow-hidden pt-24 sm:pt-32 pb-0 text-center bg-black select-none"
       aria-label="Introduction"
     >
-      {/* 3D Warp & Starfield Particles Canvas */}
+      {/* 3D Particle Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 pointer-events-none z-0 opacity-80"
+        className="absolute inset-0 pointer-events-none z-0 opacity-85"
         aria-hidden="true"
       />
 
@@ -238,120 +225,175 @@ export const Hero = () => {
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           background: `
-            radial-gradient(circle at 50% 36%, rgba(255, 42, 59, 0.12), transparent 52%),
-            radial-gradient(circle at 50% 64%, rgba(184, 20, 36, 0.05), transparent 58%),
-            radial-gradient(ellipse 90% 80% at 50% 50%, transparent 25%, #000000 92%),
-            linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 35%, #000000 100%)
+            radial-gradient(ellipse 60% 45% at 50% 32%, rgba(255, 30, 56, 0.16), transparent 70%),
+            radial-gradient(ellipse 80% 60% at 50% 75%, rgba(168, 15, 33, 0.08), transparent 75%),
+            radial-gradient(circle at 50% 50%, transparent 40%, #000000 95%),
+            linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 30%, #000000 100%)
           `,
         }}
         aria-hidden="true"
       />
 
-      <div className="relative z-10 px-5 sm:px-12 md:px-16 my-auto py-6 sm:py-14 flex flex-col items-center text-center max-w-5xl mx-auto w-full">
-        {/* Status Kicker with Parallax Fade (Responsive concise on mobile) */}
-        <motion.p
-          style={{ opacity: kickerOpacity, y: kickerY }}
-          initial={{ opacity: 0, y: 15 }}
+      {/* Main Content Area */}
+      <div className="relative z-10 px-5 sm:px-12 md:px-16 my-auto py-8 sm:py-12 flex flex-col items-center max-w-5xl mx-auto w-full">
+        {/* Availability Pill with Pulsing LED */}
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mono text-[#b8b3a8] flex items-center justify-center gap-2 mb-3 sm:mb-6 text-center text-[0.7rem] sm:text-[0.82rem] tracking-wider uppercase will-change-transform"
+          transition={{ duration: 0.55 }}
+          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.1] hover:border-[#ff1e38]/50 shadow-[0_4px_20px_rgba(0,0,0,0.8)] mb-6 sm:mb-8 transition-colors cursor-default"
         >
           <span className="status-dot shrink-0" aria-hidden="true" />
-          <span>
+          <span className="mono text-[0.68rem] sm:text-[0.74rem] text-[#c2bdb3] tracking-wider uppercase font-medium">
             {language === 'fr' ? (
               <>
                 <span className="sm:hidden">Disponible · Vibe Coder en France</span>
-                <span className="hidden sm:inline">disponible pour missions &amp; projets ambitieux — vibe coder en France</span>
+                <span className="hidden sm:inline">Disponible pour missions &amp; builds — vibe coder en France</span>
               </>
             ) : (
               <>
                 <span className="sm:hidden">Available · Vibe Coder in France</span>
-                <span className="hidden sm:inline">available for contracts &amp; full-stack builds — vibe coder in France</span>
+                <span className="hidden sm:inline">Available for contracts &amp; builds — vibe coder in France</span>
               </>
             )}
           </span>
-        </motion.p>
+        </motion.div>
 
-        {/* Monumental Title Dolly-Zoom Camera Push: "ARES" */}
-        <motion.h1
+        {/* Monumental Sculptural Typography: "ARES" with Backlight Glow */}
+        <motion.div
           style={{
             scale: titleScale,
             y: titleY,
             opacity: titleOpacity,
-            filter: titleBlur,
           }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display font-bold uppercase tracking-[-0.035em] leading-[0.86] sm:leading-[0.82] select-none text-[clamp(3.6rem,19vw,14rem)] mb-4 sm:mb-8 text-center origin-center will-change-transform"
+          className="relative will-change-transform mb-3 sm:mb-6"
         >
-          <span className="block text-[#f4f2ee] drop-shadow-[0_12px_45px_rgba(0,0,0,0.95)]">
-            ARES
-          </span>
-        </motion.h1>
+          {/* Subtle Ambient Red Glow Behind Title */}
+          <div
+            className="absolute -inset-4 sm:-inset-8 rounded-full bg-[#ff1e38]/12 blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
 
-        {/* Subtitle & Role with Parallax Drift */}
+          <h1 className="relative font-display font-bold uppercase tracking-[-0.04em] leading-[0.85] select-none text-[clamp(3.6rem,20vw,14.5rem)] text-center">
+            <span className="block text-[#f5f3ef] drop-shadow-[0_15px_40px_rgba(0,0,0,0.9)]">
+              ARES
+            </span>
+          </h1>
+        </motion.div>
+
+        {/* Subtitle & Role */}
         <motion.div
           style={{
-            y: subY,
-            opacity: subOpacity,
+            y: subtitleY,
+            opacity: subtitleOpacity,
           }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-2xl text-center mx-auto flex flex-col items-center will-change-transform"
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="max-w-2xl text-center mx-auto flex flex-col items-center will-change-transform space-y-3"
         >
-          <p className="font-display font-medium text-[clamp(1.1rem,2.5vw,1.8rem)] text-[#f4f2ee] tracking-tight text-center">
+          <p className="font-display font-medium text-[clamp(1.15rem,2.8vw,1.95rem)] text-[#f5f3ef] tracking-tight">
             {language === 'fr' ? (
               <>
-                Développeur full-stack <em className="text-[#ff2a3b] not-italic font-serif">&amp;</em> creative builder.
+                Développeur full-stack <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> creative builder.
               </>
             ) : (
               <>
-                Full-stack developer <em className="text-[#ff2a3b] not-italic font-serif">&amp;</em> creative builder.
+                Full-stack developer <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> creative builder.
               </>
             )}
           </p>
 
-          <p className="text-[#b8b3a8] text-[clamp(0.85rem,1.5vw,1.15rem)] mt-2 sm:mt-3 font-normal leading-relaxed max-w-xl text-center mx-auto">
+          <p className="text-[#b8b3a8] text-[clamp(0.85rem,1.5vw,1.1rem)] font-normal leading-relaxed max-w-xl mx-auto">
             {language === 'fr'
-              ? 'Je conçois des produits web & mobiles haute performance — véloces, soignés et avec du caractère.'
-              : 'I build streaming-grade web & mobile products — fast, polished, and a little bit loud.'}
+              ? 'Je conçois des applications de streaming, du mobile iOS, du reverse d’APIs et des interfaces rapides qui ont du caractère.'
+              : 'I engineer streaming-grade web & iOS software, reverse-engineered APIs, and fast digital products with character.'}
           </p>
         </motion.div>
 
-        {/* CTAs */}
+        {/* Interactive Quick Metrics Bar */}
         <motion.div
           style={{
-            y: ctaY,
-            opacity: ctaOpacity,
+            y: cardsY,
+            opacity: cardsOpacity,
           }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-10 will-change-transform"
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 mt-8 sm:mt-10 w-full max-w-3xl will-change-transform"
         >
-          <a href="#work" className="btn btn--solid group py-3 px-5 sm:py-3.5 sm:px-6 text-[0.72rem] sm:text-[0.78rem]">
-            <span>{language === 'fr' ? 'Voir les projets' : 'View work'}</span>
-            <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
+          {[
+            { value: '10+', label: language === 'fr' ? 'Projets live' : 'Shipped Projects' },
+            { value: 'Web & iOS', label: language === 'fr' ? 'Multiplateforme' : 'Cross-Platform' },
+            { value: '<50ms', label: language === 'fr' ? 'Latence APIs' : 'Fast API Latency' },
+            { value: '100%', label: language === 'fr' ? 'Solo shipping' : 'Solo Autonomy' },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              className="p-3 sm:p-4 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/[0.08] hover:border-[#ff1e38]/40 transition-all duration-300 text-left group"
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-display font-bold text-lg sm:text-2xl text-[#f5f3ef] group-hover:text-[#ff1e38] transition-colors">
+                  {stat.value}
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]/50 group-hover:bg-[#ff1e38] transition-colors shadow-[0_0_8px_rgba(255,30,56,0.6)]" />
+              </div>
+              <p className="mono text-[0.62rem] sm:text-[0.68rem] text-[#726d64] uppercase tracking-wider truncate">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Call to Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 will-change-transform"
+        >
+          <a
+            href="#work"
+            className="btn btn--crimson group py-3 px-6 sm:py-3.5 sm:px-7 text-[0.74rem] sm:text-[0.78rem]"
+          >
+            <span>{language === 'fr' ? 'Explorer les projets' : 'Explore Projects'}</span>
+            <ArrowDownRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
           </a>
 
-          <a href="#contact" className="btn btn--ghost py-3 px-5 sm:py-3.5 sm:px-6 text-[0.72rem] sm:text-[0.78rem]">
-            <span>{language === 'fr' ? 'Me contacter' : 'Contact me'}</span>
+          <a
+            href="#contact"
+            className="btn btn--ghost py-3 px-6 sm:py-3.5 sm:px-7 text-[0.74rem] sm:text-[0.78rem]"
+          >
+            <span>{language === 'fr' ? 'Me contacter' : 'Get in Touch'}</span>
           </a>
+
+          {onOpenTerminal && (
+            <button
+              type="button"
+              onClick={onOpenTerminal}
+              className="btn btn--ghost py-3 px-4 sm:py-3.5 text-[0.74rem] sm:text-[0.78rem] text-[#b8b3a8] hover:text-[#ff1e38]"
+              title="Terminal Dev"
+            >
+              <Terminal className="w-3.5 h-3.5 text-[#ff1e38]" />
+              <span className="hidden sm:inline">CLI</span>
+            </button>
+          )}
         </motion.div>
       </div>
 
-      {/* Hero Bottom Meta Bar - Clean Single-line Bar on Mobile */}
-      <div className="relative z-10 flex items-center justify-between gap-3 px-5 sm:px-12 md:px-16 py-3 sm:py-4 border-t border-white/[0.08] text-[#797368] font-mono text-[0.66rem] sm:text-[0.72rem] tracking-wider uppercase bg-black/75 backdrop-blur-sm select-none">
-        <span>{language === 'fr' ? 'EN PROD DEPUIS 2023 →' : 'SHIPPING SINCE 2023 →'}</span>
-        <span className="hidden sm:inline-block text-[#b8b3a8]">
-          SHOPCORE · Z-FLIX · Z-LAUNCHER · Z-MUSIC · SPOTI
+      {/* Hero Bottom Meta Bar */}
+      <div className="relative z-10 flex items-center justify-between gap-3 px-5 sm:px-12 md:px-16 py-3 sm:py-4 border-t border-white/[0.08] text-[#726d64] font-mono text-[0.66rem] sm:text-[0.72rem] tracking-wider uppercase bg-black/85 backdrop-blur-md select-none">
+        <span className="flex items-center gap-2">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#ff1e38]" />
+          <span>{language === 'fr' ? 'PRODUCTION SHIPPER' : 'PRODUCTION SHIPPER'}</span>
+        </span>
+        <span className="hidden md:inline-block text-[#b8b3a8]">
+          SHOPCORE · Z-FLIX · Z-LAUNCHER · Z-MUSIC · SPOTI LIQUID GLASS
         </span>
         <span className="inline-flex items-center gap-2">
           <span>SCROLL</span>
-          <span className="w-8 sm:w-10 h-[1px] bg-white/20 relative overflow-hidden inline-block">
-            <span className="absolute inset-0 bg-[#ff2a3b] animate-[scrollhint_2.2s_cubic-bezier(0.22,1,0.36,1)_infinite]" />
+          <span className="w-8 sm:w-12 h-[1px] bg-white/20 relative overflow-hidden inline-block">
+            <span className="absolute inset-0 bg-[#ff1e38] animate-[scrollhint_2.2s_cubic-bezier(0.22,1,0.36,1)_infinite]" />
           </span>
         </span>
       </div>

@@ -1,187 +1,293 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { Terminal } from 'lucide-react';
+import { Terminal, Volume2 } from 'lucide-react';
 
 interface NavbarProps {
   onToggleTerminal?: () => void;
   isPlaying?: boolean;
+  onTogglePlay?: () => void;
 }
 
-export const Navbar = ({ onToggleTerminal, isPlaying }: NavbarProps) => {
+export const Navbar = ({ onToggleTerminal, isPlaying, onTogglePlay }: NavbarProps) => {
   const { language, setLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+      if (lenis) lenis.start();
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
+
+      // Simple active section detection
+      const sections = ['hero', 'work', 'lab', 'method', 'about', 'contact'];
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 200 && rect.bottom >= 200) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Listen to keyboard shortcut Ctrl+K / Cmd+K to open terminal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        onToggleTerminal?.();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onToggleTerminal]);
+
   const navLinks = [
-    { href: '#work', label: language === 'fr' ? 'Projets' : 'Work' },
-    { href: '#next', label: language === 'fr' ? 'À venir' : 'Next' },
-    { href: '#stack', label: 'Stack' },
-    { href: '#method', label: language === 'fr' ? 'Méthode' : 'Method' },
-    { href: '#about', label: language === 'fr' ? 'À propos' : 'About' },
-    { href: '#contact', label: 'Contact', isContact: true },
+    { href: '#work', id: 'work', label: language === 'fr' ? 'Projets' : 'Work' },
+    { href: '#lab', id: 'lab', label: language === 'fr' ? 'Le Lab' : 'The Lab' },
+    { href: '#method', id: 'method', label: language === 'fr' ? 'Méthode' : 'Method' },
+    { href: '#about', id: 'about', label: language === 'fr' ? 'Bio' : 'About' },
+    { href: '#contact', id: 'contact', label: 'Contact', isContact: true },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-[900] flex items-center justify-between px-6 sm:px-12 py-5 transition-all duration-400 ${
-          scrolled
-            ? 'bg-black/80 backdrop-blur-md border-b border-white/[0.08]'
-            : 'bg-transparent'
+        className={`fixed top-0 left-0 right-0 z-[900] transition-all duration-500 py-3 sm:py-4 px-4 sm:px-8 flex items-center justify-between pointer-events-none ${
+          scrolled ? 'pt-2.5 sm:pt-3' : 'pt-4 sm:pt-6'
         }`}
       >
-        {/* Logo / Monogram with spinning disc in Crimson */}
-        <a
-          href="#hero"
-          className="inline-flex items-center gap-2.5 font-mono text-[0.82rem] tracking-wider text-[#f4f2ee] uppercase group select-none"
-          aria-label="Ares — retour en haut"
-        >
-          <span
-            className={`w-3.5 h-3.5 rounded-full border-2 border-[#ff2a3b] relative flex items-center justify-center shadow-[0_0_8px_rgba(255,42,59,0.5)] ${
-              isPlaying ? 'animate-spin' : ''
-            }`}
-            style={{ animationDuration: '2.4s' }}
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
+          {/* Logo / Monogram Brand with Glowing Disc */}
+          <a
+            href="#hero"
+            className="pointer-events-auto inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.8)] font-mono text-[0.82rem] tracking-wider text-[#f5f3ef] uppercase group select-none hover:border-[#ff1e38]/50 transition-all duration-300"
+            aria-label="Ares — retour au début"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff172d]" />
-          </span>
-          <span className="font-bold tracking-tight">
-            ares<sup className="text-[#ff2a3b] font-normal text-[0.65em] ml-0.5">®</sup>
-          </span>
-        </a>
-
-        {/* Desktop Links */}
-        <nav className="hidden md:flex items-center gap-7 font-mono text-[0.72rem] tracking-widest uppercase" aria-label="Navigation principale">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`relative py-1 transition-colors group ${
-                link.isContact
-                  ? 'text-[#ff2a3b] font-semibold hover:text-[#ff2a3b]'
-                  : 'text-[#b8b3a8] hover:text-[#f4f2ee]'
+            <span
+              className={`w-3.5 h-3.5 rounded-full border-2 border-[#ff1e38] relative flex items-center justify-center shadow-[0_0_10px_rgba(255,30,56,0.6)] ${
+                isPlaying ? 'animate-spin' : ''
               }`}
+              style={{ animationDuration: '2.5s' }}
             >
-              <span>{link.label}</span>
-              <span className="absolute left-0 bottom-0 w-full h-[1px] bg-[#ff2a3b] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left shadow-[0_0_6px_rgba(255,42,59,0.8)]" />
-            </a>
-          ))}
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff2d46]" />
+            </span>
+            <span className="font-bold tracking-tight text-[#f5f3ef] group-hover:text-white transition-colors">
+              ares<sup className="text-[#ff1e38] font-normal text-[0.65em] ml-0.5">®</sup>
+            </span>
+          </a>
 
-          {/* Dev Terminal Icon Button */}
-          {onToggleTerminal && (
-            <button
-              onClick={onToggleTerminal}
-              className="p-1.5 text-[#797368] hover:text-[#ff2a3b] transition-colors cursor-pointer"
-              title="CLI Dev"
-              aria-label="Terminal CLI"
-            >
-              <Terminal className="w-3.5 h-3.5" />
-            </button>
-          )}
-
-          {/* Language Switcher: EN / FR */}
-          <div className="flex items-center gap-1.5 text-[#797368] font-mono text-[0.72rem] ml-2 border-l border-white/10 pl-4">
-            <button
-              type="button"
-              onClick={() => setLanguage('en')}
-              className={`transition-colors hover:text-[#f4f2ee] cursor-pointer ${
-                language === 'en' ? 'text-[#ff2a3b] font-bold' : 'text-[#797368]'
-              }`}
-            >
-              EN
-            </button>
-            <span className="text-white/20">/</span>
-            <button
-              type="button"
-              onClick={() => setLanguage('fr')}
-              className={`transition-colors hover:text-[#f4f2ee] cursor-pointer ${
-                language === 'fr' ? 'text-[#ff2a3b] font-bold' : 'text-[#797368]'
-              }`}
-            >
-              FR
-            </button>
-          </div>
-        </nav>
-
-        {/* Mobile Hamburger Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-2 text-[#f4f2ee]"
-          aria-label="Menu"
-          aria-expanded={mobileMenuOpen}
-        >
-          <span
-            className={`w-6 h-[2px] bg-[#f4f2ee] transition-transform duration-300 ${
-              mobileMenuOpen ? 'translate-y-2 rotate-45 bg-[#ff2a3b]' : ''
-            }`}
-          />
-          <span
-            className={`w-6 h-[2px] bg-[#f4f2ee] transition-opacity duration-300 ${
-              mobileMenuOpen ? 'opacity-0' : ''
-            }`}
-          />
-          <span
-            className={`w-6 h-[2px] bg-[#f4f2ee] transition-transform duration-300 ${
-              mobileMenuOpen ? '-translate-y-2 -rotate-45 bg-[#ff2a3b]' : ''
-            }`}
-          />
-        </button>
-      </header>
-
-      {/* Fullscreen Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[850] bg-black/95 backdrop-blur-2xl flex flex-col justify-center px-8 sm:px-16"
+          {/* Center Floating Navigation Pill (Desktop) */}
+          <nav
+            className="pointer-events-auto hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.9)] font-mono text-[0.72rem] tracking-wider uppercase select-none"
+            aria-label="Navigation principale"
           >
-            <nav className="flex flex-col gap-2">
-              {navLinks.map((link) => (
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="font-display font-semibold text-3xl sm:text-5xl text-[#f4f2ee] py-2 border-b border-white/[0.08] hover:text-[#ff2a3b] transition-colors"
+                  className={`relative px-4 py-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'text-[#f5f3ef] font-semibold bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
+                      : link.isContact
+                      ? 'text-[#ff1e38] hover:text-white hover:bg-[#ff1e38]/15'
+                      : 'text-[#b8b3a8] hover:text-[#f5f3ef] hover:bg-white/[0.04]'
+                  }`}
                 >
-                  {link.label}
+                  <span className="relative z-10">{link.label}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-pill"
+                      className="absolute inset-0 rounded-full border border-[#ff1e38]/40 shadow-[0_0_12px_rgba(255,30,56,0.25)] pointer-events-none"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
                 </a>
-              ))}
-            </nav>
+              );
+            })}
+          </nav>
 
-            <div className="flex items-center gap-4 mt-8 font-mono text-base text-[#797368]">
-              <span>Lang:</span>
+          {/* Right Action Tools: Terminal Shortcut + Sound EQ + Language */}
+          <div className="pointer-events-auto flex items-center gap-2">
+            {/* Audio Mini Pulse Trigger */}
+            {onTogglePlay && (
+              <button
+                type="button"
+                onClick={onTogglePlay}
+                className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] hover:border-[#ff1e38]/50 text-[#b8b3a8] hover:text-[#f5f3ef] transition-all text-xs font-mono select-none cursor-pointer"
+                title={isPlaying ? 'Pause audio' : 'Play audio'}
+                aria-label="Contrôle audio"
+              >
+                {isPlaying ? (
+                  <div className="flex items-end gap-[2px] h-3.5 w-3.5 text-[#ff1e38]">
+                    <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-1" />
+                    <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-2" />
+                    <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-3" />
+                  </div>
+                ) : (
+                  <Volume2 className="w-3.5 h-3.5 text-[#726d64]" />
+                )}
+                <span className="text-[0.68rem] tracking-wider font-semibold">
+                  {isPlaying ? 'AUDIO ON' : 'AUDIO OFF'}
+                </span>
+              </button>
+            )}
+
+            {/* Dev Terminal Button */}
+            {onToggleTerminal && (
+              <button
+                type="button"
+                onClick={onToggleTerminal}
+                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] hover:border-[#ff1e38]/50 text-[#726d64] hover:text-[#f5f3ef] transition-all text-xs font-mono cursor-pointer"
+                title="Terminal Dev (Ctrl+K)"
+                aria-label="Ouvrir le terminal dev"
+              >
+                <Terminal className="w-3.5 h-3.5 text-[#ff1e38]" />
+                <span className="text-[0.66rem] tracking-widest text-[#b8b3a8]">CLI</span>
+                <span className="text-[0.62rem] text-[#726d64] px-1 py-0.5 rounded bg-white/5 border border-white/5">
+                  ⌘K
+                </span>
+              </button>
+            )}
+
+            {/* Language Switcher Pill: EN / FR */}
+            <div className="inline-flex items-center p-1 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.68rem] select-none">
               <button
                 type="button"
                 onClick={() => setLanguage('en')}
-                className={language === 'en' ? 'text-[#ff2a3b] font-bold' : ''}
+                className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                  language === 'en'
+                    ? 'bg-[#ff1e38] text-white font-bold shadow-[0_0_12px_rgba(255,30,56,0.6)]'
+                    : 'text-[#726d64] hover:text-[#f5f3ef]'
+                }`}
               >
                 EN
               </button>
-              <span>/</span>
               <button
                 type="button"
                 onClick={() => setLanguage('fr')}
-                className={language === 'fr' ? 'text-[#ff2a3b] font-bold' : ''}
+                className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                  language === 'fr'
+                    ? 'bg-[#ff1e38] text-white font-bold shadow-[0_0_12px_rgba(255,30,56,0.6)]'
+                    : 'text-[#726d64] hover:text-[#f5f3ef]'
+                }`}
               >
                 FR
               </button>
             </div>
 
-            <p className="mt-8 font-mono text-xs text-[#797368] flex items-center gap-2">
-              <span className="status-dot" />
-              <span>FR — Remote friendly · Open to contracts & builds</span>
-            </p>
+            {/* Mobile Hamburger Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden flex flex-col items-center justify-center w-9 h-9 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.1] text-[#f5f3ef] cursor-pointer"
+              aria-label="Menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              <span
+                className={`w-4 h-[1.5px] bg-[#f5f3ef] transition-transform duration-300 ${
+                  mobileMenuOpen ? 'translate-y-[4.5px] rotate-45 bg-[#ff1e38]' : ''
+                }`}
+              />
+              <span
+                className={`w-4 h-[1.5px] bg-[#f5f3ef] my-1 transition-opacity duration-300 ${
+                  mobileMenuOpen ? 'opacity-0' : ''
+                }`}
+              />
+              <span
+                className={`w-4 h-[1.5px] bg-[#f5f3ef] transition-transform duration-300 ${
+                  mobileMenuOpen ? '-translate-y-[4.5px] -rotate-45 bg-[#ff1e38]' : ''
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Fullscreen Mobile Drawer Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={language === 'fr' ? 'Menu de navigation mobile' : 'Mobile navigation menu'}
+            className="fixed inset-0 z-[850] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-10 pt-24"
+          >
+            {/* Crimson Atmospheric Glow */}
+            <div
+              className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-[#ff1e38]/10 blur-[100px] pointer-events-none"
+              aria-hidden="true"
+            />
+
+            <nav className="flex flex-col gap-2 relative z-10">
+              <span className="mono text-xs text-[#ff1e38] tracking-widest mb-2 font-semibold">
+                // NAVIGATION
+              </span>
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-display font-semibold text-3xl sm:text-4xl text-[#f5f3ef] py-2.5 border-b border-white/[0.06] hover:text-[#ff1e38] transition-colors flex items-center justify-between"
+                >
+                  <span>{link.label}</span>
+                  <span className="text-[#ff1e38] text-lg opacity-60">↗</span>
+                </a>
+              ))}
+            </nav>
+
+            <div className="relative z-10 space-y-4 pt-6 border-t border-white/[0.08]">
+              {onToggleTerminal && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onToggleTerminal();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-white/[0.05] border border-white/10 text-xs font-mono text-[#f5f3ef] hover:border-[#ff1e38]/50"
+                >
+                  <Terminal className="w-4 h-4 text-[#ff1e38]" />
+                  <span>{language === 'fr' ? 'Ouvrir la console CLI' : 'Open Developer CLI'}</span>
+                </button>
+              )}
+
+              <p className="font-mono text-xs text-[#b8b3a8] flex items-center gap-2 justify-center">
+                <span className="status-dot shrink-0" />
+                <span>France · Full-Stack &amp; Creative Builder</span>
+              </p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -174,6 +174,7 @@ class PortfolioAudioEngine {
         this.analyser.connect(this.gainNode);
         this.gainNode.connect(this.ctx.destination);
         this.isGraphConnected = true;
+        this.audio.volume = 1; // GainNode manages volume in Web Audio graph
       }
     } catch (e) {
       console.warn('Web Audio Graph initialization note:', e);
@@ -321,11 +322,12 @@ class PortfolioAudioEngine {
     if (this.volume > 0 && this.isMuted) {
       this.isMuted = false;
     }
-    if (this.audio) {
-      this.audio.volume = this.isMuted ? 0 : this.volume;
-    }
-    if (this.gainNode && this.ctx) {
-      this.gainNode.gain.setValueAtTime(this.isMuted ? 0 : this.volume, this.ctx.currentTime);
+    const effectiveVol = this.isMuted ? 0 : this.volume;
+    if (this.isGraphConnected && this.gainNode && this.ctx) {
+      this.gainNode.gain.setValueAtTime(effectiveVol, this.ctx.currentTime);
+      if (this.audio) this.audio.volume = 1;
+    } else if (this.audio) {
+      this.audio.volume = effectiveVol;
     }
     this.notify();
   }
@@ -337,11 +339,11 @@ class PortfolioAudioEngine {
   public toggleMute(): boolean {
     this.isMuted = !this.isMuted;
     const effectiveVol = this.isMuted ? 0 : this.volume;
-    if (this.audio) {
-      this.audio.volume = effectiveVol;
-    }
-    if (this.gainNode && this.ctx) {
+    if (this.isGraphConnected && this.gainNode && this.ctx) {
       this.gainNode.gain.setValueAtTime(effectiveVol, this.ctx.currentTime);
+      if (this.audio) this.audio.volume = 1;
+    } else if (this.audio) {
+      this.audio.volume = effectiveVol;
     }
     this.notify();
     return this.isMuted;
