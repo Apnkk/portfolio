@@ -122,43 +122,6 @@ function PortfolioApp() {
     }
   };
 
-  useEffect(() => {
-    let active = true;
-
-    const startAudio = async () => {
-      if (!active) return;
-      try {
-        const started = await audioEngine.play();
-        if (started && active) {
-          setIsPlaying(true);
-          cleanup();
-        }
-      } catch {
-        // Awaiting browser gesture
-      }
-    };
-
-    const cleanup = () => {
-      const events = ['pointerdown', 'keydown', 'touchstart'];
-      events.forEach((evt) => {
-        window.removeEventListener(evt, startAudio);
-      });
-    };
-
-    // 1. Initial attempt
-    void startAudio();
-
-    // 2. Direct user interaction gesture fallback (no spam on scroll/wheel)
-    const events = ['pointerdown', 'keydown', 'touchstart'];
-    events.forEach((evt) => {
-      window.addEventListener(evt, startAudio, { once: true, passive: true });
-    });
-
-    return () => {
-      active = false;
-      cleanup();
-    };
-  }, []);
 
   return (
     <div className="relative min-h-screen bg-black text-[#f5f3ef] selection:bg-[#ff1e38] selection:text-white">
