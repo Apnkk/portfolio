@@ -90,8 +90,8 @@ export const Hero = () => {
           </span>
         </motion.h1>
 
-        {/* Lower Content Cluster: Description, CTAs & Metrics pushed lower down */}
-        <div className="flex flex-col items-center w-full mt-20 sm:mt-32 lg:mt-40">
+        {/* Lower Content Cluster: CTAs & Metrics pushed lower down */}
+        <div className="flex flex-col items-center w-full mt-24 sm:mt-36 lg:mt-48">
 
           {/* Action Buttons with Magnetic cursor pull & spring taps */}
           <motion.div
