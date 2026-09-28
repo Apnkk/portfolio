@@ -89,6 +89,11 @@ export const FullscreenLyrics = ({
   const lyricRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [hoverRatio, setHoverRatio] = useState<number | null>(null);
 
+  // Position and height of the single unified gliding indicator bar
+  const [indicatorY, setIndicatorY] = useState(0);
+  const [indicatorHeight, setIndicatorHeight] = useState(32);
+  const [indicatorVisible, setIndicatorVisible] = useState(false);
+
   // Anti-hijack: pause automatic follow ONLY when the user physically wheels or touches
   const isUserInteractingRef = useRef(false);
   const userInteractionTimeoutRef = useRef<number | null>(null);
@@ -124,6 +129,31 @@ export const FullscreenLyrics = ({
       behavior: smooth ? 'smooth' : 'auto',
     });
   }, [currentLyricIndex]);
+
+  // Update gliding bar coordinates whenever active lyric or window size changes
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const updateIndicator = () => {
+      const activeEl = lyricRefs.current[currentLyricIndex];
+      if (activeEl) {
+        setIndicatorY(activeEl.offsetTop + 6);
+        setIndicatorHeight(Math.max(28, activeEl.offsetHeight - 12));
+        setIndicatorVisible(true);
+      } else {
+        setIndicatorVisible(false);
+      }
+    };
+
+    updateIndicator();
+    const timer = window.setTimeout(updateIndicator, 40);
+    window.addEventListener('resize', updateIndicator);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [isOpen, currentLyricIndex, currentTrack]);
 
   // Handle genuine user wheel/touch interaction
   const handleUserWheelOrTouch = () => {
@@ -347,79 +377,83 @@ export const FullscreenLyrics = ({
                   'linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)',
               }}
             >
-              {/* Intro preamble dots */}
-              <div className="text-white/35 font-mono text-2xl sm:text-3xl tracking-[0.3em] py-4 select-none pl-6">
-                • • •
-              </div>
+              {/* Lyrics List Container with Single True Gliding Bar */}
+              <div className="relative pl-6 sm:pl-8 select-none">
+                {/* The Single True Gliding Indicator Bar (Physically moves, 0 Lag, 0 Stray) */}
+                <motion.div
+                  initial={false}
+                  animate={{
+                    y: indicatorY,
+                    height: indicatorHeight,
+                    opacity: indicatorVisible ? 1 : 0,
+                  }}
+                  transition={{
+                    type: 'spring',
+                    visualDuration: 0.32,
+                    bounce: 0.12,
+                  }}
+                  className="absolute left-0 w-1.5 rounded-full pointer-events-none shadow-[0_0_18px_rgba(255,255,255,0.85)] z-10"
+                  style={{ background: theme.accent }}
+                />
 
-              {currentTrack.lyrics && currentTrack.lyrics.length > 0 ? (
-                currentTrack.lyrics.map((line, idx) => {
-                  const isCurrent = idx === currentLyricIndex;
+                {/* Intro preamble dots */}
+                <div className="text-white/35 font-mono text-2xl sm:text-3xl tracking-[0.3em] py-4">
+                  • • •
+                </div>
 
-                  return (
-                    <motion.div
-                      key={idx}
-                      ref={(el) => {
-                        lyricRefs.current[idx] = el;
-                      }}
-                      onClick={() => handleLyricClick(line.time)}
-                      initial={false}
-                      animate={{
-                        scale: isCurrent ? 1.02 : 0.98,
-                        opacity: isCurrent ? 1 : 0.28,
-                        x: isCurrent ? 8 : 0,
-                        filter: isCurrent ? 'blur(0px)' : 'blur(0.5px)',
-                      }}
-                      whileHover={{
-                        scale: isCurrent ? 1.02 : 1.0,
-                        opacity: isCurrent ? 1 : 0.75,
-                        filter: 'blur(0px)',
-                        x: isCurrent ? 8 : 4,
-                      }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{
-                        type: 'spring',
-                        visualDuration: 0.35,
-                        bounce: 0.12,
-                      }}
-                      className={`relative py-3.5 sm:py-4.5 cursor-pointer select-none origin-left flex items-start gap-3.5 sm:gap-5 transition-colors ${
-                        isCurrent ? 'text-white' : 'text-white/60'
-                      }`}
-                    >
-                      {/* Active Lyric Spring Glide Indicator Bar */}
-                      <div className="w-1.5 self-stretch shrink-0 flex items-stretch">
-                        {isCurrent && (
-                          <motion.div
-                            layoutId="active-lyric-bar"
-                            transition={{
-                              type: 'spring',
-                              visualDuration: 0.35,
-                              bounce: 0.15,
-                            }}
-                            className="w-full rounded-full shadow-[0_0_16px_rgba(255,255,255,0.9)]"
-                            style={{ background: theme.accent }}
-                          />
-                        )}
-                      </div>
+                {currentTrack.lyrics && currentTrack.lyrics.length > 0 ? (
+                  currentTrack.lyrics.map((line, idx) => {
+                    const isCurrent = idx === currentLyricIndex;
 
-                      {/* Lyric Text */}
-                      <span
-                        className={`font-display font-black tracking-tight leading-[1.24] text-2xl sm:text-3xl md:text-4xl lg:text-[2.85rem] xl:text-[3.35rem] transition-all duration-300 break-normal ${
-                          isCurrent
-                            ? 'text-white drop-shadow-[0_4px_35px_rgba(255,255,255,0.45)]'
-                            : 'text-white/40 hover:text-white/80'
+                    return (
+                      <motion.div
+                        key={idx}
+                        ref={(el) => {
+                          lyricRefs.current[idx] = el;
+                        }}
+                        onClick={() => handleLyricClick(line.time)}
+                        initial={false}
+                        animate={{
+                          scale: isCurrent ? 1.02 : 0.98,
+                          opacity: isCurrent ? 1 : 0.28,
+                          x: isCurrent ? 8 : 0,
+                          filter: isCurrent ? 'blur(0px)' : 'blur(0.5px)',
+                        }}
+                        whileHover={{
+                          scale: isCurrent ? 1.02 : 1.0,
+                          opacity: isCurrent ? 1 : 0.75,
+                          filter: 'blur(0px)',
+                          x: isCurrent ? 8 : 4,
+                        }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{
+                          type: 'spring',
+                          visualDuration: 0.35,
+                          bounce: 0.12,
+                        }}
+                        className={`py-3.5 sm:py-4.5 cursor-pointer select-none origin-left transition-colors ${
+                          isCurrent ? 'text-white' : 'text-white/60'
                         }`}
                       >
-                        {line.text}
-                      </span>
-                    </motion.div>
-                  );
-                })
-              ) : (
-                <div className="py-24 text-center text-white/50 font-mono text-sm">
-                  Paroles indisponibles pour ce morceau.
-                </div>
-              )}
+                        {/* Lyric Text */}
+                        <span
+                          className={`font-display font-black tracking-tight leading-[1.24] text-2xl sm:text-3xl md:text-4xl lg:text-[2.85rem] xl:text-[3.35rem] transition-all duration-300 break-normal ${
+                            isCurrent
+                              ? 'text-white drop-shadow-[0_4px_35px_rgba(255,255,255,0.45)]'
+                              : 'text-white/40 hover:text-white/80'
+                          }`}
+                        >
+                          {line.text}
+                        </span>
+                      </motion.div>
+                    );
+                  })
+                ) : (
+                  <div className="py-24 text-center text-white/50 font-mono text-sm">
+                    Paroles indisponibles pour ce morceau.
+                  </div>
+                )}
+              </div>
             </div>
           </main>
 
