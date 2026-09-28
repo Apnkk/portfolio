@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { portfolioData } from '../data/portfolioData';
-import { Check, Copy, ArrowUp, Send, Loader2, Mail, AlertCircle, MessageSquare } from 'lucide-react';
+import { Check, Copy, Send, Loader2, Mail, AlertCircle, MessageSquare } from 'lucide-react';
 import { GithubIcon } from './icons/BrandIcons';
 import { MagneticButton } from './motion/MagneticButton';
 import { BorderBeam } from './motion/BorderBeam';
@@ -19,15 +19,6 @@ export const ContactSection = () => {
     navigator.clipboard.writeText(portfolioData.personal.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2500);
-  };
-
-  const scrollToTop = () => {
-    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: { duration?: number }) => void } }).__lenis;
-    if (lenis) {
-      lenis.scrollTo(0, { duration: 1.0 });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -321,17 +312,14 @@ export const ContactSection = () => {
         </div>
 
         {/* Footer Bar */}
-        <footer className="mt-24 sm:mt-32 py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-[#71717a]">
-          <span>© 2026 ARES — FULL-STACK &amp; SYSTEMS DEVELOPER</span>
-          <span className="text-[#a1a1aa]">REACT 19 · TYPESCRIPT · TAILWIND CSS</span>
-          <button
-            type="button"
-            onClick={scrollToTop}
-            className="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
-          >
-            <span>RETOUR EN HAUT</span>
-            <ArrowUp className="w-3.5 h-3.5" />
-          </button>
+        <footer className="mt-24 sm:mt-32 py-8 border-t border-white/[0.08] grid grid-cols-1 sm:grid-cols-3 items-center gap-4 font-mono text-xs text-[#71717a]">
+          <div className="text-center sm:text-left">
+            <span>© 2026 ARES</span>
+          </div>
+          <div className="text-center text-[#a1a1aa]">
+            <span>REACT 19 · TYPESCRIPT · TAILWIND CSS</span>
+          </div>
+          <div className="hidden sm:block" aria-hidden="true" />
         </footer>
       </div>
     </section>
