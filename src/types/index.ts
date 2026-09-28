@@ -10,6 +10,8 @@ export interface Project {
   description: { fr: string; en: string };
   longDescription: { fr: string; en: string };
   image?: string;
+  video?: string;
+  gallery?: string[];
   tags: string[];
   metrics?: { fr: string; en: string };
   featured?: boolean;

@@ -174,7 +174,14 @@ export const portfolioData: PortfolioData = {
         en: "Spoti Liquid Glass proves the feasibility of injecting high-end UI customizations into existing iOS app bundles while maintaining native stability and full sideloading support."
       },
       tags: ["Swift / iOS", "Liquid Glass", "Objective-C", "UI Modding", "Sideloading"],
-      image: "/projects/spoti-now-playing.webp",
+      image: "/projects/spoti-liquid-glass-3d.webp",
+      gallery: [
+        "/projects/spoti-liquid-glass-3d.webp",
+        "/projects/spoti-dual-mockup.webp",
+        "/projects/spoti/now-playing.webp",
+        "/projects/spoti/live-activity.webp",
+        "/projects/spoti/home.webp"
+      ],
       metrics: { fr: "No Jailbreak Needed", en: "No Jailbreak Needed" },
       featured: true,
       status: "opensource",

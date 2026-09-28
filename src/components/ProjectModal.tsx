@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Project } from '../types';
 import { useLanguage } from '../context/LanguageContext';
@@ -12,6 +12,7 @@ interface ProjectModalProps {
 
 export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const { language } = useLanguage();
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -92,18 +93,60 @@ export const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
         {/* Modal Scrollable Content */}
         <div className="mt-6 space-y-6 max-h-[60vh] overflow-y-auto pr-2">
-          {/* Screenshot */}
-          {project.image && (
+          {/* Media Viewport (Video or Screenshot with Gallery support) */}
+          {project.video ? (
             <div className="relative aspect-[16/9] rounded-xl overflow-hidden border border-white/[0.08] bg-black">
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-full object-cover object-top"
-                loading="lazy"
-                decoding="async"
+              <video
+                src={project.video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls
+                className="w-full h-full object-cover object-center"
               />
             </div>
-          )}
+          ) : (project.gallery && project.gallery.length > 0) || project.image ? (
+            <div className="space-y-3">
+              <div className="relative aspect-[16/9] rounded-xl overflow-hidden border border-white/[0.08] bg-black">
+                <img
+                  src={
+                    project.gallery && project.gallery[activeImageIndex]
+                      ? project.gallery[activeImageIndex]
+                      : project.image
+                  }
+                  alt={project.title}
+                  className="w-full h-full object-cover object-center"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              {/* Gallery Thumbnails Selector */}
+              {project.gallery && project.gallery.length > 1 && (
+                <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                  {project.gallery.map((imgUrl, gIdx) => (
+                    <button
+                      key={gIdx}
+                      type="button"
+                      onClick={() => setActiveImageIndex(gIdx)}
+                      className={`relative aspect-[16/10] w-20 rounded-lg overflow-hidden border transition-all cursor-pointer shrink-0 ${
+                        activeImageIndex === gIdx
+                          ? 'border-[#ff1e38] ring-2 ring-[#ff1e38]/30 scale-105'
+                          : 'border-white/[0.1] opacity-60 hover:opacity-100 hover:border-white/30'
+                      }`}
+                    >
+                      <img
+                        src={imgUrl}
+                        alt={`Preview ${gIdx + 1}`}
+                        className="w-full h-full object-cover object-center"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : null}
 
           {/* Detailed Overview */}
           <div>

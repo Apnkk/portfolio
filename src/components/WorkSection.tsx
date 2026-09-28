@@ -49,13 +49,22 @@ const ProjectCard = ({ project, isWide, idx, onOpenModal }: ProjectCardProps) =>
           onClick={() => onOpenModal(project)}
           className="relative aspect-[16/10] overflow-hidden bg-black cursor-pointer group/img"
         >
-          {project.image ? (
+          {project.video ? (
+            <video
+              src={project.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover object-center filter brightness-[0.95] group-hover/img:scale-[1.04] transition-all duration-500 ease-out"
+            />
+          ) : project.image ? (
             <img
               src={project.image}
               alt={project.title}
               loading="lazy"
               decoding="async"
-              className="w-full h-full object-cover object-top filter brightness-[0.92] group-hover/img:scale-[1.04] group-hover/img:brightness-100 transition-all duration-500 ease-out"
+              className="w-full h-full object-cover object-center filter brightness-[0.94] group-hover/img:scale-[1.04] group-hover/img:brightness-100 transition-all duration-500 ease-out"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-zinc-950 text-[#71717a] font-mono text-xs">
