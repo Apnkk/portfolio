@@ -477,23 +477,34 @@ export const FullscreenLyrics = ({
                     const isCurrent = idx === currentLyricIndex;
                     const distance = Math.abs(idx - currentLyricIndex);
 
+                    // Compute progressive karaoke reveal for the current lyric line
+                    const nextLine = currentTrack.lyrics?.[idx + 1];
+                    const lineStart = line.time;
+                    const lineEnd = nextLine ? nextLine.time : (lineStart + 3.8);
+                    const lineDuration = Math.max(0.6, lineEnd - lineStart);
+                    const lineProgress = isCurrent
+                      ? Math.min(1, Math.max(0, (currentTime - lineStart) / lineDuration))
+                      : idx < currentLyricIndex
+                      ? 1
+                      : 0;
+
                     // Multi-tier Apple Music Depth of Field Calculation
-                    let targetOpacity = 0.12;
+                    let targetOpacity = 0.08;
                     let targetBlur = 'blur(4px)';
-                    let targetScale = 0.94;
+                    let targetScale = 0.92;
 
                     if (isCurrent) {
                       targetOpacity = 1;
                       targetBlur = 'blur(0px)';
-                      targetScale = 1.04;
+                      targetScale = 1.05;
                     } else if (distance === 1) {
                       targetOpacity = 0.45;
                       targetBlur = 'blur(1.2px)';
                       targetScale = 0.98;
                     } else if (distance === 2) {
-                      targetOpacity = 0.25;
+                      targetOpacity = 0.22;
                       targetBlur = 'blur(2.5px)';
-                      targetScale = 0.95;
+                      targetScale = 0.94;
                     }
 
                     return (
@@ -508,39 +519,63 @@ export const FullscreenLyrics = ({
                           scale: targetScale,
                           opacity: targetOpacity,
                           filter: targetBlur,
-                          x: isCurrent ? 14 : 0,
+                          x: isCurrent ? 18 : 0,
                         }}
                         whileHover={{
-                          scale: isCurrent ? 1.04 : 1.015,
-                          opacity: 0.9,
+                          scale: isCurrent ? 1.05 : 1.02,
+                          opacity: 0.92,
                           filter: 'blur(0px)',
-                          x: isCurrent ? 14 : 8,
+                          x: isCurrent ? 18 : 8,
                         }}
                         whileTap={{ scale: 0.98 }}
                         transition={{
                           type: 'spring',
-                          visualDuration: 0.42,
-                          bounce: 0.14,
+                          visualDuration: 0.38,
+                          bounce: 0.15,
                         }}
                         className="py-3.5 sm:py-4.5 lg:py-5 cursor-pointer select-none origin-left transition-colors"
                       >
-                        {/* Lyric Text with Apple Music Bloom & Shimmer */}
-                        <span
-                          className={`font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] transition-all duration-300 break-normal block ${
-                            isCurrent
-                              ? 'text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.7)]'
-                              : 'text-white/60 hover:text-white'
-                          }`}
-                          style={
-                            isCurrent
-                              ? {
-                                  textShadow: `0 0 35px rgba(255, 255, 255, 0.75), 0 0 70px ${theme.accent}70`,
-                                }
-                              : undefined
-                          }
-                        >
-                          {line.text}
-                        </span>
+                        {/* Apple Music Progressive Karaoke Text Container */}
+                        <div className="relative inline-block break-normal select-none">
+                          {/* Layer 1: Dimmed Base Text */}
+                          <span
+                            className={`font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] block transition-colors duration-300 ${
+                              isCurrent
+                                ? 'text-white/35'
+                                : distance === 1
+                                ? 'text-white/45'
+                                : 'text-white/20'
+                            }`}
+                          >
+                            {line.text}
+                          </span>
+
+                          {/* Layer 2: Radiant Live Karaoke Sweep (Lights up in real-time as sung) */}
+                          {isCurrent && (
+                            <span
+                              className="absolute inset-0 font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] text-white block pointer-events-none select-none transition-[clip-path] duration-75"
+                              style={{
+                                clipPath: `inset(0 ${(1 - lineProgress) * 100}% 0 0)`,
+                                textShadow: `0 0 20px rgba(255, 255, 255, 0.95), 0 0 45px ${theme.accent}, 0 0 75px ${theme.accent}80`,
+                                filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.75))',
+                                WebkitTextFillColor: '#ffffff',
+                              }}
+                              aria-hidden="true"
+                            >
+                              {line.text}
+                            </span>
+                          )}
+
+                          {/* Soft persistence for recently sung lines */}
+                          {idx < currentLyricIndex && distance <= 2 && (
+                            <span
+                              className="absolute inset-0 font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] text-white/50 block pointer-events-none select-none"
+                              aria-hidden="true"
+                            >
+                              {line.text}
+                            </span>
+                          )}
+                        </div>
                       </motion.div>
                     );
                   })
