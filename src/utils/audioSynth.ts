@@ -282,6 +282,13 @@ class PortfolioAudioEngine {
       this.isPlaying = false;
       this.notify();
     });
+
+    // High-resolution ticker (every 100ms) for millisecond-accurate lyric synchronization
+    setInterval(() => {
+      if (this.isPlaying && this.audio && !this.audio.paused) {
+        this.notify();
+      }
+    }, 100);
   }
 
   private initContext() {

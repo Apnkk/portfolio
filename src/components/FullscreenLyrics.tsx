@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Track } from '../utils/audioSynth';
 import { 
@@ -85,13 +85,13 @@ export const FullscreenLyrics = ({
   onVolumeChange,
   onToggleMute,
 }: FullscreenLyricsProps) => {
-  const activeLyricRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const lyricRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [hoverRatio, setHoverRatio] = useState<number | null>(null);
 
-  // Anti-hijack scroll: pause auto-scroll if user is manually scrolling
-  const isUserScrollingRef = useRef(false);
-  const userScrollTimeoutRef = useRef<number | null>(null);
+  // Anti-hijack: pause automatic follow ONLY when the user physically wheels or touches
+  const isUserInteractingRef = useRef(false);
+  const userInteractionTimeoutRef = useRef<number | null>(null);
 
   const theme = TRACK_THEMES[currentTrack.id] || TRACK_THEMES.borderline;
 
@@ -106,26 +106,69 @@ export const FullscreenLyrics = ({
   const durationSec = duration > 0 ? duration : 180;
   const progressRatio = durationSec > 0 ? Math.min(1, currentTime / durationSec) : 0;
 
-  // Track user manual scrolling
-  const handleScroll = () => {
-    isUserScrollingRef.current = true;
-    if (userScrollTimeoutRef.current) {
-      window.clearTimeout(userScrollTimeoutRef.current);
+  // Direct container scroll computation to guarantee centering
+  const scrollToActiveLyric = useCallback((smooth = true) => {
+    const container = containerRef.current;
+    const activeEl = lyricRefs.current[currentLyricIndex];
+    if (!container || !activeEl) return;
+
+    const containerHeight = container.clientHeight;
+    const activeTop = activeEl.offsetTop;
+    const activeHeight = activeEl.offsetHeight;
+
+    // Center the active element precisely in the view
+    const targetScroll = Math.max(0, activeTop - (containerHeight / 2) + (activeHeight / 2));
+
+    container.scrollTo({
+      top: targetScroll,
+      behavior: smooth ? 'smooth' : 'auto',
+    });
+  }, [currentLyricIndex]);
+
+  // Handle genuine user wheel/touch interaction
+  const handleUserWheelOrTouch = () => {
+    isUserInteractingRef.current = true;
+    if (userInteractionTimeoutRef.current) {
+      window.clearTimeout(userInteractionTimeoutRef.current);
     }
-    userScrollTimeoutRef.current = window.setTimeout(() => {
-      isUserScrollingRef.current = false;
-    }, 3500);
+    userInteractionTimeoutRef.current = window.setTimeout(() => {
+      isUserInteractingRef.current = false;
+      scrollToActiveLyric(true);
+    }, 2800);
   };
 
-  // Smooth auto-scroll keeping active lyric centered (respecting anti-hijack)
+  // Follow active lyric on index change (unless actively scrolling)
   useEffect(() => {
-    if (isOpen && activeLyricRef.current && !isUserScrollingRef.current) {
-      activeLyricRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
+    if (!isOpen) return;
+    if (isUserInteractingRef.current) return;
+
+    const timer = window.setTimeout(() => {
+      scrollToActiveLyric(true);
+    }, 30);
+
+    return () => window.clearTimeout(timer);
+  }, [isOpen, currentLyricIndex, scrollToActiveLyric]);
+
+  // Center active lyric immediately on modal open
+  useEffect(() => {
+    if (isOpen) {
+      isUserInteractingRef.current = false;
+      const timer = window.setTimeout(() => {
+        scrollToActiveLyric(false);
+      }, 60);
+      return () => window.clearTimeout(timer);
     }
-  }, [isOpen, currentLyricIndex]);
+  }, [isOpen, scrollToActiveLyric]);
+
+  // Pause Lenis smooth scroll while fullscreen lyrics is open to avoid conflicts
+  useEffect(() => {
+    if (!isOpen) return;
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    lenis?.stop();
+    return () => {
+      lenis?.start();
+    };
+  }, [isOpen]);
 
   // Keyboard shortcut: Escape to close, Space to toggle play
   useEffect(() => {
@@ -143,8 +186,8 @@ export const FullscreenLyrics = ({
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      if (userScrollTimeoutRef.current) {
-        window.clearTimeout(userScrollTimeoutRef.current);
+      if (userInteractionTimeoutRef.current) {
+        window.clearTimeout(userInteractionTimeoutRef.current);
       }
     };
   }, [isOpen, onClose, onTogglePlay]);
@@ -155,12 +198,22 @@ export const FullscreenLyrics = ({
     onSeek(ratio * durationSec);
   };
 
+  const handleLyricClick = (time: number) => {
+    isUserInteractingRef.current = false;
+    if (userInteractionTimeoutRef.current) {
+      window.clearTimeout(userInteractionTimeoutRef.current);
+    }
+    onSeek(time);
+    window.setTimeout(() => scrollToActiveLyric(true), 40);
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           role="dialog"
           aria-modal="true"
+          data-lenis-prevent
           aria-label={`Paroles en direct : ${currentTrack.title}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -168,9 +221,8 @@ export const FullscreenLyrics = ({
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[1000] flex flex-col justify-between overflow-hidden bg-black select-none pointer-events-auto"
         >
-          {/* Animated Atmospheric Fluid Mesh Gradient Background (Ultra Soft & Deep) */}
+          {/* Animated Atmospheric Fluid Mesh Gradient Background */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
-            {/* Deep velvet dark tone base */}
             <div
               className="absolute inset-0 transition-colors duration-1000"
               style={{ background: theme.bgDark }}
@@ -224,14 +276,13 @@ export const FullscreenLyrics = ({
               style={{ background: theme.orb4 }}
             />
 
-            {/* Dark Vignette Overlay for OLED contrast */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-[8px]" />
             <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_30%,rgba(0,0,0,0.7)_100%]" />
           </div>
 
-          {/* Top Bar Header (Propre & Minimaliste) */}
+          {/* Top Bar Header */}
           <header className="relative z-20 flex items-center justify-between w-full px-6 sm:px-12 md:px-16 lg:px-24 pt-6 sm:pt-10 select-none">
-            {/* Left: Album cover thumbnail + Title + Artist + Live Sync Badge */}
+            {/* Left: Track Info & Live Sync Pill */}
             <div className="flex items-center gap-3.5">
               <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden shadow-2xl border border-white/15 shrink-0">
                 {currentTrack.coverImage ? (
@@ -256,7 +307,6 @@ export const FullscreenLyrics = ({
                 </p>
               </div>
 
-              {/* Minimalist Live Sync Badge */}
               <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/[0.08] backdrop-blur-md ml-3">
                 <span
                   className="w-1.5 h-1.5 rounded-full animate-pulse shadow-sm"
@@ -268,7 +318,7 @@ export const FullscreenLyrics = ({
               </div>
             </div>
 
-            {/* Right: Minimalist Frosted Close Button */}
+            {/* Right: Minimalist Close Button */}
             <motion.button
               type="button"
               onClick={onClose}
@@ -282,14 +332,14 @@ export const FullscreenLyrics = ({
             </motion.button>
           </header>
 
-          {/* Main Lyrics Viewport (Widened & Rich Motion UI) */}
+          {/* Main Lyrics Viewport (Broadened & Centered Scroll Tracking) */}
           <main className="relative z-20 flex-1 flex flex-col justify-center overflow-hidden max-w-5xl lg:max-w-6xl xl:max-w-7xl w-full mx-auto px-6 sm:px-12 md:px-16 lg:px-24">
             <div
               ref={containerRef}
-              onScroll={handleScroll}
-              onTouchStart={handleScroll}
-              onWheel={handleScroll}
-              className="h-[58vh] sm:h-[64vh] overflow-y-auto scroll-smooth py-20 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              onWheel={handleUserWheelOrTouch}
+              onTouchMove={handleUserWheelOrTouch}
+              data-lenis-prevent
+              className="h-[58vh] sm:h-[64vh] overflow-y-auto scroll-smooth py-24 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
               style={{
                 maskImage:
                   'linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)',
@@ -309,8 +359,10 @@ export const FullscreenLyrics = ({
                   return (
                     <motion.div
                       key={idx}
-                      ref={isCurrent ? activeLyricRef : null}
-                      onClick={() => onSeek(line.time)}
+                      ref={(el) => {
+                        lyricRefs.current[idx] = el;
+                      }}
+                      onClick={() => handleLyricClick(line.time)}
                       initial={false}
                       animate={{
                         scale: isCurrent ? 1.02 : 0.98,
@@ -330,7 +382,7 @@ export const FullscreenLyrics = ({
                         visualDuration: 0.35,
                         bounce: 0.12,
                       }}
-                      className={`relative py-3 sm:py-4.5 cursor-pointer select-none origin-left flex items-start gap-4 transition-colors ${
+                      className={`relative py-3.5 sm:py-4.5 cursor-pointer select-none origin-left flex items-start gap-3.5 sm:gap-5 transition-colors ${
                         isCurrent ? 'text-white' : 'text-white/60'
                       }`}
                     >
@@ -350,7 +402,7 @@ export const FullscreenLyrics = ({
                         )}
                       </div>
 
-                      {/* Lyric Text with Fluid Responsive Typography */}
+                      {/* Lyric Text */}
                       <span
                         className={`font-display font-black tracking-tight leading-[1.24] text-2xl sm:text-3xl md:text-4xl lg:text-[2.85rem] xl:text-[3.35rem] transition-all duration-300 break-normal ${
                           isCurrent
@@ -371,7 +423,7 @@ export const FullscreenLyrics = ({
             </div>
           </main>
 
-          {/* Bottom Playback Control Bar (Propre & Minimaliste) */}
+          {/* Bottom Playback Control Bar */}
           <footer className="relative z-20 w-full max-w-xl sm:max-w-2xl mx-auto px-6 pb-8 sm:pb-12 pt-2 flex flex-col items-center gap-3.5 select-none">
             {/* Progress Scrubber Bar */}
             <div className="w-full flex items-center gap-3">
@@ -388,14 +440,12 @@ export const FullscreenLyrics = ({
                 onMouseLeave={() => setHoverRatio(null)}
                 className="relative flex-1 h-1.5 hover:h-2.5 bg-white/20 rounded-full transition-all cursor-pointer overflow-hidden group"
               >
-                {/* Hover preview ghost bar */}
                 {hoverRatio !== null && (
                   <div
                     className="absolute inset-y-0 left-0 bg-white/30 pointer-events-none"
                     style={{ width: `${hoverRatio * 100}%` }}
                   />
                 )}
-                {/* Active progress fill */}
                 <div
                   className="absolute inset-y-0 left-0 transition-all duration-100 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)]"
                   style={{ width: `${progressRatio * 100}%` }}
@@ -409,7 +459,6 @@ export const FullscreenLyrics = ({
 
             {/* Playback Action Buttons */}
             <div className="flex items-center justify-center gap-6 w-full relative">
-              {/* Skip Previous */}
               <motion.button
                 type="button"
                 whileHover={{ scale: 1.15 }}
@@ -422,7 +471,6 @@ export const FullscreenLyrics = ({
                 <SkipBack className="w-5 h-5 fill-white/20" />
               </motion.button>
 
-              {/* Big White Circular Play/Pause Button */}
               <motion.button
                 type="button"
                 whileHover={{ scale: 1.08 }}
@@ -439,7 +487,6 @@ export const FullscreenLyrics = ({
                 )}
               </motion.button>
 
-              {/* Skip Next */}
               <motion.button
                 type="button"
                 whileHover={{ scale: 1.15 }}
@@ -452,7 +499,6 @@ export const FullscreenLyrics = ({
                 <SkipForward className="w-5 h-5 fill-white/20" />
               </motion.button>
 
-              {/* Volume Slider (Right on Desktop) */}
               <div className="hidden sm:flex items-center gap-2 absolute right-0">
                 <button
                   type="button"

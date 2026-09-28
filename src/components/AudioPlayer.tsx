@@ -380,6 +380,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
                     {/* Lyrics Scrollable Container with Smooth Edge Mask and Hidden Scrollbar */}
                     <div
+                      data-lenis-prevent
                       className="flex-1 overflow-y-auto space-y-5 px-3 py-12 scroll-smooth select-none text-left [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                       style={{
                         maskImage: 'linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%)',
