@@ -31,7 +31,7 @@ interface FullscreenLyricsProps {
   onToggleMute: () => void;
 }
 
-// Deep, velvet-like OLED ambient mesh gradient palettes
+// Deep, velvet-like OLED ambient mesh gradient palettes (Pure minimalism)
 const TRACK_THEMES: Record<
   string,
   {
@@ -91,11 +91,6 @@ export const FullscreenLyrics = ({
   const lyricRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [hoverRatio, setHoverRatio] = useState<number | null>(null);
 
-  // Position and height of the fluid neon gliding indicator bar
-  const [indicatorY, setIndicatorY] = useState(0);
-  const [indicatorHeight, setIndicatorHeight] = useState(36);
-  const [indicatorVisible, setIndicatorVisible] = useState(false);
-
   // Anti-hijack: pause automatic follow ONLY when the user physically wheels or touches
   const isUserInteractingRef = useRef(false);
   const userInteractionTimeoutRef = useRef<number | null>(null);
@@ -113,7 +108,7 @@ export const FullscreenLyrics = ({
   const durationSec = duration > 0 ? duration : 180;
   const progressRatio = durationSec > 0 ? Math.min(1, currentTime / durationSec) : 0;
 
-  // Direct container scroll computation to guarantee centering
+  // Direct container scroll computation to guarantee optical centering
   const scrollToActiveLyric = useCallback((smooth = true) => {
     const container = containerRef.current;
     const activeEl = lyricRefs.current[currentLyricIndex];
@@ -131,31 +126,6 @@ export const FullscreenLyrics = ({
       behavior: smooth ? 'smooth' : 'auto',
     });
   }, [currentLyricIndex]);
-
-  // Update gliding bar coordinates whenever active lyric or window size changes
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const updateIndicator = () => {
-      const activeEl = lyricRefs.current[currentLyricIndex];
-      if (activeEl) {
-        setIndicatorY(activeEl.offsetTop + 4);
-        setIndicatorHeight(Math.max(32, activeEl.offsetHeight - 8));
-        setIndicatorVisible(true);
-      } else {
-        setIndicatorVisible(false);
-      }
-    };
-
-    updateIndicator();
-    const timer = window.setTimeout(updateIndicator, 40);
-    window.addEventListener('resize', updateIndicator);
-
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener('resize', updateIndicator);
-    };
-  }, [isOpen, currentLyricIndex, currentTrack]);
 
   // Handle genuine user wheel/touch interaction
   const handleUserWheelOrTouch = () => {
@@ -253,7 +223,7 @@ export const FullscreenLyrics = ({
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[1000] flex flex-col justify-between overflow-hidden bg-black select-none pointer-events-auto"
         >
-          {/* Animated Atmospheric Fluid Mesh Gradient Background */}
+          {/* Atmospheric Fluid Mesh Gradient Background */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
             <div
               className="absolute inset-0 transition-colors duration-1000"
@@ -406,69 +376,28 @@ export const FullscreenLyrics = ({
             </motion.button>
           </header>
 
-          {/* Main Lyrics Viewport with Apple Music-Grade Depth-of-Field Blur */}
+          {/* Main Lyrics Viewport with Pure Apple Music Typography */}
           <main className="relative z-20 flex-1 flex flex-col justify-center overflow-hidden w-full max-w-[94vw] sm:max-w-[90vw] md:max-w-5xl lg:max-w-6xl xl:max-w-[1380px] 2xl:max-w-[1600px] mx-auto px-6 sm:px-10 md:px-14 lg:px-16 xl:px-20">
             <div
               ref={containerRef}
               onWheel={handleUserWheelOrTouch}
               onTouchMove={handleUserWheelOrTouch}
               data-lenis-prevent
-              className="h-[62vh] sm:h-[68vh] lg:h-[72vh] overflow-y-auto scroll-smooth py-24 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
+              className="h-[62vh] sm:h-[68vh] lg:h-[72vh] overflow-y-auto scroll-smooth py-28 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
               style={{
                 maskImage:
-                  'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+                  'linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)',
                 WebkitMaskImage:
-                  'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+                  'linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)',
               }}
             >
-              {/* Lyrics List Container with Neon Gliding Indicator */}
-              <div className="relative pl-8 sm:pl-12 select-none">
-                {/* Fluid Neon Gliding Indicator Bar with Glow Pulse */}
-                <motion.div
-                  initial={false}
-                  animate={{
-                    y: indicatorY,
-                    height: indicatorHeight,
-                    opacity: indicatorVisible ? 1 : 0,
-                  }}
-                  transition={{
-                    type: 'spring',
-                    visualDuration: 0.38,
-                    bounce: 0.12,
-                  }}
-                  className="absolute left-0 w-1.5 sm:w-2 rounded-full pointer-events-none z-10"
-                  style={{
-                    background: `linear-gradient(180deg, ${theme.accent}, #ffffff)`,
-                    boxShadow: `0 0 20px ${theme.accent}, 0 0 45px ${theme.accent}90`,
-                  }}
-                />
-
-                {/* Animated Beat Preamble Dots */}
-                <div className="flex items-center gap-2.5 py-4 mb-2 select-none">
-                  {[0, 1, 2].map((i) => (
-                    <motion.span
-                      key={i}
-                      animate={
-                        isPlaying && !shouldReduceMotion
-                          ? {
-                              scale: [1, 1.45, 1],
-                              opacity: [0.3, 1, 0.3],
-                            }
-                          : { scale: 1, opacity: 0.3 }
-                      }
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        delay: i * 0.22,
-                        ease: 'easeInOut',
-                      }}
-                      className="w-2.5 h-2.5 rounded-full"
-                      style={{ background: theme.accent, boxShadow: `0 0 10px ${theme.accent}` }}
-                    />
-                  ))}
-                  <span className="font-mono text-[0.66rem] text-white/40 uppercase tracking-widest ml-2 flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-[#ff1e38]" />
-                    Paroles synchronisées
+              {/* Pure Typography Lyrics List (No sidebar, no vertical bar) */}
+              <div className="relative select-none">
+                {/* Subtle synchronized tag */}
+                <div className="flex items-center gap-2 py-3 mb-4 select-none opacity-60">
+                  <Sparkles className="w-3.5 h-3.5 text-white/80" />
+                  <span className="font-mono text-[0.68rem] text-white/70 uppercase tracking-widest">
+                    Paroles synchronisées en direct
                   </span>
                 </div>
 
@@ -477,34 +406,23 @@ export const FullscreenLyrics = ({
                     const isCurrent = idx === currentLyricIndex;
                     const distance = Math.abs(idx - currentLyricIndex);
 
-                    // Compute progressive karaoke reveal for the current lyric line
-                    const nextLine = currentTrack.lyrics?.[idx + 1];
-                    const lineStart = line.time;
-                    const lineEnd = nextLine ? nextLine.time : (lineStart + 3.8);
-                    const lineDuration = Math.max(0.6, lineEnd - lineStart);
-                    const lineProgress = isCurrent
-                      ? Math.min(1, Math.max(0, (currentTime - lineStart) / lineDuration))
-                      : idx < currentLyricIndex
-                      ? 1
-                      : 0;
-
-                    // Multi-tier Apple Music Depth of Field Calculation
+                    // Refined Apple Music depth of field & hierarchy
                     let targetOpacity = 0.08;
-                    let targetBlur = 'blur(4px)';
+                    let targetBlur = 'blur(3.5px)';
                     let targetScale = 0.92;
 
                     if (isCurrent) {
                       targetOpacity = 1;
                       targetBlur = 'blur(0px)';
-                      targetScale = 1.05;
+                      targetScale = 1.04;
                     } else if (distance === 1) {
-                      targetOpacity = 0.45;
-                      targetBlur = 'blur(1.2px)';
+                      targetOpacity = 0.38;
+                      targetBlur = 'blur(0.8px)';
                       targetScale = 0.98;
                     } else if (distance === 2) {
-                      targetOpacity = 0.22;
-                      targetBlur = 'blur(2.5px)';
-                      targetScale = 0.94;
+                      targetOpacity = 0.18;
+                      targetBlur = 'blur(2px)';
+                      targetScale = 0.95;
                     }
 
                     return (
@@ -519,63 +437,40 @@ export const FullscreenLyrics = ({
                           scale: targetScale,
                           opacity: targetOpacity,
                           filter: targetBlur,
-                          x: isCurrent ? 18 : 0,
                         }}
                         whileHover={{
-                          scale: isCurrent ? 1.05 : 1.02,
-                          opacity: 0.92,
+                          scale: isCurrent ? 1.04 : 1.015,
+                          opacity: isCurrent ? 1 : 0.85,
                           filter: 'blur(0px)',
-                          x: isCurrent ? 18 : 8,
                         }}
-                        whileTap={{ scale: 0.98 }}
+                        whileTap={{ scale: 0.985 }}
                         transition={{
                           type: 'spring',
-                          visualDuration: 0.38,
-                          bounce: 0.15,
+                          visualDuration: 0.35,
+                          bounce: 0.1,
                         }}
-                        className="py-3.5 sm:py-4.5 lg:py-5 cursor-pointer select-none origin-left transition-colors"
+                        className={`py-4 sm:py-5 lg:py-6 cursor-pointer select-none origin-left transition-colors ${
+                          isCurrent ? 'text-white' : 'text-white/40'
+                        }`}
                       >
-                        {/* Apple Music Progressive Karaoke Text Container */}
-                        <div className="relative inline-block break-normal select-none">
-                          {/* Layer 1: Dimmed Base Text */}
-                          <span
-                            className={`font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] block transition-colors duration-300 ${
-                              isCurrent
-                                ? 'text-white/35'
-                                : distance === 1
-                                ? 'text-white/45'
-                                : 'text-white/20'
-                            }`}
-                          >
-                            {line.text}
-                          </span>
-
-                          {/* Layer 2: Radiant Live Karaoke Sweep (Lights up in real-time as sung) */}
-                          {isCurrent && (
-                            <span
-                              className="absolute inset-0 font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] text-white block pointer-events-none select-none transition-[clip-path] duration-75"
-                              style={{
-                                clipPath: `inset(0 ${(1 - lineProgress) * 100}% 0 0)`,
-                                textShadow: `0 0 20px rgba(255, 255, 255, 0.95), 0 0 45px ${theme.accent}, 0 0 75px ${theme.accent}80`,
-                                filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.75))',
-                                WebkitTextFillColor: '#ffffff',
-                              }}
-                              aria-hidden="true"
-                            >
-                              {line.text}
-                            </span>
-                          )}
-
-                          {/* Soft persistence for recently sung lines */}
-                          {idx < currentLyricIndex && distance <= 2 && (
-                            <span
-                              className="absolute inset-0 font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] text-white/50 block pointer-events-none select-none"
-                              aria-hidden="true"
-                            >
-                              {line.text}
-                            </span>
-                          )}
-                        </div>
+                        {/* Pure, Sharp & Prestigious Apple Music Typography */}
+                        <p
+                          className={`font-display font-extrabold tracking-tight leading-[1.22] text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] xl:text-[3.25rem] 2xl:text-[3.75rem] transition-all duration-300 break-normal ${
+                            isCurrent
+                              ? 'text-white drop-shadow-[0_2px_24px_rgba(255,255,255,0.45)]'
+                              : 'text-white/40 hover:text-white/80'
+                          }`}
+                          style={
+                            isCurrent
+                              ? {
+                                  textShadow:
+                                    '0 0 25px rgba(255, 255, 255, 0.5), 0 0 50px rgba(255, 255, 255, 0.2)',
+                                }
+                              : undefined
+                          }
+                        >
+                          {line.text}
+                        </p>
                       </motion.div>
                     );
                   })
