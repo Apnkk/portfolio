@@ -49,7 +49,7 @@ export const Hero = () => {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-[92vh] sm:min-h-screen flex flex-col justify-between pt-32 sm:pt-40 pb-12 px-5 sm:px-10 lg:px-16 text-center bg-black overflow-hidden"
+      className="relative min-h-[92vh] sm:min-h-screen flex flex-col justify-between pt-28 sm:pt-32 pb-8 sm:pb-10 px-5 sm:px-10 lg:px-16 text-center bg-black overflow-hidden"
       aria-label="Introduction"
     >
       {/* Subtle top spotlight (Linear / Vercel style) */}
@@ -69,21 +69,25 @@ export const Hero = () => {
         animate="visible"
         className="relative z-10 max-w-4xl mx-auto my-auto flex flex-col items-center"
       >
-
-        {/* Hero Title */}
+        {/* Hero Title - Ares Prominently Centered */}
         <motion.h1
           variants={itemVariants}
-          className="font-display font-semibold text-[clamp(2.4rem,6.5vw,5.2rem)] text-white tracking-tight leading-[1.08] text-balance mb-6"
+          className="font-display text-center mb-6 sm:mb-8"
         >
-          {language === 'fr' ? (
-            <>
-              Ares <span className="text-[#71717a] font-normal">—</span> Développeur full-stack <span className="text-[#ff1e38]">&amp;</span> créateur de produits.
-            </>
-          ) : (
-            <>
-              Ares <span className="text-[#71717a] font-normal">—</span> Full-stack <span className="text-[#ff1e38]">&amp;</span> product engineer.
-            </>
-          )}
+          <span className="block font-bold text-[clamp(3.4rem,8.5vw,6rem)] text-white tracking-tight leading-[1.02] mb-3 sm:mb-4">
+            Ares
+          </span>
+          <span className="block font-semibold text-[clamp(1.5rem,3.8vw,2.75rem)] text-white/90 tracking-tight leading-[1.18] max-w-3xl mx-auto text-balance">
+            {language === 'fr' ? (
+              <>
+                Développeur full-stack <span className="text-[#ff1e38]">&amp;</span> créateur de produits.
+              </>
+            ) : (
+              <>
+                Full-stack <span className="text-[#ff1e38]">&amp;</span> product engineer.
+              </>
+            )}
+          </span>
         </motion.h1>
 
         {/* Value Proposition Statement - Concise */}
@@ -99,7 +103,7 @@ export const Hero = () => {
         {/* Action Buttons with Magnetic cursor pull & spring taps */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-14 sm:mb-16"
+          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-14"
         >
           <MagneticButton>
             <motion.a
@@ -182,27 +186,31 @@ export const Hero = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Subtle Web Design Flow Scroll Indicator */}
-        <motion.div
-          variants={itemVariants}
-          className="mt-8 sm:mt-10 flex flex-col items-center gap-2 text-[#71717a] select-none"
-        >
-          <span className="font-mono text-[0.6rem] tracking-[0.22em] uppercase">
-            {language === 'fr' ? 'DÉFILER VERS LE BAS' : 'SCROLL TO EXPLORE'}
-          </span>
-          <motion.div
-            animate={{ y: [0, 4, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            className="w-3.5 h-6 rounded-full border border-white/[0.15] flex items-start justify-center p-1"
-          >
-            <div className="w-1 h-1.5 rounded-full bg-[#ff1e38]" />
-          </motion.div>
-        </motion.div>
       </motion.div>
 
+      {/* Subtle Web Design Flow Scroll Indicator - Perfectly Centered in Space */}
+      <motion.a
+        href="#work"
+        variants={itemVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 w-full flex flex-col items-center justify-center gap-2 text-[#71717a] hover:text-white transition-colors cursor-pointer select-none my-auto py-4 sm:py-6 group"
+        aria-label={language === 'fr' ? 'Défiler vers les projets' : 'Scroll to explore'}
+      >
+        <span className="font-mono text-[0.62rem] tracking-[0.22em] pl-[0.22em] uppercase group-hover:text-[#a1a1aa] transition-colors">
+          {language === 'fr' ? 'DÉFILER VERS LE BAS' : 'SCROLL TO EXPLORE'}
+        </span>
+        <motion.div
+          animate={{ y: [0, 4, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+          className="w-3.5 h-6 rounded-full border border-white/[0.15] group-hover:border-[#ff1e38]/50 flex items-start justify-center p-1 transition-colors"
+        >
+          <div className="w-1 h-1.5 rounded-full bg-[#ff1e38]" />
+        </motion.div>
+      </motion.a>
+
       {/* Hero Bottom Meta Strip */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#71717a]">
+      <div className="relative z-10 w-full max-w-4xl mx-auto pt-6 sm:pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#71717a]">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]" />
           <span>PRODUCTION STACK</span>
