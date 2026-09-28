@@ -7,6 +7,7 @@ import {
   Server, 
   Cloud 
 } from 'lucide-react';
+import { BorderBeam } from './motion/BorderBeam';
 
 export const StackSection = () => {
   const { language } = useLanguage();
@@ -136,16 +137,18 @@ export const StackSection = () => {
         </p>
       </div>
 
-      {/* Main Interactive Stack Matrix */}
+      {/* Main Interactive Stack Matrix with BorderBeam */}
       <motion.div
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-40px' }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-2xl bg-[#09090b] border border-white/[0.08] p-6 sm:p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.7)]"
+        className="relative overflow-hidden rounded-2xl bg-[#09090b] border border-white/[0.08] p-6 sm:p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.7)]"
       >
+        <BorderBeam duration={14} borderWidth={1.5} colorFrom="#ff1e38" colorTo="rgba(255, 30, 56, 0.2)" />
+
         {/* Category Selector Tabs - Centered */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pb-6 border-b border-white/[0.08] w-full">
+        <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3 pb-6 border-b border-white/[0.08] w-full">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isActive = activeTab === cat.id;
@@ -164,7 +167,7 @@ export const StackSection = () => {
                   <motion.div
                     layoutId="active-stack-tab-indicator"
                     className="absolute inset-0 rounded-xl bg-white/[0.1] border border-white/[0.14] shadow-[0_0_15px_rgba(255,255,255,0.05)]"
-                    transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                    transition={{ type: 'spring', stiffness: 420, damping: 30 }}
                   />
                 )}
                 <Icon className={`relative z-10 w-3.5 h-3.5 ${isActive ? 'text-[#ff1e38]' : ''}`} />
@@ -180,7 +183,7 @@ export const StackSection = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="pt-8"
+          className="relative z-10 pt-8"
         >
           <div className="max-w-2xl mb-6">
             <h3 className="font-display font-semibold text-xl sm:text-2xl text-white tracking-tight">
@@ -188,18 +191,18 @@ export const StackSection = () => {
             </h3>
           </div>
 
-          {/* Skills Grid */}
+          {/* Skills Grid with spring stagger */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {currentCategory.skills.map((skill, sIdx) => (
               <motion.div
-                key={sIdx}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: sIdx * 0.03 }}
-                whileHover={{ scale: 1.01, borderColor: 'rgba(255, 30, 56, 0.3)' }}
-                className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] transition-colors flex items-center gap-3 cursor-default"
+                key={skill}
+                initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.28, delay: sIdx * 0.035, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ scale: 1.02, y: -2, borderColor: 'rgba(255, 30, 56, 0.4)' }}
+                className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] hover:bg-white/[0.03] transition-all flex items-center gap-3 cursor-default shadow-sm"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38] shrink-0" />
                 <span className="font-mono text-xs sm:text-sm text-[#d4d4d8] truncate">
                   {skill}
                 </span>

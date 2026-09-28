@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { Lightbulb, Rocket, ShieldCheck, Sparkles, Send } from 'lucide-react';
+import { TiltCard } from './motion/TiltCard';
 
 export const MethodSection = () => {
   const { language } = useLanguage();
@@ -74,13 +75,19 @@ export const MethodSection = () => {
           </p>
         </div>
 
-        {/* Steps Grid with Flow Connector */}
+        {/* Steps Grid with Flow Connector and traveling pulse */}
         <div className="relative">
-          {/* Subtle desktop horizontal connecting flow line */}
+          {/* Subtle desktop horizontal connecting flow line with traveling laser pulse */}
           <div
-            className="hidden lg:block absolute top-10 left-[8%] right-[8%] h-[1px] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent pointer-events-none"
+            className="hidden lg:block absolute top-10 left-[8%] right-[8%] h-[1px] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent pointer-events-none overflow-hidden"
             aria-hidden="true"
-          />
+          >
+            <motion.div
+              animate={{ x: ['-100%', '800%'] }}
+              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+              className="w-28 h-full bg-gradient-to-r from-transparent via-[#ff1e38] to-transparent shadow-[0_0_8px_#ff1e38]"
+            />
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 relative z-10">
             {steps.map((step, idx) => {
@@ -92,23 +99,28 @@ export const MethodSection = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.45, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  className="p-6 rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/40 transition-colors flex flex-col justify-between group shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="font-mono font-bold text-xs text-[#ff1e38] group-hover:drop-shadow-[0_0_8px_rgba(255,30,56,0.6)] transition-all">
-                        {step.num}
-                      </span>
-                      <Icon className="w-4 h-4 text-[#71717a] group-hover:text-white transition-colors" />
+                  <TiltCard
+                    maxTilt={7}
+                    scale={1.02}
+                    spotlightColor="rgba(255, 30, 56, 0.12)"
+                    className="p-6 rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/40 transition-colors flex flex-col justify-between group shadow-[0_4px_20px_rgba(0,0,0,0.4)] h-full"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="font-mono font-bold text-xs text-[#ff1e38] group-hover:drop-shadow-[0_0_8px_rgba(255,30,56,0.6)] transition-all">
+                          {step.num}
+                        </span>
+                        <Icon className="w-4 h-4 text-[#71717a] group-hover:text-white transition-colors" />
+                      </div>
+                      <h3 className="font-display font-semibold text-lg text-white mb-2 tracking-tight">
+                        {step.name}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#a1a1aa] leading-relaxed">
+                        {step.desc}
+                      </p>
                     </div>
-                    <h3 className="font-display font-semibold text-lg text-white mb-2 tracking-tight">
-                      {step.name}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-[#a1a1aa] leading-relaxed">
-                      {step.desc}
-                    </p>
-                  </div>
+                  </TiltCard>
                 </motion.div>
               );
             })}

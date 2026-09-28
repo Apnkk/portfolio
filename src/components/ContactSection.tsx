@@ -3,6 +3,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { portfolioData } from '../data/portfolioData';
 import { Check, Copy, ArrowUp, Send, Loader2, Mail, AlertCircle, MessageSquare } from 'lucide-react';
 import { GithubIcon } from './icons/BrandIcons';
+import { MagneticButton } from './motion/MagneticButton';
+import { BorderBeam } from './motion/BorderBeam';
 
 export const ContactSection = () => {
   const { language } = useLanguage();
@@ -115,29 +117,32 @@ export const ContactSection = () => {
             : 'Have a project, opportunity, or inquiry? Reach out directly.'}
         </p>
 
-        {/* Direct Email Pill Button */}
+        {/* Direct Email Pill Button with Magnetic Hover */}
         <div className="flex flex-col items-center mb-12">
-          <button
-            type="button"
-            onClick={copyEmail}
-            className="group inline-flex items-center justify-center gap-3 font-mono text-sm sm:text-base tracking-wide py-3.5 px-6 sm:px-8 rounded-full border border-white/[0.12] bg-[#09090b] hover:border-white/30 text-white transition-all cursor-pointer shadow-lg active:scale-[0.98]"
-            title="Copier l'adresse email"
-          >
-            <Mail className="w-4 h-4 text-[#ff1e38]" />
-            <span>{portfolioData.personal.email}</span>
-            {copiedEmail ? (
-              <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-semibold ml-1">
-                <Check className="w-3.5 h-3.5" />
-                <span>{language === 'fr' ? 'Copié' : 'Copied'}</span>
-              </span>
-            ) : (
-              <Copy className="w-3.5 h-3.5 text-[#71717a] group-hover:text-white transition-colors ml-1" />
-            )}
-          </button>
+          <MagneticButton>
+            <button
+              type="button"
+              onClick={copyEmail}
+              className="group inline-flex items-center justify-center gap-3 font-mono text-sm sm:text-base tracking-wide py-3.5 px-6 sm:px-8 rounded-full border border-white/[0.12] bg-[#09090b] hover:border-white/30 text-white transition-all cursor-pointer shadow-lg active:scale-[0.98]"
+              title="Copier l'adresse email"
+            >
+              <Mail className="w-4 h-4 text-[#ff1e38]" />
+              <span>{portfolioData.personal.email}</span>
+              {copiedEmail ? (
+                <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-semibold ml-1">
+                  <Check className="w-3.5 h-3.5" />
+                  <span>{language === 'fr' ? 'Copié' : 'Copied'}</span>
+                </span>
+              ) : (
+                <Copy className="w-3.5 h-3.5 text-[#71717a] group-hover:text-white transition-colors ml-1" />
+              )}
+            </button>
+          </MagneticButton>
         </div>
 
-        {/* Clean Direct Message Form */}
-        <div className="max-w-lg mx-auto p-6 sm:p-8 rounded-2xl bg-[#09090b] border border-white/[0.08] text-left shadow-2xl">
+        {/* Clean Direct Message Form with BorderBeam */}
+        <div className="relative overflow-hidden max-w-lg mx-auto p-6 sm:p-8 rounded-2xl bg-[#09090b] border border-white/[0.08] text-left shadow-2xl">
+          <BorderBeam duration={16} borderWidth={1.5} colorFrom="#ff1e38" colorTo="rgba(255, 30, 56, 0.2)" />
           {status === 'success' ? (
             <div className="text-center py-6 space-y-3">
               <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20">

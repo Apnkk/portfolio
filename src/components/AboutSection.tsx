@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { portfolioData } from '../data/portfolioData';
 import { MapPin } from 'lucide-react';
+import { TiltCard } from './motion/TiltCard';
 
 export const AboutSection = () => {
   const { language } = useLanguage();
@@ -61,9 +62,13 @@ export const AboutSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -3, transition: { duration: 0.2 } }}
-              className="p-6 rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/40 transition-all flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)] group"
             >
+              <TiltCard
+                maxTilt={6}
+                scale={1.02}
+                spotlightColor="rgba(255, 30, 56, 0.14)"
+                className="p-6 rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/40 transition-colors flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)] group h-full"
+              >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <span className="font-mono text-xs text-[#ff1e38] font-bold tracking-wider">
@@ -97,7 +102,8 @@ export const AboutSection = () => {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </TiltCard>
+          </motion.div>
           ))}
         </div>
       </div>

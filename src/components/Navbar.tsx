@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { VolumeX, Menu, X } from 'lucide-react';
+import { MagneticButton } from './motion/MagneticButton';
 
 interface NavbarProps {
   isPlaying?: boolean;
@@ -69,18 +70,20 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
           scrolled ? 'pt-2.5 sm:pt-3' : 'pt-4 sm:pt-6'
         }`}
       >
-        {/* Left: Brand Monogram */}
+        {/* Left: Brand Monogram with Magnetic pull */}
         <div className="pointer-events-auto flex items-center gap-3">
-          <a
-            href="#hero"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] text-white hover:border-white/20 transition-all select-none"
-            aria-label="Ares — retour au début"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
-            <span className="font-mono text-xs font-semibold tracking-tight uppercase">
-              ares
-            </span>
-          </a>
+          <MagneticButton pullFactor={0.2}>
+            <a
+              href="#hero"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] text-white hover:border-white/20 transition-all select-none"
+              aria-label="Ares — retour au début"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
+              <span className="font-mono text-xs font-semibold tracking-tight uppercase">
+                ares
+              </span>
+            </a>
+          </MagneticButton>
         </div>
 
         {/* Center: Minimalist Desktop Navigation - Geometrically Centered */}
@@ -115,33 +118,35 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
 
         {/* Right: Audio Control + Language Switcher + Mobile Menu Trigger */}
         <div className="pointer-events-auto flex items-center gap-2">
-          {/* Audio Button */}
+          {/* Audio Button with Magnetic Pull */}
           {onTogglePlay && (
-            <button
-              type="button"
-              onClick={onTogglePlay}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 text-[#a1a1aa] hover:text-white transition-all text-xs font-mono select-none cursor-pointer"
-              title={isPlaying ? 'Pause audio' : 'Play audio'}
-              aria-label="Contrôle audio"
-            >
-              {isPlaying ? (
-                <>
-                  <div className="flex items-end gap-[2px] h-3 w-3 text-[#ff1e38]">
-                    <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-1" />
-                    <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-2" />
-                    <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-3" />
-                  </div>
-                  <span className="text-[0.66rem] font-semibold text-white tracking-wider">
-                    SOUND ON
-                  </span>
-                </>
-              ) : (
-                <>
-                  <VolumeX className="w-3.5 h-3.5 text-[#71717a]" />
-                  <span className="text-[0.66rem] tracking-wider">SOUND</span>
-                </>
-              )}
-            </button>
+            <MagneticButton pullFactor={0.2}>
+              <button
+                type="button"
+                onClick={onTogglePlay}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 text-[#a1a1aa] hover:text-white transition-all text-xs font-mono select-none cursor-pointer"
+                title={isPlaying ? 'Pause audio' : 'Play audio'}
+                aria-label="Contrôle audio"
+              >
+                {isPlaying ? (
+                  <>
+                    <div className="flex items-end gap-[2px] h-3 w-3 text-[#ff1e38]">
+                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-1" />
+                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-2" />
+                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-3" />
+                    </div>
+                    <span className="text-[0.66rem] font-semibold text-white tracking-wider">
+                      SOUND ON
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <VolumeX className="w-3.5 h-3.5 text-[#71717a]" />
+                    <span className="text-[0.66rem] tracking-wider">SOUND</span>
+                  </>
+                )}
+              </button>
+            </MagneticButton>
           )}
 
           {/* Language Switcher Pill */}

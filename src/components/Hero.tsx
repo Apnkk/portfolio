@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { ArrowDownRight, Mail } from 'lucide-react';
 import { GithubIcon } from './icons/BrandIcons';
+import { MagneticButton } from './motion/MagneticButton';
 
 export const Hero = () => {
   const { language } = useLanguage();
@@ -39,14 +40,17 @@ export const Hero = () => {
         style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
         className="relative z-10 max-w-4xl mx-auto my-auto flex flex-col items-center"
       >
-        {/* Understated Status Badge */}
+        {/* Understated Status Badge with live pulsing radar ring */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6 sm:mb-8"
+          className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6 sm:mb-8 hover:border-white/20 transition-colors"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff1e38] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
+          </span>
           <span className="font-mono text-xs text-[#a1a1aa] tracking-wide">
             {language === 'fr'
               ? 'Développeur Full-Stack & Systèmes'
@@ -84,42 +88,48 @@ export const Hero = () => {
             : 'Building streaming applications, native iOS tools, and high-performance web products.'}
         </motion.p>
 
-        {/* Action Buttons */}
+        {/* Action Buttons with Magnetic cursor pull */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-14 sm:mb-16"
         >
-          <a
-            href="#work"
-            className="btn btn--crimson group py-3 px-6 text-xs sm:text-[0.78rem]"
-          >
-            <span>{language === 'fr' ? 'Explorer les projets' : 'View Projects'}</span>
-            <ArrowDownRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
-          </a>
+          <MagneticButton>
+            <a
+              href="#work"
+              className="btn btn--crimson group py-3 px-6 text-xs sm:text-[0.78rem]"
+            >
+              <span>{language === 'fr' ? 'Explorer les projets' : 'View Projects'}</span>
+              <ArrowDownRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
+            </a>
+          </MagneticButton>
 
-          <a
-            href="#contact"
-            className="btn btn--ghost py-3 px-6 text-xs sm:text-[0.78rem]"
-          >
-            <Mail className="w-3.5 h-3.5 text-[#a1a1aa]" />
-            <span>{language === 'fr' ? 'Me contacter' : 'Get in Touch'}</span>
-          </a>
+          <MagneticButton>
+            <a
+              href="#contact"
+              className="btn btn--ghost py-3 px-6 text-xs sm:text-[0.78rem]"
+            >
+              <Mail className="w-3.5 h-3.5 text-[#a1a1aa]" />
+              <span>{language === 'fr' ? 'Me contacter' : 'Get in Touch'}</span>
+            </a>
+          </MagneticButton>
 
-          <a
-            href="https://github.com/Apnkk"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn--ghost py-3 px-4 text-xs"
-            title="GitHub Profile"
-            aria-label="GitHub Profile"
-          >
-            <GithubIcon className="w-3.5 h-3.5" />
-          </a>
+          <MagneticButton>
+            <a
+              href="https://github.com/Apnkk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn--ghost py-3 px-4 text-xs"
+              title="GitHub Profile"
+              aria-label="GitHub Profile"
+            >
+              <GithubIcon className="w-3.5 h-3.5" />
+            </a>
+          </MagneticButton>
         </motion.div>
 
-        {/* Clean Metrics Strip */}
+        {/* Clean Metrics Strip with spring hover */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -144,17 +154,19 @@ export const Hero = () => {
               label: language === 'fr' ? 'Autonomie' : 'End-to-End',
             },
           ].map((metric, i) => (
-            <div
+            <motion.div
               key={i}
-              className="p-4 rounded-xl bg-[#09090b] border border-white/[0.08] hover:border-white/20 transition-colors text-left"
+              whileHover={{ y: -3, scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              className="p-4 rounded-xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/30 transition-colors text-left group cursor-default relative overflow-hidden"
             >
-              <div className="font-display font-semibold text-xl sm:text-2xl text-white mb-1">
+              <div className="font-display font-semibold text-xl sm:text-2xl text-white mb-1 group-hover:text-[#ff1e38] transition-colors">
                 {metric.value}
               </div>
               <div className="font-mono text-[0.66rem] text-[#71717a] uppercase tracking-wider leading-snug">
                 {metric.label}
               </div>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
 
