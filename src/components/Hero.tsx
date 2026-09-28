@@ -49,15 +49,15 @@ export const Hero = () => {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-[92vh] sm:min-h-screen flex flex-col justify-between pt-28 sm:pt-32 pb-8 sm:pb-10 px-5 sm:px-10 lg:px-16 text-center bg-black overflow-hidden"
+      className="relative min-h-[92vh] sm:min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-6 sm:pb-8 px-5 sm:px-10 lg:px-16 text-center bg-black overflow-hidden"
       aria-label="Introduction"
     >
-      {/* Subtle top spotlight (Linear / Vercel style) */}
+      {/* Ambient crimson halo spotlight behind Ares */}
       <motion.div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[720px] h-[360px] pointer-events-none"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] pointer-events-none"
         style={{
           opacity: spotlightOpacity,
-          background: 'radial-gradient(ellipse at 50% 0%, rgba(255, 30, 56, 0.2), transparent 70%)',
+          background: 'radial-gradient(ellipse at 50% 15%, rgba(255, 30, 56, 0.22), transparent 70%)',
         }}
         aria-hidden="true"
       />
@@ -67,24 +67,24 @@ export const Hero = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-4xl mx-auto my-auto flex flex-col items-center"
+        className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto my-auto flex flex-col items-center w-full"
       >
-        {/* Hero Title - Ares Prominently Centered */}
+        {/* Hero Title - Ares Grand, Monumental & Centered */}
         <motion.h1
           variants={itemVariants}
-          className="font-display text-center mb-6 sm:mb-8"
+          className="font-display text-center mb-4 sm:mb-6"
         >
-          <span className="block font-bold text-[clamp(3.4rem,8.5vw,6rem)] text-white tracking-tight leading-[1.02] mb-3 sm:mb-4">
+          <span className="block font-bold text-[clamp(4.8rem,13vw,9.5rem)] text-white tracking-tighter leading-[0.92] select-none drop-shadow-[0_15px_45px_rgba(255,255,255,0.12)]">
             Ares
           </span>
-          <span className="block font-semibold text-[clamp(1.5rem,3.8vw,2.75rem)] text-white/90 tracking-tight leading-[1.18] max-w-3xl mx-auto text-balance">
+          <span className="block font-semibold text-[clamp(1.4rem,3.2vw,2.5rem)] text-white/90 tracking-tight leading-[1.2] max-w-3xl mx-auto text-balance mt-2 sm:mt-3">
             {language === 'fr' ? (
               <>
-                Développeur full-stack <span className="text-[#ff1e38]">&amp;</span> créateur de produits.
+                Développeur full-stack <span className="text-[#ff1e38] font-bold">&amp;</span> créateur de produits.
               </>
             ) : (
               <>
-                Full-stack <span className="text-[#ff1e38]">&amp;</span> product engineer.
+                Full-stack <span className="text-[#ff1e38] font-bold">&amp;</span> product engineer.
               </>
             )}
           </span>
@@ -93,7 +93,7 @@ export const Hero = () => {
         {/* Value Proposition Statement - Concise */}
         <motion.p
           variants={itemVariants}
-          className="text-[#a1a1aa] text-base sm:text-lg max-w-xl mx-auto leading-relaxed mb-8 sm:mb-10 text-balance font-normal"
+          className="text-[#a1a1aa] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-7 sm:mb-9 text-balance font-normal"
         >
           {language === 'fr'
             ? "Créateur d'applications de streaming, d'outils iOS et d'interfaces web rapides et réactives."
@@ -103,7 +103,7 @@ export const Hero = () => {
         {/* Action Buttons with Magnetic cursor pull & spring taps */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-14"
+          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-9 sm:mb-11"
         >
           <MagneticButton>
             <motion.a
@@ -151,7 +151,7 @@ export const Hero = () => {
         {/* Clean Metrics Strip with spring physics */}
         <motion.div
           variants={itemVariants}
-          className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-3xl"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 w-full max-w-4xl mb-7 sm:mb-9"
         >
           {[
             {
@@ -175,7 +175,7 @@ export const Hero = () => {
               key={i}
               whileHover={{ y: -3, scale: 1.02 }}
               transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.15 }}
-              className="p-4 rounded-xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/30 transition-colors text-left group cursor-default relative overflow-hidden"
+              className="p-4 sm:p-5 rounded-xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/30 transition-colors text-left group cursor-default relative overflow-hidden"
             >
               <div className="font-display font-semibold text-xl sm:text-2xl text-white mb-1 group-hover:text-[#ff1e38] transition-colors">
                 {metric.value}
@@ -186,31 +186,29 @@ export const Hero = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Subtle Web Design Flow Scroll Indicator */}
+        <motion.a
+          href="#work"
+          variants={itemVariants}
+          className="flex flex-col items-center justify-center gap-2 text-[#71717a] hover:text-white transition-colors cursor-pointer select-none group mt-1"
+          aria-label={language === 'fr' ? 'Défiler vers les projets' : 'Scroll to explore'}
+        >
+          <span className="font-mono text-[0.62rem] tracking-[0.22em] pl-[0.22em] uppercase group-hover:text-[#a1a1aa] transition-colors">
+            {language === 'fr' ? 'DÉFILER VERS LE BAS' : 'SCROLL TO EXPLORE'}
+          </span>
+          <motion.div
+            animate={{ y: [0, 4, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+            className="w-3.5 h-6 rounded-full border border-white/[0.15] group-hover:border-[#ff1e38]/50 flex items-start justify-center p-1 transition-colors"
+          >
+            <div className="w-1 h-1.5 rounded-full bg-[#ff1e38]" />
+          </motion.div>
+        </motion.a>
       </motion.div>
 
-      {/* Subtle Web Design Flow Scroll Indicator - Perfectly Centered in Space */}
-      <motion.a
-        href="#work"
-        variants={itemVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 w-full flex flex-col items-center justify-center gap-2 text-[#71717a] hover:text-white transition-colors cursor-pointer select-none my-auto py-4 sm:py-6 group"
-        aria-label={language === 'fr' ? 'Défiler vers les projets' : 'Scroll to explore'}
-      >
-        <span className="font-mono text-[0.62rem] tracking-[0.22em] pl-[0.22em] uppercase group-hover:text-[#a1a1aa] transition-colors">
-          {language === 'fr' ? 'DÉFILER VERS LE BAS' : 'SCROLL TO EXPLORE'}
-        </span>
-        <motion.div
-          animate={{ y: [0, 4, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-          className="w-3.5 h-6 rounded-full border border-white/[0.15] group-hover:border-[#ff1e38]/50 flex items-start justify-center p-1 transition-colors"
-        >
-          <div className="w-1 h-1.5 rounded-full bg-[#ff1e38]" />
-        </motion.div>
-      </motion.a>
-
       {/* Hero Bottom Meta Strip */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto pt-6 sm:pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#71717a]">
+      <div className="relative z-10 w-full max-w-5xl lg:max-w-6xl mx-auto pt-5 sm:pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#71717a]">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]" />
           <span>PRODUCTION STACK</span>
@@ -222,3 +220,6 @@ export const Hero = () => {
     </section>
   );
 };
+
+
+
