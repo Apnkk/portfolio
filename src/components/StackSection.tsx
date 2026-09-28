@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { 
   Code2, 
@@ -12,6 +12,7 @@ import { BorderBeam } from './motion/BorderBeam';
 export const StackSection = () => {
   const { language } = useLanguage();
   const [activeTab, setActiveTab] = useState<string>('frontend');
+  const shouldReduceMotion = useReducedMotion();
 
   const categories = [
     {
@@ -111,9 +112,9 @@ export const StackSection = () => {
       {/* Section Head */}
       <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16 sm:mb-20">
         <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38]" />
           <p className="font-mono text-xs text-[#a1a1aa] tracking-widest uppercase">
-            02 / STACK &amp; SYSTÈMES
+            {language === 'fr' ? 'STACK TECHNIQUE' : 'CORE STACK'}
           </p>
         </div>
         <h2
@@ -122,11 +123,11 @@ export const StackSection = () => {
         >
           {language === 'fr' ? (
             <>
-              Architecture technique <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> boîte à outils
+              Architecture technique <span className="text-[#ff1e38]">&amp;</span> outils
             </>
           ) : (
             <>
-              Technical architecture <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> core stack
+              Technical architecture <span className="text-[#ff1e38]">&amp;</span> tools
             </>
           )}
         </h2>
@@ -147,7 +148,7 @@ export const StackSection = () => {
       >
         <BorderBeam duration={14} borderWidth={1.5} colorFrom="#ff1e38" colorTo="rgba(255, 30, 56, 0.2)" />
 
-        {/* Category Selector Tabs - Centered */}
+        {/* Category Selector Tabs - Centered with Shared Element layoutId */}
         <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3 pb-6 border-b border-white/[0.08] w-full">
           {categories.map((cat) => {
             const Icon = cat.icon;
@@ -157,7 +158,7 @@ export const StackSection = () => {
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveTab(cat.id)}
-                className={`relative flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-all cursor-pointer select-none ${
+                className={`relative flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-colors duration-200 cursor-pointer select-none ${
                   isActive
                     ? 'text-white font-semibold'
                     : 'text-[#71717a] hover:text-[#d4d4d8] hover:bg-white/[0.04]'
@@ -166,50 +167,65 @@ export const StackSection = () => {
                 {isActive && (
                   <motion.div
                     layoutId="active-stack-tab-indicator"
-                    className="absolute inset-0 rounded-xl bg-white/[0.1] border border-white/[0.14] shadow-[0_0_15px_rgba(255,255,255,0.05)]"
-                    transition={{ type: 'spring', stiffness: 420, damping: 30 }}
+                    className="absolute inset-0 rounded-xl bg-white/[0.1] border border-white/[0.14] shadow-[0_0_15px_rgba(255,255,255,0.06)]"
+                    transition={{
+                      type: 'spring',
+                      visualDuration: shouldReduceMotion ? 0.01 : 0.28,
+                      bounce: 0.15,
+                    }}
                   />
                 )}
-                <Icon className={`relative z-10 w-3.5 h-3.5 ${isActive ? 'text-[#ff1e38]' : ''}`} />
+                <Icon className={`relative z-10 w-3.5 h-3.5 transition-colors ${isActive ? 'text-[#ff1e38]' : ''}`} />
                 <span className="relative z-10">{cat.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Category Details View */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}
-          className="relative z-10 pt-8"
-        >
-          <div className="max-w-2xl mb-6">
-            <h3 className="font-display font-semibold text-xl sm:text-2xl text-white tracking-tight">
-              {currentCategory.headline[language]}
-            </h3>
-          </div>
+        {/* Category Details View with AnimatePresence */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -10 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 pt-8"
+          >
+            <div className="max-w-2xl mb-6">
+              <h3 className="font-display font-semibold text-xl sm:text-2xl text-white tracking-tight">
+                {currentCategory.headline[language]}
+              </h3>
+              <p className="text-[#a1a1aa] text-xs sm:text-sm mt-2 font-normal leading-relaxed">
+                {currentCategory.description[language]}
+              </p>
+            </div>
 
-          {/* Skills Grid with spring stagger */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {currentCategory.skills.map((skill, sIdx) => (
-              <motion.div
-                key={skill}
-                initial={{ opacity: 0, y: 12, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.28, delay: sIdx * 0.035, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ scale: 1.02, y: -2, borderColor: 'rgba(255, 30, 56, 0.4)' }}
-                className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] hover:bg-white/[0.03] transition-all flex items-center gap-3 cursor-default shadow-sm"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38] shrink-0" />
-                <span className="font-mono text-xs sm:text-sm text-[#d4d4d8] truncate">
-                  {skill}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+            {/* Skills Grid with orchestrated stagger */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {currentCategory.skills.map((skill, sIdx) => (
+                <motion.div
+                  key={skill}
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    type: 'spring',
+                    visualDuration: 0.3,
+                    bounce: 0.12,
+                    delay: shouldReduceMotion ? 0 : sIdx * 0.035,
+                  }}
+                  whileHover={{ scale: 1.025, y: -2, borderColor: 'rgba(255, 30, 56, 0.4)' }}
+                  className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] hover:bg-white/[0.03] transition-colors flex items-center gap-3 cursor-default shadow-sm group"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38] shrink-0 group-hover:scale-125 transition-transform" />
+                  <span className="font-mono text-xs sm:text-sm text-[#d4d4d8] group-hover:text-white transition-colors truncate">
+                    {skill}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </motion.div>
     </section>
   );

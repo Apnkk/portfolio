@@ -1,5 +1,5 @@
 import { useRef, type ReactNode } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -10,18 +10,20 @@ interface MagneticButtonProps {
 export const MagneticButton = ({
   children,
   className = '',
-  pullFactor = 0.25,
+  pullFactor = 0.22,
 }: MagneticButtonProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const springX = useSpring(x, { stiffness: 350, damping: 20 });
-  const springY = useSpring(y, { stiffness: 350, damping: 20 });
+  // Tuned damped spring physics for tactile magnetic cursor attraction
+  const springX = useSpring(x, { stiffness: 320, damping: 22 });
+  const springY = useSpring(y, { stiffness: 320, damping: 22 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
+    if (shouldReduceMotion || !ref.current) return;
     const { left, top, width, height } = ref.current.getBoundingClientRect();
     const centerX = left + width / 2;
     const centerY = top + height / 2;
@@ -42,8 +44,9 @@ export const MagneticButton = ({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ x: springX, y: springY }}
+      style={{ x: shouldReduceMotion ? 0 : springX, y: shouldReduceMotion ? 0 : springY }}
       whileTap={{ scale: 0.96 }}
+      transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.15 }}
       className={`inline-block ${className}`}
     >
       {children}

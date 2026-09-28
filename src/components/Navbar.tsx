@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { VolumeX, Menu, X } from 'lucide-react';
 import { MagneticButton } from './motion/MagneticButton';
@@ -14,6 +14,7 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -106,8 +107,12 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
                 {isActive && (
                   <motion.div
                     layoutId="active-nav-pill"
-                    className="absolute inset-0 rounded-full bg-white/[0.1] border border-white/[0.12] shadow-[0_0_12px_rgba(255,255,255,0.05)]"
-                    transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                    className="absolute inset-0 rounded-full bg-white/[0.1] border border-white/[0.12] shadow-[0_0_12px_rgba(255,255,255,0.06)]"
+                    transition={{
+                      type: 'spring',
+                      visualDuration: shouldReduceMotion ? 0.01 : 0.28,
+                      bounce: 0.15,
+                    }}
                   />
                 )}
                 <span className="relative z-10">{link.label}</span>
@@ -149,29 +154,47 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
             </MagneticButton>
           )}
 
-          {/* Language Switcher Pill */}
-          <div className="inline-flex items-center p-0.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.66rem] select-none">
+          {/* Language Switcher Pill with Shared Element Spring Transition */}
+          <div className="relative inline-flex items-center p-0.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.66rem] select-none">
             <button
               type="button"
               onClick={() => setLanguage('en')}
-              className={`px-2 py-1 rounded-full transition-all cursor-pointer ${
-                language === 'en'
-                  ? 'bg-white/[0.12] text-white font-bold'
-                  : 'text-[#71717a] hover:text-white'
+              className={`relative px-2 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
+                language === 'en' ? 'text-white font-bold' : 'text-[#71717a] hover:text-white'
               }`}
             >
-              EN
+              {language === 'en' && (
+                <motion.div
+                  layoutId="active-lang-pill"
+                  className="absolute inset-0 rounded-full bg-white/[0.12] border border-white/[0.1]"
+                  transition={{
+                    type: 'spring',
+                    visualDuration: shouldReduceMotion ? 0.01 : 0.24,
+                    bounce: 0.12,
+                  }}
+                />
+              )}
+              <span className="relative z-10">EN</span>
             </button>
             <button
               type="button"
               onClick={() => setLanguage('fr')}
-              className={`px-2 py-1 rounded-full transition-all cursor-pointer ${
-                language === 'fr'
-                  ? 'bg-white/[0.12] text-white font-bold'
-                  : 'text-[#71717a] hover:text-white'
+              className={`relative px-2 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
+                language === 'fr' ? 'text-white font-bold' : 'text-[#71717a] hover:text-white'
               }`}
             >
-              FR
+              {language === 'fr' && (
+                <motion.div
+                  layoutId="active-lang-pill"
+                  className="absolute inset-0 rounded-full bg-white/[0.12] border border-white/[0.1]"
+                  transition={{
+                    type: 'spring',
+                    visualDuration: shouldReduceMotion ? 0.01 : 0.24,
+                    bounce: 0.12,
+                  }}
+                />
+              )}
+              <span className="relative z-10">FR</span>
             </button>
           </div>
 
@@ -195,7 +218,11 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{
+              type: 'spring',
+              visualDuration: shouldReduceMotion ? 0.01 : 0.25,
+              bounce: 0.05,
+            }}
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
