@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { portfolioData } from '../data/portfolioData';
-import { MapPin, CheckCircle2 } from 'lucide-react';
+import { MapPin, Check } from 'lucide-react';
 
 export const AboutSection = () => {
   const { language } = useLanguage();
@@ -9,124 +9,124 @@ export const AboutSection = () => {
   return (
     <section
       id="about"
-      className="py-20 sm:py-32 px-5 sm:px-10 md:px-14 max-w-6xl mx-auto text-left relative select-none"
+      className="py-24 sm:py-32 px-5 sm:px-10 lg:px-16 max-w-6xl mx-auto text-left relative"
       aria-labelledby="about-title"
     >
       {/* Section Head */}
-      <header className="mb-12 sm:mb-20">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
-          <p className="mono text-[#ff1e38] font-semibold text-xs tracking-widest">
-            05 / ABOUT
+      <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]" />
+          <p className="font-mono text-xs text-[#a1a1aa] tracking-widest uppercase">
+            04 / BIOGRAPHIE &amp; PARCOURS
           </p>
         </div>
         <h2
           id="about-title"
-          className="font-display font-semibold text-[clamp(2.4rem,6vw,5rem)] text-[#f5f3ef] tracking-tight leading-none"
+          className="font-display font-semibold text-[clamp(2.2rem,5vw,4.2rem)] text-white tracking-tight leading-tight"
         >
-          {language === 'fr' ? 'À propos de moi' : "Behind the Builds"}
+          {language === 'fr' ? 'À propos de moi' : 'Behind the Craft'}
         </h2>
-      </header>
+      </div>
 
       {/* Editorial Narrative */}
-      <div className="space-y-6 sm:space-y-8 font-display font-medium text-[clamp(1.1rem,2.4vw,1.85rem)] text-[#f5f3ef] leading-[1.4] tracking-tight">
+      <div className="space-y-6 sm:space-y-8 font-display font-medium text-[clamp(1.15rem,2.2vw,1.75rem)] text-white leading-relaxed tracking-tight max-w-4xl mx-auto">
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.4 }}
         >
           {language === 'fr' ? (
             <>
-              Je suis un développeur full-stack basé en France qui aborde chaque projet comme un véritable produit vivant. Je conçois et prototype avec vélocité, puis j’industrialise rigoureusement : typage strict TypeScript, architectures scalables, builds iOS propres et pipelines d’automatisation.
+              Je suis un développeur full-stack basé en France qui aborde chaque logiciel comme un véritable produit vivant. Je conçois et prototype rapidement pour valider l'expérience, puis j’industrialise rigoureusement : typage strict TypeScript, architectures modulaires, builds iOS propres et automatisation.
             </>
           ) : (
             <>
-              I'm a full-stack developer based in France who treats software like a living product. I build and prototype rapidly, then engineer strictly: strict TypeScript, scalable architectures, solid iOS builds, and automated delivery pipelines.
+              I am a full-stack software engineer based in France who approaches every build as a living product. I prototype fast to validate real user experience, then engineer strictly: strict TypeScript, modular architectures, clean native iOS builds, and automated pipelines.
             </>
           )}
         </motion.p>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-[#b8b3a8]"
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="text-[#a1a1aa]"
         >
           {language === 'fr' ? (
             <>
-              Tout ce que je livre vit au croisement de la <strong className="text-[#ff1e38] font-medium">performance, du web moderne et des médias</strong> : plateforme e-commerce ShopCore, écosystème de streaming Z-Flix &amp; Z-Launcher, client musical Z-Music, UI Liquid Glass pour Spoti.
+              Mes créations se situent au confluent de la <strong className="text-white font-semibold">performance, des médias et du web moderne</strong> : plateforme e-commerce ShopCore, écosystème de streaming Z-Flix &amp; Z-Launcher, lecteur musical Z-Music, UI Liquid Glass pour Spoti.
             </>
           ) : (
             <>
-              Everything I ship lives at the intersection of <strong className="text-[#ff1e38] font-medium">performance, modern web, and media</strong>: ShopCore e-commerce marketplace, Z-Flix &amp; Z-Launcher streaming suite, Z-Music audio client, and Liquid Glass UI for Spoti.
+              My work focuses on the intersection of <strong className="text-white font-semibold">performance, media streaming, and modern web</strong>: ShopCore subscription e-commerce, Z-Flix &amp; Z-Launcher streaming suite, Z-Music audio client, and Liquid Glass UI tweak for Spoti.
             </>
           )}
         </motion.p>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="text-[#726d64] text-[clamp(1rem,1.8vw,1.35rem)]"
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className="text-[#71717a] text-[clamp(1rem,1.7vw,1.25rem)]"
         >
           {language === 'fr' ? (
             <>
-              Et sous le capot : <strong className="text-[#f5f3ef] font-medium">l'automatisation & l'ingénierie inverse</strong>. APIs résilientes, scraping intelligent, synchronisation temps réel, caches Redis. Si un système a des données ou des processus qui en valent la peine, c'est branché, testé et déployé.
+              Sous le capot : <strong className="text-[#a1a1aa] font-medium">l’automatisation et l’ingénierie inverse</strong>. Rétro-ingénierie d’APIs, protocoles de contournement, synchronisation temps réel, caches distribués. Pas de blabla superficiel : du code propre qui fonctionne en conditions réelles.
             </>
           ) : (
             <>
-              And underneath it all: <strong className="text-[#f5f3ef] font-medium">automation & reverse-engineering</strong>. Resilient APIs, smart scraping pipelines, realtime WebSockets sync, and multi-layer caching.
+              Underneath: <strong className="text-[#a1a1aa] font-medium">automation and reverse-engineering</strong>. Resilient API reverse, streaming protocols, realtime sync, and distributed caching. Clean code running in real-world production.
             </>
           )}
         </motion.p>
       </div>
 
-      {/* Experience Milestones Cards */}
+      {/* Experience Milestones */}
       <div className="mt-16 sm:mt-24 space-y-6">
-        <h3 className="mono text-xs text-[#ff1e38] font-semibold tracking-wider mb-6">
-          // PARCOURS &amp; EXPÉRIENCES
+        <h3 className="font-mono text-xs text-[#71717a] font-semibold tracking-wider uppercase mb-6">
+          // EXPÉRIENCES &amp; PROJETS MAJEURS
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {portfolioData.experiences.map((exp, idx) => (
             <motion.div
               key={exp.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: idx * 0.1 }}
-              className="oled-card p-6 sm:p-7 flex flex-col justify-between"
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: idx * 0.12, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="p-6 sm:p-7 rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/40 transition-all flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)] group"
             >
-              <div className="vu-bar" aria-hidden="true" />
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="mono text-xs text-[#ff1e38] font-bold">
+                  <span className="font-mono text-xs text-[#ff1e38] font-bold tracking-wider">
                     {exp.period[language]}
                   </span>
-                  <span className="mono text-[0.66rem] text-[#726d64] flex items-center gap-1">
+                  <span className="font-mono text-[0.68rem] text-[#71717a] flex items-center gap-1">
                     <MapPin className="w-3 h-3" />
                     {exp.location}
                   </span>
                 </div>
 
-                <h4 className="font-display font-bold text-xl sm:text-2xl text-[#f5f3ef] mb-1">
+                <h4 className="font-display font-semibold text-lg text-white mb-1 group-hover:text-white transition-colors">
                   {exp.role[language]}
                 </h4>
-                <p className="text-xs sm:text-sm text-[#ff1e38] font-mono mb-4">
+                <p className="text-xs text-[#ff1e38] font-mono mb-4">
                   {exp.company}
                 </p>
 
-                <p className="text-[#b8b3a8] text-xs sm:text-sm leading-relaxed mb-4">
+                <p className="text-[#a1a1aa] text-xs leading-relaxed mb-4">
                   {exp.description[language]}
                 </p>
 
                 <ul className="space-y-2 mb-4">
                   {exp.achievements[language].map((item, aIdx) => (
-                    <li key={aIdx} className="flex items-start gap-2 text-xs text-[#c2bdb3]">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#ff1e38] shrink-0 mt-0.5" />
+                    <li key={aIdx} className="flex items-start gap-2 text-xs text-[#d4d4d8]">
+                      <Check className="w-3.5 h-3.5 text-[#ff1e38] shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -137,30 +137,13 @@ export const AboutSection = () => {
                 {exp.technologies.map((tech, tIdx) => (
                   <span
                     key={tIdx}
-                    className="px-2 py-0.5 rounded-md bg-white/[0.04] text-[0.66rem] font-mono text-[#726d64]"
+                    className="px-2 py-0.5 rounded-md bg-white/[0.04] text-[0.66rem] font-mono text-[#71717a] group-hover:text-[#a1a1aa] transition-colors"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
             </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* Focus & Interests Tags */}
-      <div className="mt-12 sm:mt-16 p-6 sm:p-8 oled-card">
-        <h4 className="mono text-xs text-[#726d64] uppercase tracking-wider mb-4 font-semibold">
-          {language === 'fr' ? 'Domaines de prédilection' : 'Areas of Passion'}
-        </h4>
-        <div className="flex flex-wrap gap-2.5">
-          {portfolioData.interests[language].map((interest, iIdx) => (
-            <span
-              key={iIdx}
-              className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[#ff1e38]/15 hover:border-[#ff1e38]/40 border border-white/[0.08] font-mono text-xs text-[#f5f3ef] transition-colors"
-            >
-              ✦ {interest}
-            </span>
           ))}
         </div>
       </div>

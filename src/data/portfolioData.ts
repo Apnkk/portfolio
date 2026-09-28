@@ -20,8 +20,8 @@ export const portfolioData: PortfolioData = {
     availability: {
       status: "available",
       text: {
-        fr: "Disponible pour projets & missions — full-stack builder en France",
-        en: "Available for contracts & full-stack builds — full-stack builder in France"
+        fr: "Ingénieur logiciel & créateur de produits en France",
+        en: "Software engineer & full-stack builder based in France"
       }
     },
     email: "contact@shopcore.buzz",
@@ -39,9 +39,9 @@ export const portfolioData: PortfolioData = {
       subtext: { fr: "Web, Windows & iOS", en: "Web, Windows & iOS" }
     },
     {
-      value: "WASM / TS",
-      label: { fr: "Stack de prédilection", en: "Primary Toolset" },
-      subtext: { fr: "Performance & typage strict", en: "Performance & strict types" }
+      value: "TypeScript",
+      label: { fr: "Langage principal", en: "Primary Language" },
+      subtext: { fr: "TypeScript strict & Swift", en: "Strict TypeScript & Swift" }
     },
     {
       value: "100%",
@@ -65,8 +65,55 @@ export const portfolioData: PortfolioData = {
   ],
   projects: [
     {
+      id: "zflix-desktop",
+      title: "Z-Flix Desktop",
+      year: "2024 - 2026",
+      category: "fullstack",
+      categoryLabel: { fr: "Streaming & Médias", en: "Streaming & Media" },
+      tagline: {
+        fr: "Application de streaming média avec hubs de contenus, lecteur vidéo et catalogue unifié.",
+        en: "Media streaming application with studio hubs, high-performance video player, and unified catalog."
+      },
+      description: {
+        fr: "Client streaming pour séries, films et animés avec intégration de hubs (Netflix, Disney+, HBO Max), lecteur HLS sans coupure et interface sombre cinématique.",
+        en: "Streaming client for movies, series, and anime featuring studio hubs (Netflix, Disney+, HBO Max), seamless HLS player, and cinematic dark UI."
+      },
+      longDescription: {
+        fr: "Z-Flix Desktop offre une expérience de streaming fluide sans publicité. L'application agrège et indexe les catalogues de plusieurs plateformes majeures, propose un sélecteur de sources vidéo résilient et un lecteur avec reprise de lecture automatique.",
+        en: "Z-Flix Desktop delivers an ad-free streaming experience. Aggregates and indexes multi-platform catalogs, resilient stream resolvers, and hardware-accelerated playback with resume state."
+      },
+      tags: ["Electron", "TypeScript", "React", "HLS Streaming", "Video Player"],
+      image: "/projects/zflix-desktop.png",
+      metrics: { fr: "Z-Movies & Z-Animes", en: "Z-Movies & Z-Animes" },
+      featured: true,
+      status: "production",
+      statusLabel: { fr: "En production", en: "In Production" },
+      githubUrl: "https://github.com/Apnkk/Z-FLIX-app",
+      liveUrl: "https://github.com/Apnkk/Z-FLIX-app",
+      gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
+      features: {
+        fr: [
+          "Hubs dédiés (Netflix, Disney+, HBO, Marvel, DC, Apple TV, Prime Video)",
+          "Lecteur vidéo avec choix des pistes VF et VOSTFR",
+          "Reprise de lecture automatique et gestion de liste personnelle",
+          "Interface sombre cinématique ultra-fluide"
+        ],
+        en: [
+          "Dedicated studio hubs (Netflix, Disney+, HBO, Marvel, DC, Apple TV, Prime Video)",
+          "Video player supporting multiple audio and subtitle tracks",
+          "Automatic playback resume and personal watchlist",
+          "Ultra-smooth cinematic dark UI"
+        ]
+      },
+      architecture: {
+        fr: "Client Electron et frontend réactif avec passerelle d'agrégation de flux vidéo HLS et distribution optimisée.",
+        en: "Electron client and reactive frontend with HLS stream aggregation gateway and optimized playback pipeline."
+      }
+    },
+    {
       id: "shopcore",
       title: "ShopCore",
+      year: "2025 - 2026",
       category: "fullstack",
       categoryLabel: { fr: "E-Commerce & Abonnements", en: "E-Commerce & SaaS" },
       tagline: {
@@ -81,7 +128,7 @@ export const portfolioData: PortfolioData = {
         fr: "ShopCore est une plateforme de vente en ligne conçue pour la distribution automatisée d'abonnements numériques. Le système intègre un pipeline de paiement hybride (Stripe + Crypto), un provisionnement instantané et un espace client fluide développé sous Next.js moderne.",
         en: "ShopCore is an automated e-commerce web platform engineered for digital subscriptions. Features a hybrid payment engine (Stripe + Crypto gateways), real-time order fulfillment, and a high-performance Next.js storefront."
       },
-      tags: ["Next.js", "TypeScript", "Tailwind CSS", "Stripe API", "Crypto Payments", "E-Commerce"],
+      tags: ["Next.js", "TypeScript", "Stripe", "Tailwind CSS", "Crypto Payments"],
       image: "/projects/shopcore.png",
       metrics: { fr: "shopcore.buzz", en: "shopcore.buzz" },
       featured: true,
@@ -109,53 +156,55 @@ export const portfolioData: PortfolioData = {
       }
     },
     {
-      id: "zflix-desktop",
-      title: "Z-Flix Desktop",
-      category: "fullstack",
-      categoryLabel: { fr: "Streaming & Médias", en: "Streaming & Media" },
+      id: "spoti-liquid-glass",
+      title: "Spoti Liquid Glass",
+      year: "2024",
+      category: "tools",
+      categoryLabel: { fr: "iOS Modding & UI", en: "iOS Modding & UI" },
       tagline: {
-        fr: "Application de streaming média avec hubs de contenus, lecteur vidéo et catalogue unifié.",
-        en: "Media streaming application with studio hubs, high-performance video player, and unified catalog."
+        fr: "Refonte de l'interface utilisateur pour l'application Spotify sur iOS avec Liquid Glass UI.",
+        en: "Custom Liquid Glass user interface tweak for the Spotify iOS app, no jailbreak."
       },
       description: {
-        fr: "Client streaming pour séries, films et animés avec intégration de hubs (Netflix, Disney+, HBO Max, Marvel, DC), lecteur HLS sans coupure et interface sombre cinématique.",
-        en: "Streaming client for movies, series, and anime featuring studio hubs (Netflix, Disney+, HBO Max, Marvel, DC), seamless HLS player, and cinematic dark UI."
+        fr: "Projet de personnalisation esthétique intégrant des composants dépolis modernes et des transitions fluides sur iOS sans nécessiter de jailbreak.",
+        en: "UI enhancement project injecting modern frosted glass styling, custom playback docks, and responsive controls on non-jailbroken iOS devices."
       },
       longDescription: {
-        fr: "Z-Flix Desktop offre une expérience de streaming fluide sans publicité. L'application agrège et indexe les catalogues de plusieurs plateformes majeures, propose un sélecteur de sources vidéo résilient et un lecteur avec reprise de lecture automatique.",
-        en: "Z-Flix Desktop delivers an ad-free streaming experience. Aggregates and indexes multi-platform catalogs, resilient stream resolvers, and hardware-accelerated playback with resume state."
+        fr: "Spoti Liquid Glass démontre la faisabilité d'injecter des modifications d'interface avancées dans des applications iOS existantes tout en conservant la compatibilité avec les sideloaders modernes (AltStore, Feather, TrollStore).",
+        en: "Spoti Liquid Glass proves the feasibility of injecting high-end UI customizations into existing iOS app bundles while maintaining native stability and full sideloading support."
       },
-      tags: ["Desktop & Web", "React", "TypeScript", "Video Player", "HLS", "Cinematic UI"],
-      image: "/projects/zflix-desktop.png",
-      metrics: { fr: "Z-Movies & Z-Animes", en: "Z-Movies & Z-Animes" },
+      tags: ["Swift / iOS", "Liquid Glass", "Objective-C", "UI Modding", "Sideloading"],
+      image: "/projects/spoti-now-playing.webp",
+      metrics: { fr: "No Jailbreak Needed", en: "No Jailbreak Needed" },
       featured: true,
-      status: "production",
-      statusLabel: { fr: "En production", en: "In Production" },
-      githubUrl: "https://github.com/Apnkk/Z-FLIX-app",
-      liveUrl: "https://github.com/Apnkk/Z-FLIX-app",
-      gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
+      status: "opensource",
+      statusLabel: { fr: "Open Source", en: "Open Source" },
+      githubUrl: "https://github.com/Apnkk/spoti.pw",
+      liveUrl: "https://github.com/Apnkk/spoti.pw",
+      gradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
       features: {
         fr: [
-          "Hubs dédiés (Netflix, Disney+, HBO, Marvel, DC, Apple TV, Prime Video)",
-          "Lecteur vidéo avec choix des pistes VF et VOSTFR",
-          "Reprise de lecture automatique et gestion de liste personnelle",
-          "Interface sombre cinématique ultra-fluide"
+          "Interface Liquid Glass sur le lecteur et les menus",
+          "Fonctionnement sans jailbreak via injection de dylib propre",
+          "Consommation batterie optimisée et fluidité 60 FPS",
+          "Code source auditable et ouvert sur GitHub"
         ],
         en: [
-          "Dedicated studio hubs (Netflix, Disney+, HBO, Marvel, DC, Apple TV, Prime Video)",
-          "Video player supporting multiple audio and subtitle tracks",
-          "Automatic playback resume and personal watchlist",
-          "Ultra-smooth cinematic dark UI"
+          "Liquid Glass UI applied across player and navigation views",
+          "Jailbreak-free operation via clean dylib injection",
+          "Optimized battery consumption and constant 60 FPS rendering",
+          "Open source and auditable on GitHub"
         ]
       },
       architecture: {
-        fr: "Frontend réactif avec passerelle d'agrégation de flux vidéo HLS et distribution optimisée.",
-        en: "Reactive frontend with HLS stream aggregation gateway and optimized playback pipeline."
+        fr: "Injection dynamique de vues et surcharge des styles système via dylib compilée en Swift & Objective-C pour architectures ARM64 iOS.",
+        en: "Dynamic view injection and runtime styling hooks bundled inside a Swift & Objective-C ARM64 dylib for iOS."
       }
     },
     {
       id: "zflix-launcher",
       title: "Z-Launcher",
+      year: "2024 - 2025",
       category: "tools",
       categoryLabel: { fr: "Launcher Desktop", en: "Desktop Launcher" },
       tagline: {
@@ -163,14 +212,14 @@ export const portfolioData: PortfolioData = {
         en: "PC desktop launcher to launch, update, and manage Z-Movies and Z-Animes."
       },
       description: {
-        fr: "Application de bureau Windows avec interface thématique nuit cyberpunk, bouton de lancement instantané, vérification d'intégrité et mises à jour automatiques.",
-        en: "Windows desktop launcher with cyberpunk night aesthetic, instant launch button, integrity checks, and automatic release updates."
+        fr: "Application de bureau Windows avec interface sombre minimale, bouton de lancement instantané, vérification d'intégrité et mises à jour automatiques.",
+        en: "Windows desktop application featuring a minimalist dark interface, instant launch button, integrity checks, and automatic release updates."
       },
       longDescription: {
         fr: "Z-Launcher est le point d'entrée pour l'écosystème de bureau Z-Flix. Il gère l'installation propre des composants, vérifie les versions disponibles et lance les applications en mode optimisé.",
         en: "Z-Launcher is the central gateway for the desktop Z-Flix suite. Handles component installation, checks remote release versions, and launches the software with hardware optimization."
       },
-      tags: ["Windows", "TypeScript", "Desktop Tool", "Auto-Updater", "Cyberpunk UI"],
+      tags: ["Electron", "TypeScript", "Desktop & IPC", "Auto-Updater", "Windows"],
       image: "/projects/zlauncher.png",
       metrics: { fr: "PC Desktop Launcher", en: "PC Desktop Launcher" },
       featured: true,
@@ -183,24 +232,25 @@ export const portfolioData: PortfolioData = {
         fr: [
           "Lancement instantané de Z-Movies et Z-Animes",
           "Vérification automatique des mises à jour au démarrage",
-          "Interface sombre immersive avec visuels soignés",
+          "Interface sombre épurée et moderne",
           "Système de vérification des fichiers et désinstallation propre"
         ],
         en: [
           "Instant one-click launch for Z-Movies and Z-Animes",
           "Automatic update checks on startup",
-          "Immersive dark aesthetic with high-end visuals",
+          "Clean, modern dark aesthetic",
           "File integrity verification and clean uninstaller"
         ]
       },
       architecture: {
-        fr: "Client desktop Windows avec communication inter-processus et gestion des flux de releases.",
-        en: "Windows desktop client with IPC bridges and remote release pipeline."
+        fr: "Client desktop Electron pour Windows avec communication inter-processus et gestion des flux de releases.",
+        en: "Electron desktop client for Windows with IPC bridges and remote release pipeline."
       }
     },
     {
       id: "zmusic",
       title: "Z-Music",
+      year: "2025",
       category: "mobile",
       categoryLabel: { fr: "Audio & Streaming", en: "Audio & Streaming" },
       tagline: {
@@ -208,14 +258,14 @@ export const portfolioData: PortfolioData = {
         en: "Limitless music streaming client with frosted audio dock and playlist management."
       },
       description: {
-        fr: "Application de streaming musical inspirée de Spotify avec lecture audio en continu, gestion de playlists, titres likés, paroles synchronisées et dock de lecture flottant.",
+        fr: "Application de streaming musical avec lecture audio en continu, gestion de playlists, titres likés, paroles synchronisées et dock de lecture flottant.",
         en: "Music streaming application featuring continuous playback, custom playlists, liked tracks, synced lyrics, and floating audio player dock."
       },
       longDescription: {
         fr: "Z-Music offre un univers musical sans limites : recherche instantanée d'artistes et de morceaux, lecture haute fidélité, affichage des paroles, gestion de bibliothèque personnelle et lecteur audio avec barre de progression interactive.",
         en: "Z-Music delivers limitless music streaming: instant artist and track search, high-fidelity playback, lyrics display, library management, and an interactive playback dock."
       },
-      tags: ["Desktop & Web", "Audio Engine", "TypeScript", "Playlists", "Lyrics", "Modern UI"],
+      tags: ["TypeScript", "Web Audio API", "React", "Audio Streaming", "Playlists"],
       image: "/projects/zmusic.png",
       metrics: { fr: "Stream Audio", en: "Audio Streaming" },
       featured: true,
@@ -241,51 +291,6 @@ export const portfolioData: PortfolioData = {
       architecture: {
         fr: "Moteur audio Web Audio / HTML5 avec mise en mémoire tampon dynamique et interface réactive.",
         en: "Web Audio / HTML5 audio engine with dynamic stream buffering and responsive UI."
-      }
-    },
-    {
-      id: "spoti-liquid-glass",
-      title: "Spoti Liquid Glass",
-      category: "tools",
-      categoryLabel: { fr: "iOS Modding & UI", en: "iOS Modding & UI" },
-      tagline: {
-        fr: "Refonte de l'interface utilisateur pour l'application Spotify sur iOS avec Liquid Glass UI.",
-        en: "Custom Liquid Glass user interface tweak for the Spotify iOS app, no jailbreak."
-      },
-      description: {
-        fr: "Projet de personnalisation esthétique intégrant des composants dépolis modernes et des transitions fluides sur iOS sans nécessiter de jailbreak.",
-        en: "UI enhancement project injecting modern frosted glass styling, custom playback docks, and responsive controls on non-jailbroken iOS devices."
-      },
-      longDescription: {
-        fr: "Spoti Liquid Glass démontre la faisabilité d'injecter des modifications d'interface avancées dans des applications iOS existantes tout en conservant la compatibilité avec les sideloaders modernes (AltStore, Feather, TrollStore).",
-        en: "Spoti Liquid Glass proves the feasibility of injecting high-end UI customizations into existing iOS app bundles while maintaining native stability and full sideloading support."
-      },
-      tags: ["iOS Tweaks", "Liquid Glass", "Objective-C / Swift", "UI Modding", "Sideloading"],
-      image: "/projects/spoti-now-playing.webp",
-      metrics: { fr: "No Jailbreak Needed", en: "No Jailbreak Needed" },
-      featured: true,
-      status: "opensource",
-      statusLabel: { fr: "Open Source", en: "Open Source" },
-      githubUrl: "https://github.com/Apnkk/spoti.pw",
-      liveUrl: "https://github.com/Apnkk/spoti.pw",
-      gradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
-      features: {
-        fr: [
-          "Interface Liquid Glass sur le lecteur et les menus",
-          "Fonctionnement sans jailbreak via injection de dylib propre",
-          "Consommation batterie optimisée et fluidité 60 FPS",
-          "Code source auditable et ouvert sur GitHub"
-        ],
-        en: [
-          "Liquid Glass UI applied across player and navigation views",
-          "Jailbreak-free operation via clean dylib injection",
-          "Optimized battery consumption and constant 60 FPS rendering",
-          "Open source and auditable on GitHub"
-        ]
-      },
-      architecture: {
-        fr: "Injection dynamique de vues et surcharge des styles système via dylib compilée pour architectures ARM64 iOS.",
-        en: "Dynamic view injection and runtime styling hooks bundled inside an ARM64 compiled dylib for iOS."
       }
     }
   ],
@@ -342,13 +347,41 @@ export const portfolioData: PortfolioData = {
   ],
   experiences: [
     {
+      id: "exp-shopcore",
+      role: {
+        fr: "Créateur & Lead Architecte",
+        en: "Founder & Lead Architect"
+      },
+      company: "ShopCore (SaaS & E-Commerce Automatisé)",
+      period: { fr: "2025 - 2026", en: "2025 - 2026" },
+      location: "France / Remote",
+      description: {
+        fr: "Architecture et déploiement de la plateforme e-commerce ShopCore : intégration multi-passerelles Stripe & Crypto, automatisation de la délivrance et gestion de catalogue Next.js.",
+        en: "Engineered and deployed the ShopCore automated e-commerce platform: hybrid Stripe & Crypto gateways, instant webhook-driven fulfillment, and modern Next.js store."
+      },
+      achievements: {
+        fr: [
+          "Pipeline de commande 100% automatisé avec délivrance d'accès instantanée par webhook",
+          "Double intégration de checkout sécurisé Stripe API et passerelle Crypto multi-devises",
+          "Temps de chargement < 200ms et conformité stricte Core Web Vitals"
+        ],
+        en: [
+          "100% automated order fulfillment pipeline delivering digital licenses via webhooks",
+          "Dual secure checkout integrating Stripe API and multi-currency Crypto gateway",
+          "Sub-200ms page loads with strict Core Web Vitals compliance"
+        ]
+      },
+      technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Stripe API", "Crypto", "PostgreSQL"],
+      type: "work"
+    },
+    {
       id: "exp-1",
       role: {
         fr: "Créateur & Développeur Lead",
         en: "Creator & Lead Developer"
       },
       company: "Écosystème Z-Flix (iOS & Desktop)",
-      period: { fr: "2024 - Présent", en: "2024 - Present" },
+      period: { fr: "2024 - 2026", en: "2024 - 2026" },
       location: "France / Remote",
       description: {
         fr: "Conception, développement et maintenance de la suite Z-Flix : application iOS signée pour Feather/AltStore, application PC desktop et launcher de mise à jour automatique.",
@@ -397,21 +430,5 @@ export const portfolioData: PortfolioData = {
       technologies: ["React 19", "Node.js", "TypeScript", "Python", "Redis", "Sideloading"],
       type: "work"
     }
-  ],
-  interests: {
-    fr: [
-      "Streaming audio & vidéo haute performance",
-      "Reverse engineering et contournement d'APIs",
-      "Liquid Glass UI & Design d'interaction soigné",
-      "Écosystème iOS, sideloading et tweaks",
-      "Automatisation de bout en bout et vitesse d'exécution"
-    ],
-    en: [
-      "High-performance audio and video streaming",
-      "Reverse engineering and API scraping",
-      "Liquid Glass UI and tactile interaction design",
-      "iOS ecosystem, sideloading, and custom tweaks",
-      "End-to-end automation and rapid execution"
-    ]
-  }
+  ]
 };

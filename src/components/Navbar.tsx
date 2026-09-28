@@ -1,22 +1,14 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { Volume2 } from 'lucide-react';
-import { ConceptSwitcher, type ConceptId } from './concepts/ConceptSwitcher';
+import { VolumeX, Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   isPlaying?: boolean;
   onTogglePlay?: () => void;
-  activeConcept?: ConceptId;
-  onSelectConcept?: (concept: ConceptId) => void;
 }
 
-export const Navbar = ({
-  isPlaying,
-  onTogglePlay,
-  activeConcept,
-  onSelectConcept,
-}: NavbarProps) => {
+export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
   const { language, setLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -43,10 +35,9 @@ export const Navbar = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 30);
 
-      // Active section detection
-      const sections = ['hero', 'work', 'lab', 'method', 'about', 'contact'];
+      const sections = ['hero', 'work', 'stack', 'method', 'about', 'contact'];
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
         if (el) {
@@ -64,267 +55,167 @@ export const Navbar = ({
   }, []);
 
   const navLinks = [
-    { href: '#work', id: 'work', label: language === 'fr' ? 'Projets' : 'Work' },
-    { href: '#lab', id: 'lab', label: language === 'fr' ? 'Le Lab' : 'The Lab' },
-    { href: '#method', id: 'method', label: language === 'fr' ? 'Méthode' : 'Method' },
+    { href: '#work', id: 'work', label: language === 'fr' ? 'Projets' : 'Projects' },
+    { href: '#stack', id: 'stack', label: language === 'fr' ? 'Stack' : 'Stack' },
+    { href: '#method', id: 'method', label: language === 'fr' ? 'Méthode' : 'Process' },
     { href: '#about', id: 'about', label: language === 'fr' ? 'Bio' : 'About' },
-    { href: '#contact', id: 'contact', label: 'Contact', isContact: true },
+    { href: '#contact', id: 'contact', label: 'Contact' },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-[960] transition-all duration-500 py-3 sm:py-4 px-4 sm:px-8 lg:px-10 flex items-center pointer-events-none ${
+        className={`fixed top-0 left-0 right-0 z-[960] transition-all duration-300 py-3 sm:py-4 px-4 sm:px-8 lg:px-12 flex items-center justify-between pointer-events-none ${
           scrolled ? 'pt-2.5 sm:pt-3' : 'pt-4 sm:pt-6'
         }`}
       >
-        <div className="w-full relative flex items-center justify-between">
-          {/* Top Left: Logo / Monogram Brand with Glowing Disc */}
+        {/* Left: Brand Monogram */}
+        <div className="pointer-events-auto flex items-center gap-3">
           <a
-            href={activeConcept === 'showcase' ? '#hero' : '#'}
-            onClick={(e) => {
-              if (activeConcept !== 'showcase') {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }
-            }}
-            className="pointer-events-auto inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.8)] font-mono text-[0.82rem] tracking-wider text-[#f5f3ef] uppercase group select-none hover:border-[#ff1e38]/50 transition-all duration-300"
+            href="#hero"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] text-white hover:border-white/20 transition-all select-none"
             aria-label="Ares — retour au début"
           >
-            <span
-              className={`w-3.5 h-3.5 rounded-full border-2 border-[#ff1e38] relative flex items-center justify-center shadow-[0_0_10px_rgba(255,30,56,0.6)] ${
-                isPlaying ? 'animate-spin' : ''
-              }`}
-              style={{ animationDuration: '2.5s' }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff2d46]" />
-            </span>
-            <span className="font-bold tracking-tight text-[#f5f3ef] group-hover:text-white transition-colors">
-              ares<sup className="text-[#ff1e38] font-normal text-[0.65em] ml-0.5">®</sup>
+            <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
+            <span className="font-mono text-xs font-semibold tracking-tight uppercase">
+              ares
             </span>
           </a>
+        </div>
 
-          {/* Perfectly Centered: Concept Switcher on Desktop PC (>= lg) */}
-          {activeConcept && onSelectConcept ? (
-            <div className="pointer-events-auto hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 z-20">
-              <ConceptSwitcher
-                activeConcept={activeConcept}
-                onSelectConcept={onSelectConcept}
-                isEmbedded={true}
-              />
-            </div>
-          ) : (
-            <nav
-              className="pointer-events-auto hidden lg:flex items-center gap-1 xl:gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.9)] font-mono text-[0.68rem] xl:text-[0.72rem] tracking-wider uppercase select-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap z-20"
-              aria-label="Navigation principale"
-            >
-              {navLinks.map((link) => {
-                const isActive = activeSection === link.id;
-                return (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className={`relative px-3.5 xl:px-4 py-1.5 xl:py-2 rounded-full transition-all duration-300 ${
-                      isActive
-                        ? 'text-[#f5f3ef] font-semibold bg-white/[0.07] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
-                        : link.isContact
-                        ? 'text-[#ff1e38] hover:text-white hover:bg-[#ff1e38]/15'
-                        : 'text-[#b8b3a8] hover:text-[#f5f3ef] hover:bg-white/[0.04]'
-                    }`}
-                  >
-                    <span className="relative z-10">{link.label}</span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="nav-active-pill"
-                        className="absolute inset-0 rounded-full border border-[#ff1e38]/40 shadow-[0_0_12px_rgba(255,30,56,0.25)] pointer-events-none"
-                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                      />
-                    )}
-                  </a>
-                );
-              })}
-            </nav>
-          )}
-
-          {/* Top Right: Sound EQ + Language Switcher */}
-          <div className="pointer-events-auto flex items-center gap-2">
-            {/* Audio Mini Pulse Trigger */}
-            {onTogglePlay && (
-              <button
-                type="button"
-                onClick={onTogglePlay}
-                className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] hover:border-[#ff1e38]/50 text-[#b8b3a8] hover:text-[#f5f3ef] transition-all text-xs font-mono select-none cursor-pointer"
-                title={isPlaying ? 'Pause audio' : 'Play audio'}
-                aria-label="Contrôle audio"
+        {/* Center: Minimalist Desktop Navigation - Geometrically Centered */}
+        <nav
+          className="pointer-events-auto hidden md:flex items-center gap-1 p-1 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.7rem] uppercase tracking-wider select-none shadow-[0_8px_30px_rgba(0,0,0,0.8)] absolute left-1/2 -translate-x-1/2"
+          aria-label="Navigation principale"
+        >
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`relative px-3.5 py-1.5 rounded-full transition-colors duration-200 ${
+                  isActive
+                    ? 'text-white font-semibold'
+                    : 'text-[#a1a1aa] hover:text-white hover:bg-white/[0.04]'
+                }`}
               >
-                {isPlaying ? (
-                  <div className="flex items-end gap-[2px] h-3.5 w-3.5 text-[#ff1e38]">
+                {isActive && (
+                  <motion.div
+                    layoutId="active-nav-pill"
+                    className="absolute inset-0 rounded-full bg-white/[0.1] border border-white/[0.12] shadow-[0_0_12px_rgba(255,255,255,0.05)]"
+                    transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  />
+                )}
+                <span className="relative z-10">{link.label}</span>
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* Right: Audio Control + Language Switcher + Mobile Menu Trigger */}
+        <div className="pointer-events-auto flex items-center gap-2">
+          {/* Audio Button */}
+          {onTogglePlay && (
+            <button
+              type="button"
+              onClick={onTogglePlay}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 text-[#a1a1aa] hover:text-white transition-all text-xs font-mono select-none cursor-pointer"
+              title={isPlaying ? 'Pause audio' : 'Play audio'}
+              aria-label="Contrôle audio"
+            >
+              {isPlaying ? (
+                <>
+                  <div className="flex items-end gap-[2px] h-3 w-3 text-[#ff1e38]">
                     <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-1" />
                     <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-2" />
                     <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-3" />
                   </div>
-                ) : (
-                  <Volume2 className="w-3.5 h-3.5 text-[#726d64]" />
-                )}
-                <span className="text-[0.68rem] tracking-wider font-semibold">
-                  {isPlaying ? 'AUDIO ON' : 'AUDIO OFF'}
-                </span>
-              </button>
-            )}
+                  <span className="text-[0.66rem] font-semibold text-white tracking-wider">
+                    SOUND ON
+                  </span>
+                </>
+              ) : (
+                <>
+                  <VolumeX className="w-3.5 h-3.5 text-[#71717a]" />
+                  <span className="text-[0.66rem] tracking-wider">SOUND</span>
+                </>
+              )}
+            </button>
+          )}
 
-            {/* Language Switcher Pill: EN / FR */}
-            <div className="inline-flex items-center p-1 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.68rem] select-none">
-              <button
-                type="button"
-                onClick={() => setLanguage('en')}
-                className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
-                  language === 'en'
-                    ? 'bg-[#ff1e38] text-white font-bold shadow-[0_0_12px_rgba(255,30,56,0.6)]'
-                    : 'text-[#726d64] hover:text-[#f5f3ef]'
-                }`}
-              >
-                EN
-              </button>
-              <button
-                type="button"
-                onClick={() => setLanguage('fr')}
-                className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
-                  language === 'fr'
-                    ? 'bg-[#ff1e38] text-white font-bold shadow-[0_0_12px_rgba(255,30,56,0.6)]'
-                    : 'text-[#726d64] hover:text-[#f5f3ef]'
-                }`}
-              >
-                FR
-              </button>
-            </div>
-
-            {/* Mobile / Tablet Hamburger Toggle Button */}
+          {/* Language Switcher Pill */}
+          <div className="inline-flex items-center p-0.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.66rem] select-none">
             <button
               type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden flex flex-col items-center justify-center w-9 h-9 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.1] text-[#f5f3ef] cursor-pointer"
-              aria-label="Menu"
-              aria-expanded={mobileMenuOpen}
+              onClick={() => setLanguage('en')}
+              className={`px-2 py-1 rounded-full transition-all cursor-pointer ${
+                language === 'en'
+                  ? 'bg-white/[0.12] text-white font-bold'
+                  : 'text-[#71717a] hover:text-white'
+              }`}
             >
-              <span
-                className={`w-4 h-[1.5px] bg-[#f5f3ef] transition-transform duration-300 ${
-                  mobileMenuOpen ? 'translate-y-[4.5px] rotate-45 bg-[#ff1e38]' : ''
-                }`}
-              />
-              <span
-                className={`w-4 h-[1.5px] bg-[#f5f3ef] my-1 transition-opacity duration-300 ${
-                  mobileMenuOpen ? 'opacity-0' : ''
-                }`}
-              />
-              <span
-                className={`w-4 h-[1.5px] bg-[#f5f3ef] transition-transform duration-300 ${
-                  mobileMenuOpen ? '-translate-y-[4.5px] -rotate-45 bg-[#ff1e38]' : ''
-                }`}
-              />
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => setLanguage('fr')}
+              className={`px-2 py-1 rounded-full transition-all cursor-pointer ${
+                language === 'fr'
+                  ? 'bg-white/[0.12] text-white font-bold'
+                  : 'text-[#71717a] hover:text-white'
+              }`}
+            >
+              FR
             </button>
           </div>
+
+          {/* Mobile Menu Hamburger */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.1] text-white cursor-pointer"
+            aria-label="Menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
         </div>
       </header>
 
-      {/* Fullscreen Mobile Drawer Menu */}
+      {/* Mobile Menu Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             role="dialog"
             aria-modal="true"
-            aria-label={language === 'fr' ? 'Menu de navigation mobile' : 'Mobile navigation menu'}
-            className="fixed inset-0 z-[950] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-10 pt-24"
+            aria-label="Menu"
+            className="fixed inset-0 z-[950] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-6 pt-24 pb-12"
           >
-            {/* Crimson Atmospheric Glow */}
-            <div
-              className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-[#ff1e38]/10 blur-[100px] pointer-events-none"
-              aria-hidden="true"
-            />
-
-            <div className="relative z-10 flex flex-col gap-5">
-              {activeConcept && onSelectConcept && (
-                <div>
-                  <span className="mono text-xs text-[#ff1e38] tracking-widest mb-2.5 block font-semibold">
-                    // {language === 'fr' ? 'SÉLECTEUR DE CONCEPT' : 'CONCEPT SELECTION'}
-                  </span>
-                  <div className="grid grid-cols-1 gap-2">
-                    {[
-                      { id: 'cad' as ConceptId, label: '01 CAD DISSECTION', desc: '3D ISOMETRIC WAFER' },
-                      { id: '35mm' as ConceptId, label: '02 35MM MASTER', desc: '2.39:1 CHRONO-SCRUBBER' },
-                      { id: 'sapphire' as ConceptId, label: '03 LIQUID SAPPHIRE', desc: 'FERROFLUID PRISM' },
-                      { id: 'showcase' as ConceptId, label: 'DEFAULT SHOWCASE', desc: 'STANDARD PORTFOLIO' },
-                    ].map((c) => {
-                      const isSel = activeConcept === c.id;
-                      return (
-                        <button
-                          key={c.id}
-                          onClick={() => {
-                            onSelectConcept(c.id);
-                            setMobileMenuOpen(false);
-                          }}
-                          className={`flex items-center justify-between p-3 rounded-xl border text-left transition-all ${
-                            isSel
-                              ? 'bg-[#ff1e38]/20 border-[#ff1e38] text-white shadow-[0_0_15px_rgba(255,30,56,0.4)]'
-                              : 'bg-white/[0.04] border-white/10 text-[#b8b3a8] hover:text-white'
-                          }`}
-                        >
-                          <span className="font-mono text-xs font-bold">{c.label}</span>
-                          <span className="mono text-[0.6rem] text-[#ff1e38]">{c.desc}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {activeConcept === 'showcase' && (
-                <nav className="flex flex-col gap-1 pt-2 border-t border-white/10">
-                  <span className="mono text-xs text-[#ff1e38] tracking-widest mb-1 font-semibold">
-                    // NAVIGATION
-                  </span>
-                  {navLinks.map((link) => (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="font-display font-semibold text-2xl text-[#f5f3ef] py-1.5 border-b border-white/[0.04] hover:text-[#ff1e38] transition-colors flex items-center justify-between"
-                    >
-                      <span>{link.label}</span>
-                      <span className="text-[#ff1e38] text-sm opacity-60">↗</span>
-                    </a>
-                  ))}
-                </nav>
-              )}
-            </div>
-
-            <div className="relative z-10 space-y-4 pt-6 border-t border-white/[0.08]">
-              {/* Mobile Audio Toggle */}
-              {onTogglePlay && (
-                <button
-                  type="button"
-                  onClick={onTogglePlay}
-                  className="w-full flex items-center justify-center gap-2.5 py-3 rounded-2xl bg-white/[0.05] border border-white/10 font-mono text-xs text-[#f5f3ef] hover:border-[#ff1e38]/50 transition-colors"
+            <nav className="flex flex-col gap-3">
+              <span className="font-mono text-xs text-[#71717a] tracking-wider uppercase mb-2">
+                Navigation
+              </span>
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-display font-medium text-2xl text-white py-2 border-b border-white/[0.06] hover:text-[#ff1e38] transition-colors flex items-center justify-between"
                 >
-                  {isPlaying ? (
-                    <div className="flex items-end gap-[2px] h-3.5 w-3.5 text-[#ff1e38]">
-                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-1" />
-                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-2" />
-                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-3" />
-                    </div>
-                  ) : (
-                    <Volume2 className="w-3.5 h-3.5 text-[#726d64]" />
-                  )}
-                  <span>{isPlaying ? 'AUDIO ON (PLAYING)' : 'AUDIO OFF (MUTED)'}</span>
-                </button>
-              )}
+                  <span>{link.label}</span>
+                  <span className="text-[#71717a] text-sm">↗</span>
+                </a>
+              ))}
+            </nav>
 
-              <p className="font-mono text-xs text-[#b8b3a8] flex items-center gap-2 justify-center">
-                <span className="status-dot shrink-0" />
-                <span>France · Full-Stack &amp; Creative Builder</span>
+            <div className="pt-6 border-t border-white/[0.08]">
+              <p className="font-mono text-xs text-[#71717a]">
+                France · Full-Stack &amp; Systems Developer
               </p>
             </div>
           </motion.div>

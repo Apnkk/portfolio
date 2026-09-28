@@ -3,6 +3,7 @@ export type Language = 'fr' | 'en';
 export interface Project {
   id: string;
   title: string;
+  year?: string;
   category: 'fullstack' | 'mobile' | 'ai' | 'tools';
   categoryLabel: { fr: string; en: string };
   tagline: { fr: string; en: string };
@@ -77,5 +78,4 @@ export interface PortfolioData {
   projects: Project[];
   skills: SkillCategory[];
   experiences: Experience[];
-  interests: { fr: string[]; en: string[] };
 }

@@ -82,7 +82,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
       let energy = 0;
       if (analyser && isPlaying) {
         const data = new Uint8Array(analyser.frequencyBinCount);
-        (analyser as any).getByteFrequencyData(data);
+        analyser.getByteFrequencyData(data);
         let sum = 0;
         for (let k = 0; k < data.length; k++) sum += data[k];
         energy = sum / (data.length * 255);
