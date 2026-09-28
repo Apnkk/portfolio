@@ -5,6 +5,10 @@ import { LanguageProvider } from './context/LanguageContext';
 import { CustomCursor } from './components/CustomCursor';
 import { AudioPlayer } from './components/AudioPlayer';
 import { Navbar } from './components/Navbar';
+import { ConceptSwitcher, type ConceptId } from './components/concepts/ConceptSwitcher';
+import { ConceptCadDissection } from './components/concepts/ConceptCadDissection';
+import { Concept35mmMaster } from './components/concepts/Concept35mmMaster';
+import { ConceptLiquidSapphire } from './components/concepts/ConceptLiquidSapphire';
 import { Hero } from './components/Hero';
 import { MarqueeTicker } from './components/MarqueeTicker';
 import { WorkSection } from './components/WorkSection';
@@ -21,6 +25,27 @@ function PortfolioApp() {
   const [scrollPercent, setScrollPercent] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
 
+  // Active Concept State ('cad' | '35mm' | 'sapphire' | 'showcase')
+  const [activeConcept, setActiveConcept] = useState<ConceptId>(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const hash = window.location.hash.toLowerCase();
+        if (hash.includes('35mm')) return '35mm';
+        if (hash.includes('sapphire')) return 'sapphire';
+        if (hash.includes('showcase')) return 'showcase';
+        if (hash.includes('cad')) return 'cad';
+
+        const saved = localStorage.getItem('portfolio_active_concept') as ConceptId | null;
+        if (saved && ['cad', '35mm', 'sapphire', 'showcase'].includes(saved)) {
+          return saved;
+        }
+      }
+      return 'cad';
+    } catch {
+      return 'cad';
+    }
+  });
+
   // Cinematic Scrubber Timeline (Video Progress Bar)
   const { scrollYProgress } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, {
@@ -35,6 +60,36 @@ function PortfolioApp() {
       setScrollPercent(Math.round(latest * 100));
     });
   }, [scrollYProgress]);
+
+  // Sync hash changes (browser back / forward buttons)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash.includes('35mm')) setActiveConcept('35mm');
+      else if (hash.includes('sapphire')) setActiveConcept('sapphire');
+      else if (hash.includes('showcase')) setActiveConcept('showcase');
+      else if (hash.includes('cad')) setActiveConcept('cad');
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Concept switcher action
+  const handleSelectConcept = (concept: ConceptId) => {
+    setActiveConcept(concept);
+    try {
+      localStorage.setItem('portfolio_active_concept', concept);
+      window.history.replaceState(null, '', `#${concept}`);
+    } catch {
+      // ignore
+    }
+    // Instant smooth reset to top for the newly chosen universe
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  };
 
   // Initialize Lenis Inertial Smooth Scrolling with native mobile touch momentum
   useEffect(() => {
@@ -82,7 +137,7 @@ function PortfolioApp() {
       const target = (e.target as HTMLElement).closest('a[href^="#"]');
       if (!target) return;
       const href = target.getAttribute('href');
-      if (href && href.length > 1) {
+      if (href && href.length > 1 && !['#cad', '#35mm', '#sapphire', '#showcase'].includes(href)) {
         const el = document.querySelector(href);
         if (el) {
           e.preventDefault();
@@ -119,7 +174,6 @@ function PortfolioApp() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
-
 
   return (
     <div className="relative min-h-screen bg-black text-[#f5f3ef] selection:bg-[#ff1e38] selection:text-white">
@@ -158,22 +212,40 @@ function PortfolioApp() {
         </motion.button>
       )}
 
-      {/* Top Navbar */}
+      {/* Top Navbar (Hosts ConceptSwitcher in Center on Desktop) */}
       <Navbar
         isPlaying={isPlaying}
         onTogglePlay={handleTogglePlay}
+        activeConcept={activeConcept}
+        onSelectConcept={handleSelectConcept}
       />
 
-      {/* Main Scrollytelling Content */}
+      {/* Floating Concept Switcher for Mobile (lg:hidden) */}
+      <div className="lg:hidden">
+        <ConceptSwitcher
+          activeConcept={activeConcept}
+          onSelectConcept={handleSelectConcept}
+          isEmbedded={false}
+        />
+      </div>
+
+      {/* Main Scrollytelling Content based on active concept */}
       <main id="main" className="pb-24 sm:pb-0">
-        <Hero />
-        <MarqueeTicker />
-        <WorkSection />
-        <LabBentoSection />
-        <NextSection isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
-        <MethodSection />
-        <AboutSection />
-        <ContactSection />
+        {activeConcept === 'cad' && <ConceptCadDissection />}
+        {activeConcept === '35mm' && <Concept35mmMaster />}
+        {activeConcept === 'sapphire' && <ConceptLiquidSapphire />}
+        {activeConcept === 'showcase' && (
+          <>
+            <Hero />
+            <MarqueeTicker />
+            <WorkSection />
+            <LabBentoSection />
+            <NextSection isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
+            <MethodSection />
+            <AboutSection />
+            <ContactSection />
+          </>
+        )}
       </main>
     </div>
   );
