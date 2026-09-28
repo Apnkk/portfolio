@@ -74,10 +74,10 @@ export const Hero = () => {
           variants={itemVariants}
           className="font-display text-center"
         >
-          <span className="block font-bold text-[clamp(6rem,16.5vw,13.5rem)] text-white tracking-tighter leading-[0.9] select-none drop-shadow-[0_20px_60px_rgba(255,255,255,0.14)]">
+          <span className="block font-bold text-[clamp(6.8rem,19vw,16.8rem)] text-white tracking-tighter leading-[0.88] select-none drop-shadow-[0_25px_70px_rgba(255,255,255,0.16)]">
             Ares
           </span>
-          <span className="block font-semibold text-[clamp(1.45rem,3.2vw,2.6rem)] text-white/90 tracking-tight leading-[1.22] max-w-3xl mx-auto text-balance mt-5 sm:mt-6">
+          <span className="block font-semibold text-[clamp(1.65rem,3.6vw,3.15rem)] text-white/90 tracking-tight leading-[1.2] max-w-4xl mx-auto text-balance mt-6 sm:mt-8">
             {language === 'fr' ? (
               <>
                 Développeur full-stack <span className="text-[#ff1e38] font-bold">&amp;</span> créateur de produits.
