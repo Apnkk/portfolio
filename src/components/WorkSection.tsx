@@ -30,9 +30,8 @@ const ProjectCard = ({ project, isWide, idx, onOpenModal }: ProjectCardProps) =>
       className={colSpan}
     >
       <TiltCard
-        maxTilt={5}
         scale={1.015}
-        spotlightColor="rgba(255, 30, 56, 0.14)"
+        spotlightColor="rgba(255, 30, 56, 0.12)"
         className="group h-full rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-white/20 transition-colors duration-300 flex flex-col justify-between overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.6)]"
       >
         {/* Animated laser border beam on top 2 primary products */}
@@ -56,7 +55,7 @@ const ProjectCard = ({ project, isWide, idx, onOpenModal }: ProjectCardProps) =>
               alt={project.title}
               loading="lazy"
               decoding="async"
-              className="w-full h-full object-cover object-top filter brightness-[0.92] group-hover/img:scale-[1.05] group-hover/img:brightness-100 transition-all duration-500 ease-out"
+              className="w-full h-full object-cover object-top filter brightness-[0.92] group-hover/img:scale-[1.04] group-hover/img:brightness-100 transition-all duration-500 ease-out"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-zinc-950 text-[#71717a] font-mono text-xs">
@@ -67,23 +66,15 @@ const ProjectCard = ({ project, isWide, idx, onOpenModal }: ProjectCardProps) =>
           {/* Subtle vignette gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-transparent to-black/30 pointer-events-none" />
 
-          {/* Top Badges: Category, Real Year, Metrics */}
+          {/* Top Badges: Category & Metrics */}
           <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-2 pointer-events-none z-10">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/[0.1] text-white font-mono text-[0.66rem] tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38]" />
-                {project.categoryLabel[language]}
-              </span>
-
-              {project.year && (
-                <span className="px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/[0.1] text-[#e4e4e7] font-mono text-[0.66rem] font-semibold tracking-wider shadow-sm">
-                  {project.year}
-                </span>
-              )}
-            </div>
+            <span className="px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/[0.1] text-white font-mono text-[0.66rem] tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38]" />
+              {project.categoryLabel[language]}
+            </span>
 
             {project.metrics && (
-              <span className="px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/[0.1] text-[#a1a1aa] font-mono text-[0.66rem] tracking-wide shadow-sm">
+              <span className="px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/[0.1] text-[#d4d4d8] font-mono text-[0.66rem] tracking-wide shadow-sm">
                 {project.metrics[language]}
               </span>
             )}
@@ -94,7 +85,7 @@ const ProjectCard = ({ project, isWide, idx, onOpenModal }: ProjectCardProps) =>
         <div className="p-6 flex flex-col justify-between flex-1 relative z-20">
           <div>
             {/* Status and Year Indicator */}
-            <div className="flex items-center justify-between gap-2 mb-2.5">
+            <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70" />
@@ -106,7 +97,7 @@ const ProjectCard = ({ project, isWide, idx, onOpenModal }: ProjectCardProps) =>
               </div>
 
               {project.year && (
-                <span className="font-mono text-[0.68rem] text-[#71717a] font-medium">
+                <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] font-mono text-[0.68rem] text-[#a1a1aa] font-medium tracking-wider">
                   {project.year}
                 </span>
               )}
@@ -122,11 +113,11 @@ const ProjectCard = ({ project, isWide, idx, onOpenModal }: ProjectCardProps) =>
             </h3>
 
             {/* Description */}
-            <p className="text-[#a1a1aa] text-sm mt-2.5 line-clamp-2 leading-relaxed">
+            <p className="text-[#a1a1aa] text-sm mt-2.5 leading-relaxed font-normal">
               {project.tagline[language]}
             </p>
 
-            {/* Tags with micro-scale on hover */}
+            {/* Tags */}
             <div className="flex flex-wrap gap-1.5 mt-4">
               {project.tags.slice(0, 4).map((tag, tIdx) => (
                 <span
@@ -195,9 +186,9 @@ export const WorkSection = () => {
       {/* Section Header */}
       <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16 sm:mb-20">
         <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38]" />
           <p className="font-mono text-xs text-[#a1a1aa] tracking-widest uppercase">
-            01 / PROJETS
+            {language === 'fr' ? 'PROJETS & LOGICIELS' : 'FEATURED PROJECTS'}
           </p>
         </div>
         <h2
@@ -206,11 +197,11 @@ export const WorkSection = () => {
         >
           {language === 'fr' ? (
             <>
-              Travaux récents <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> logiciels en production
+              Travaux récents <span className="text-[#ff1e38]">&amp;</span> logiciels
             </>
           ) : (
             <>
-              Featured work <em className="text-[#ff1e38] not-italic font-serif">&amp;</em> production software
+              Featured work <span className="text-[#ff1e38]">&amp;</span> software
             </>
           )}
         </h2>

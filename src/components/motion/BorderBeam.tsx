@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { motion } from 'framer-motion';
 
 interface BorderBeamProps {
@@ -9,42 +10,47 @@ interface BorderBeamProps {
 }
 
 export const BorderBeam = ({
-  duration = 8,
+  duration = 9,
   borderWidth = 1.5,
   colorFrom = '#ff1e38',
-  colorTo = 'rgba(255, 30, 56, 0.2)',
+  colorTo = 'rgba(255, 30, 56, 0.25)',
   className = '',
 }: BorderBeamProps) => {
+  const id = useId();
+  const safeId = id.replace(/:/g, '-');
+
   return (
     <div
-      className={`pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden ${className}`}
+      className={`pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden z-20 ${className}`}
       aria-hidden="true"
     >
       <svg
-        className="w-full h-full"
+        className="w-full h-full absolute inset-0"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
       >
         <defs>
-          <linearGradient id="beam-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={`beam-${safeId}`} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor={colorFrom} stopOpacity="1" />
-            <stop offset="60%" stopColor={colorTo} stopOpacity="0.8" />
+            <stop offset="50%" stopColor={colorTo} stopOpacity="0.5" />
             <stop offset="100%" stopColor="transparent" stopOpacity="0" />
           </linearGradient>
         </defs>
         <motion.rect
-          x={borderWidth / 2}
-          y={borderWidth / 2}
-          width={`calc(100% - ${borderWidth}px)`}
-          height={`calc(100% - ${borderWidth}px)`}
-          rx="16"
-          ry="16"
+          x="1"
+          y="1"
+          style={{
+            width: 'calc(100% - 2px)',
+            height: 'calc(100% - 2px)',
+          }}
+          rx="15"
+          ry="15"
           fill="none"
-          stroke="url(#beam-gradient)"
+          stroke={`url(#beam-${safeId})`}
           strokeWidth={borderWidth}
-          strokeDasharray="180 400"
+          strokeDasharray="160 520"
           animate={{
-            strokeDashoffset: [0, -580],
+            strokeDashoffset: [0, -680],
           }}
           transition={{
             repeat: Infinity,
