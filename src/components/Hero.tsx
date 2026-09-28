@@ -92,15 +92,6 @@ export const Hero = () => {
 
         {/* Lower Content Cluster: Description, CTAs & Metrics pushed lower down */}
         <div className="flex flex-col items-center w-full mt-20 sm:mt-32 lg:mt-40">
-          {/* Value Proposition Statement - Concise */}
-          <motion.p
-            variants={itemVariants}
-            className="text-[#a1a1aa] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-10 text-balance font-normal"
-          >
-            {language === 'fr'
-              ? "Créateur d'applications de streaming, d'outils iOS et d'interfaces web rapides et réactives."
-              : 'Building streaming applications, native iOS tools, and high-performance web products.'}
-          </motion.p>
 
           {/* Action Buttons with Magnetic cursor pull & spring taps */}
           <motion.div
