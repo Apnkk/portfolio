@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import type { Track } from '../utils/audioSynth';
 import { 
   X, 
@@ -9,7 +9,8 @@ import {
   SkipForward, 
   Volume2, 
   VolumeX, 
-  Music2 
+  Music2,
+  Sparkles
 } from 'lucide-react';
 
 interface FullscreenLyricsProps {
@@ -30,7 +31,7 @@ interface FullscreenLyricsProps {
   onToggleMute: () => void;
 }
 
-// Deep, velvet-like OLED ambient mesh gradient palettes (Clean & Minimalist)
+// Deep, velvet-like OLED ambient mesh gradient palettes
 const TRACK_THEMES: Record<
   string,
   {
@@ -43,27 +44,27 @@ const TRACK_THEMES: Record<
   }
 > = {
   borderline: {
-    bgDark: '#0e0503',
-    orb1: 'rgba(185, 28, 28, 0.45)',   // deep wine red
-    orb2: 'rgba(194, 65, 12, 0.40)',   // warm terracotta
-    orb3: 'rgba(146, 64, 14, 0.35)',   // burnt amber
-    orb4: 'rgba(253, 186, 116, 0.20)', // soft sand glow
-    accent: '#f59e0b',
+    bgDark: '#0a0302',
+    orb1: 'rgba(239, 68, 68, 0.40)',   // vibrant crimson
+    orb2: 'rgba(249, 115, 22, 0.35)',  // amber flame
+    orb3: 'rgba(185, 28, 28, 0.30)',   // deep wine
+    orb4: 'rgba(251, 146, 60, 0.20)',  // warm peach aura
+    accent: '#ff1e38',
   },
   'jane-hoodtrap': {
-    bgDark: '#090310',
-    orb1: 'rgba(126, 34, 206, 0.45)',  // deep royal violet
-    orb2: 'rgba(147, 51, 234, 0.38)',  // electric magenta
-    orb3: 'rgba(67, 56, 202, 0.35)',   // midnight indigo
-    orb4: 'rgba(216, 180, 254, 0.20)', // soft lilac glow
+    bgDark: '#07020d',
+    orb1: 'rgba(168, 85, 247, 0.42)',  // electric violet
+    orb2: 'rgba(236, 72, 153, 0.35)',  // neon magenta
+    orb3: 'rgba(99, 102, 241, 0.30)',  // deep indigo
+    orb4: 'rgba(192, 132, 252, 0.20)', // soft lilac
     accent: '#a855f7',
   },
   'ring-ding-dong': {
-    bgDark: '#020d06',
-    orb1: 'rgba(5, 120, 85, 0.40)',    // deep forest emerald
-    orb2: 'rgba(4, 90, 65, 0.35)',     // dark pine jade
-    orb3: 'rgba(161, 98, 7, 0.28)',    // subtle golden amber
-    orb4: 'rgba(16, 185, 129, 0.20)',  // soft emerald aura
+    bgDark: '#010a05',
+    orb1: 'rgba(16, 185, 129, 0.40)',  // emerald
+    orb2: 'rgba(20, 184, 166, 0.35)',  // teal
+    orb3: 'rgba(5, 150, 105, 0.30)',   // forest
+    orb4: 'rgba(110, 231, 183, 0.20)', // mint glow
     accent: '#10b981',
   },
 };
@@ -85,13 +86,14 @@ export const FullscreenLyrics = ({
   onVolumeChange,
   onToggleMute,
 }: FullscreenLyricsProps) => {
+  const shouldReduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const lyricRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [hoverRatio, setHoverRatio] = useState<number | null>(null);
 
-  // Position and height of the single unified gliding indicator bar
+  // Position and height of the fluid neon gliding indicator bar
   const [indicatorY, setIndicatorY] = useState(0);
-  const [indicatorHeight, setIndicatorHeight] = useState(32);
+  const [indicatorHeight, setIndicatorHeight] = useState(36);
   const [indicatorVisible, setIndicatorVisible] = useState(false);
 
   // Anti-hijack: pause automatic follow ONLY when the user physically wheels or touches
@@ -137,8 +139,8 @@ export const FullscreenLyrics = ({
     const updateIndicator = () => {
       const activeEl = lyricRefs.current[currentLyricIndex];
       if (activeEl) {
-        setIndicatorY(activeEl.offsetTop + 6);
-        setIndicatorHeight(Math.max(28, activeEl.offsetHeight - 12));
+        setIndicatorY(activeEl.offsetTop + 4);
+        setIndicatorHeight(Math.max(32, activeEl.offsetHeight - 8));
         setIndicatorVisible(true);
       } else {
         setIndicatorVisible(false);
@@ -245,9 +247,9 @@ export const FullscreenLyrics = ({
           aria-modal="true"
           data-lenis-prevent
           aria-label={`Paroles en direct : ${currentTrack.title}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[1000] flex flex-col justify-between overflow-hidden bg-black select-none pointer-events-auto"
         >
@@ -258,87 +260,139 @@ export const FullscreenLyrics = ({
               style={{ background: theme.bgDark }}
             />
 
-            {/* Orb 1: Top-Right Flame Aura */}
+            {/* Orb 1: Pulsing Flame Aura */}
             <motion.div
-              animate={{
-                x: [0, 40, -30, 0],
-                y: [0, -35, 25, 0],
-                scale: [1, 1.12, 0.96, 1],
+              animate={shouldReduceMotion ? undefined : {
+                x: [0, 60, -40, 0],
+                y: [0, -50, 40, 0],
+                scale: [1, 1.25, 0.9, 1],
               }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -top-32 -right-32 w-[70vw] h-[70vw] rounded-full blur-[140px] sm:blur-[200px] opacity-70 mix-blend-screen transition-colors duration-1000"
+              transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute -top-32 -right-32 w-[75vw] h-[75vw] rounded-full blur-[140px] sm:blur-[220px] opacity-75 mix-blend-screen transition-colors duration-1000"
               style={{ background: theme.orb1 }}
             />
 
-            {/* Orb 2: Center-Right Deep Flame Glow */}
+            {/* Orb 2: Deep Core Glow */}
             <motion.div
-              animate={{
-                x: [0, -45, 35, 0],
-                y: [0, 30, -40, 0],
-                scale: [1, 0.94, 1.06, 1],
+              animate={shouldReduceMotion ? undefined : {
+                x: [0, -60, 50, 0],
+                y: [0, 45, -55, 0],
+                scale: [1, 0.88, 1.15, 1],
               }}
-              transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute top-1/4 right-1/6 w-[60vw] h-[60vw] rounded-full blur-[150px] sm:blur-[220px] opacity-65 mix-blend-screen transition-colors duration-1000"
+              transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute top-1/4 right-1/6 w-[65vw] h-[65vw] rounded-full blur-[150px] sm:blur-[240px] opacity-70 mix-blend-screen transition-colors duration-1000"
               style={{ background: theme.orb2 }}
             />
 
-            {/* Orb 3: Bottom-Center Warm Glow Pool */}
+            {/* Orb 3: Bottom Pool */}
             <motion.div
-              animate={{
-                x: [0, 40, -35, 0],
-                y: [0, -20, 25, 0],
-                scale: [1, 1.15, 0.98, 1],
+              animate={shouldReduceMotion ? undefined : {
+                x: [0, 50, -45, 0],
+                y: [0, -35, 30, 0],
+                scale: [1, 1.2, 0.95, 1],
               }}
-              transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -bottom-36 left-1/4 w-[65vw] h-[65vw] rounded-full blur-[150px] sm:blur-[220px] opacity-60 mix-blend-screen transition-colors duration-1000"
+              transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute -bottom-36 left-1/4 w-[70vw] h-[70vw] rounded-full blur-[160px] sm:blur-[240px] opacity-65 mix-blend-screen transition-colors duration-1000"
               style={{ background: theme.orb3 }}
             />
 
-            {/* Orb 4: Top-Left Ambient Light */}
+            {/* Orb 4: Ambient Aura */}
             <motion.div
-              animate={{
-                x: [0, -30, 30, 0],
-                y: [0, 40, -20, 0],
-                scale: [1, 1.05, 0.95, 1],
+              animate={shouldReduceMotion ? undefined : {
+                x: [0, -40, 40, 0],
+                y: [0, 50, -30, 0],
+                scale: [1, 1.1, 0.9, 1],
               }}
-              transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -top-20 -left-20 w-[50vw] h-[50vw] rounded-full blur-[120px] sm:blur-[180px] opacity-50 mix-blend-screen transition-colors duration-1000"
+              transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute -top-20 -left-20 w-[55vw] h-[55vw] rounded-full blur-[130px] sm:blur-[200px] opacity-55 mix-blend-screen transition-colors duration-1000"
               style={{ background: theme.orb4 }}
             />
 
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-[8px]" />
-            <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_30%,rgba(0,0,0,0.7)_100%]" />
+            {/* Contrast Overlay & Vignette */}
+            <div className="absolute inset-0 bg-black/45 backdrop-blur-[12px]" />
+            <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_20%,rgba(0,0,0,0.85)_100%]" />
           </div>
 
-          {/* Top Bar Header */}
+          {/* Top Bar Header with Spinning Vinyl Artwork & Live Equalizer */}
           <header className="relative z-20 flex items-center justify-between w-full px-6 sm:px-12 md:px-16 lg:px-24 pt-6 sm:pt-10 select-none">
-            {/* Left: Track Info & Live Sync Pill */}
-            <div className="flex items-center gap-3.5">
-              <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden shadow-2xl border border-white/15 shrink-0">
-                {currentTrack.coverImage ? (
-                  <img
-                    src={currentTrack.coverImage}
-                    alt={currentTrack.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-zinc-900 flex items-center justify-center">
-                    <Music2 className="w-5 h-5 text-white" />
+            {/* Left: Track Info + Spinning Vinyl + Equalizer */}
+            <div className="flex items-center gap-4">
+              {/* Spinning Vinyl Record Container */}
+              <div className="relative flex items-center">
+                {/* Vinyl Disc Peaking Out */}
+                <motion.div
+                  animate={isPlaying && !shouldReduceMotion ? { rotate: 360 } : { rotate: 0 }}
+                  transition={{ duration: 7, repeat: Infinity, ease: 'linear' }}
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#111] border border-white/20 shadow-2xl flex items-center justify-center -mr-5 pointer-events-none relative z-0"
+                  style={{
+                    boxShadow: '0 0 15px rgba(0,0,0,0.8), inset 0 0 6px rgba(255,255,255,0.15)',
+                  }}
+                >
+                  <div className="w-4 h-4 rounded-full border border-white/10 flex items-center justify-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/80" />
                   </div>
-                )}
+                </motion.div>
+
+                {/* Album Cover Sleeve */}
+                <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden shadow-2xl border border-white/20 shrink-0 z-10 bg-black">
+                  {currentTrack.coverImage ? (
+                    <img
+                      src={currentTrack.coverImage}
+                      alt={currentTrack.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-zinc-900 flex items-center justify-center">
+                      <Music2 className="w-5 h-5 text-white" />
+                    </div>
+                  )}
+                </div>
               </div>
 
+              {/* Title, Artist & Live Spectrum Bars */}
               <div className="flex flex-col">
-                <h2 className="font-display font-bold text-white text-base sm:text-lg tracking-tight leading-tight">
-                  {currentTrack.title}
-                </h2>
-                <p className="font-mono text-[0.68rem] sm:text-xs text-white/60 uppercase tracking-widest leading-none mt-1">
-                  {currentTrack.artist}
-                </p>
+                <div className="flex items-center gap-2.5">
+                  <h2 className="font-display font-bold text-white text-base sm:text-lg tracking-tight leading-tight">
+                    {currentTrack.title}
+                  </h2>
+
+                  {/* Live Equalizer Animation */}
+                  <div className="flex items-end gap-1 h-3.5" aria-hidden="true">
+                    {[0.5, 1, 0.6, 0.85, 0.4].map((h, i) => (
+                      <motion.span
+                        key={i}
+                        animate={
+                          isPlaying && !shouldReduceMotion
+                            ? { height: ['25%', `${h * 100}%`, '30%'] }
+                            : { height: '25%' }
+                        }
+                        transition={{
+                          duration: 0.4 + i * 0.08,
+                          repeat: Infinity,
+                          repeatType: 'mirror',
+                          ease: 'easeInOut',
+                        }}
+                        className="w-1 rounded-full shadow-[0_0_6px_currentColor]"
+                        style={{ background: theme.accent, color: theme.accent }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 mt-1">
+                  <p className="font-mono text-[0.68rem] sm:text-xs text-white/60 uppercase tracking-widest leading-none">
+                    {currentTrack.artist}
+                  </p>
+                  <span className="w-1 h-1 rounded-full bg-white/30" />
+                  <span className="font-mono text-[0.62rem] text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                    Hi-Fi Master
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Right: Minimalist Close Button */}
+            {/* Right: Minimalist Close Button with spring hover */}
             <motion.button
               type="button"
               onClick={onClose}
@@ -352,7 +406,7 @@ export const FullscreenLyrics = ({
             </motion.button>
           </header>
 
-          {/* Main Lyrics Viewport (Broadened & Centered Scroll Tracking) */}
+          {/* Main Lyrics Viewport with Apple Music-Grade Depth-of-Field Blur */}
           <main className="relative z-20 flex-1 flex flex-col justify-center overflow-hidden w-full max-w-[94vw] sm:max-w-[90vw] md:max-w-5xl lg:max-w-6xl xl:max-w-[1380px] 2xl:max-w-[1600px] mx-auto px-6 sm:px-10 md:px-14 lg:px-16 xl:px-20">
             <div
               ref={containerRef}
@@ -362,14 +416,14 @@ export const FullscreenLyrics = ({
               className="h-[62vh] sm:h-[68vh] lg:h-[72vh] overflow-y-auto scroll-smooth py-24 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
               style={{
                 maskImage:
-                  'linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)',
+                  'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
                 WebkitMaskImage:
-                  'linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)',
+                  'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
               }}
             >
-              {/* Lyrics List Container with Single True Gliding Bar */}
-              <div className="relative pl-7 sm:pl-10 md:pl-12 select-none">
-                {/* The Single True Gliding Indicator Bar (Physically moves, 0 Lag, 0 Stray) */}
+              {/* Lyrics List Container with Neon Gliding Indicator */}
+              <div className="relative pl-8 sm:pl-12 select-none">
+                {/* Fluid Neon Gliding Indicator Bar with Glow Pulse */}
                 <motion.div
                   initial={false}
                   animate={{
@@ -379,13 +433,13 @@ export const FullscreenLyrics = ({
                   }}
                   transition={{
                     type: 'spring',
-                    visualDuration: 0.35,
+                    visualDuration: 0.38,
                     bounce: 0.12,
                   }}
-                  className="absolute left-0 w-1.5 sm:w-2 rounded-full pointer-events-none z-10 transition-shadow duration-300"
+                  className="absolute left-0 w-1.5 sm:w-2 rounded-full pointer-events-none z-10"
                   style={{
-                    background: theme.accent,
-                    boxShadow: `0 0 16px ${theme.accent}, 0 0 32px ${theme.accent}88`,
+                    background: `linear-gradient(180deg, ${theme.accent}, #ffffff)`,
+                    boxShadow: `0 0 20px ${theme.accent}, 0 0 45px ${theme.accent}90`,
                   }}
                 />
 
@@ -395,28 +449,52 @@ export const FullscreenLyrics = ({
                     <motion.span
                       key={i}
                       animate={
-                        isPlaying
+                        isPlaying && !shouldReduceMotion
                           ? {
-                              scale: [1, 1.4, 1],
-                              opacity: [0.35, 0.95, 0.35],
+                              scale: [1, 1.45, 1],
+                              opacity: [0.3, 1, 0.3],
                             }
-                          : { scale: 1, opacity: 0.35 }
+                          : { scale: 1, opacity: 0.3 }
                       }
                       transition={{
-                        duration: 1.6,
+                        duration: 1.5,
                         repeat: Infinity,
-                        delay: i * 0.25,
+                        delay: i * 0.22,
                         ease: 'easeInOut',
                       }}
-                      className="w-2 h-2 rounded-full"
-                      style={{ background: theme.accent }}
+                      className="w-2.5 h-2.5 rounded-full"
+                      style={{ background: theme.accent, boxShadow: `0 0 10px ${theme.accent}` }}
                     />
                   ))}
+                  <span className="font-mono text-[0.66rem] text-white/40 uppercase tracking-widest ml-2 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-[#ff1e38]" />
+                    Paroles synchronisées
+                  </span>
                 </div>
 
                 {currentTrack.lyrics && currentTrack.lyrics.length > 0 ? (
                   currentTrack.lyrics.map((line, idx) => {
                     const isCurrent = idx === currentLyricIndex;
+                    const distance = Math.abs(idx - currentLyricIndex);
+
+                    // Multi-tier Apple Music Depth of Field Calculation
+                    let targetOpacity = 0.12;
+                    let targetBlur = 'blur(4px)';
+                    let targetScale = 0.94;
+
+                    if (isCurrent) {
+                      targetOpacity = 1;
+                      targetBlur = 'blur(0px)';
+                      targetScale = 1.04;
+                    } else if (distance === 1) {
+                      targetOpacity = 0.45;
+                      targetBlur = 'blur(1.2px)';
+                      targetScale = 0.98;
+                    } else if (distance === 2) {
+                      targetOpacity = 0.25;
+                      targetBlur = 'blur(2.5px)';
+                      targetScale = 0.95;
+                    }
 
                     return (
                       <motion.div
@@ -427,32 +505,39 @@ export const FullscreenLyrics = ({
                         onClick={() => handleLyricClick(line.time)}
                         initial={false}
                         animate={{
-                          scale: isCurrent ? 1.025 : 1,
-                          opacity: isCurrent ? 1 : 0.28,
+                          scale: targetScale,
+                          opacity: targetOpacity,
+                          filter: targetBlur,
                           x: isCurrent ? 14 : 0,
                         }}
                         whileHover={{
-                          scale: isCurrent ? 1.025 : 1.01,
-                          opacity: isCurrent ? 1 : 0.75,
-                          x: isCurrent ? 14 : 6,
+                          scale: isCurrent ? 1.04 : 1.015,
+                          opacity: 0.9,
+                          filter: 'blur(0px)',
+                          x: isCurrent ? 14 : 8,
                         }}
-                        whileTap={{ scale: 0.985 }}
+                        whileTap={{ scale: 0.98 }}
                         transition={{
                           type: 'spring',
-                          visualDuration: 0.38,
+                          visualDuration: 0.42,
                           bounce: 0.14,
                         }}
-                        className={`py-3.5 sm:py-4.5 lg:py-5 cursor-pointer select-none origin-left transition-colors ${
-                          isCurrent ? 'text-white' : 'text-white/60'
-                        }`}
+                        className="py-3.5 sm:py-4.5 lg:py-5 cursor-pointer select-none origin-left transition-colors"
                       >
-                        {/* Lyric Text - Broad, Crisp & Apple Music-Grade */}
+                        {/* Lyric Text with Apple Music Bloom & Shimmer */}
                         <span
                           className={`font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] transition-all duration-300 break-normal block ${
                             isCurrent
-                              ? 'text-white [text-shadow:0_0_35px_rgba(255,255,255,0.5),0_0_70px_rgba(255,255,255,0.2)]'
-                              : 'text-white/35 hover:text-white/80'
+                              ? 'text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.7)]'
+                              : 'text-white/60 hover:text-white'
                           }`}
+                          style={
+                            isCurrent
+                              ? {
+                                  textShadow: `0 0 35px rgba(255, 255, 255, 0.75), 0 0 70px ${theme.accent}70`,
+                                }
+                              : undefined
+                          }
                         >
                           {line.text}
                         </span>
@@ -469,8 +554,8 @@ export const FullscreenLyrics = ({
           </main>
 
           {/* Bottom Playback Control Bar */}
-          <footer className="relative z-20 w-full max-w-xl sm:max-w-2xl mx-auto px-6 pb-8 sm:pb-12 pt-2 flex flex-col items-center gap-3.5 select-none">
-            {/* Progress Scrubber Bar */}
+          <footer className="relative z-20 w-full max-w-xl sm:max-w-2xl mx-auto px-6 pb-8 sm:pb-12 pt-2 flex flex-col items-center gap-4 select-none">
+            {/* Progress Scrubber Bar with Tactile Glow */}
             <div className="w-full flex items-center gap-3">
               <span className="font-mono text-xs text-white/70 w-10 text-right tabular-nums">
                 {formatTime(currentTime)}
@@ -492,7 +577,7 @@ export const FullscreenLyrics = ({
                   />
                 )}
                 <div
-                  className="absolute inset-y-0 left-0 transition-all duration-100 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)]"
+                  className="absolute inset-y-0 left-0 transition-all duration-100 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.95)]"
                   style={{ width: `${progressRatio * 100}%` }}
                 />
               </div>
@@ -503,12 +588,12 @@ export const FullscreenLyrics = ({
             </div>
 
             {/* Playback Action Buttons */}
-            <div className="flex items-center justify-center gap-6 w-full relative">
+            <div className="flex items-center justify-center gap-7 w-full relative">
               <motion.button
                 type="button"
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
-                transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.15 }}
+                transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.2 }}
                 onClick={onPrevious}
                 className="p-2 text-white/80 hover:text-white transition-colors cursor-pointer"
                 aria-label="Piste précédente"
@@ -520,9 +605,9 @@ export const FullscreenLyrics = ({
                 type="button"
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.92 }}
-                transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.2 }}
+                transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.25 }}
                 onClick={onTogglePlay}
-                className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-[0_4px_25px_rgba(255,255,255,0.4)] transition-all cursor-pointer"
+                className="w-13 h-13 rounded-full bg-white text-black flex items-center justify-center shadow-[0_4px_30px_rgba(255,255,255,0.45)] transition-all cursor-pointer"
                 aria-label={isPlaying ? 'Pause' : 'Lecture'}
               >
                 {isPlaying ? (
@@ -536,7 +621,7 @@ export const FullscreenLyrics = ({
                 type="button"
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
-                transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.15 }}
+                transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.2 }}
                 onClick={onNext}
                 className="p-2 text-white/80 hover:text-white transition-colors cursor-pointer"
                 aria-label="Piste suivante"
@@ -544,6 +629,7 @@ export const FullscreenLyrics = ({
                 <SkipForward className="w-5 h-5 fill-white/20" />
               </motion.button>
 
+              {/* Volume Slider with Mute Toggle */}
               <div className="hidden sm:flex items-center gap-2 absolute right-0">
                 <button
                   type="button"
@@ -552,7 +638,7 @@ export const FullscreenLyrics = ({
                   aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
                 >
                   {isMuted || volume === 0 ? (
-                    <VolumeX className="w-4 h-4 text-amber-500" />
+                    <VolumeX className="w-4 h-4 text-[#ff1e38]" />
                   ) : (
                     <Volume2 className="w-4 h-4" />
                   )}
@@ -564,7 +650,7 @@ export const FullscreenLyrics = ({
                   step={0.02}
                   value={isMuted ? 0 : volume}
                   onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-                  className="w-20 h-1 bg-white/20 accent-white rounded-lg appearance-none cursor-pointer"
+                  className="w-20 h-1 bg-white/20 accent-[#ff1e38] rounded-lg appearance-none cursor-pointer"
                 />
               </div>
             </div>
