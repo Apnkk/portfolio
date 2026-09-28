@@ -312,31 +312,44 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       />
                     </div>
 
-                    {/* Lyrical Preview Box (Matches User Reference Image) */}
-                    <div
+                    {/* Sleek Lyrical Preview Card (Propre & Minimaliste) */}
+                    <motion.div
                       onClick={() => setIsFullscreenLyrics(true)}
-                      className="w-full relative group cursor-pointer select-none"
+                      whileHover={{ scale: 1.01, y: -1 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.1 }}
+                      className="w-full relative group cursor-pointer select-none px-4 py-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.08] hover:border-amber-500/40 transition-colors shadow-lg backdrop-blur-md"
                       title="Ouvrir les paroles plein écran"
                     >
-                      <div className="flex items-center gap-2.5">
-                        {/* Amber timeline node */}
-                        <div className="relative flex flex-col items-center pl-1">
-                          <span className="w-2.5 h-2.5 rounded-full border border-amber-500/80 bg-black/60 shadow-[0_0_8px_rgba(245,158,11,0.6)] group-hover:scale-125 transition-transform" />
-                        </div>
-
-                        {/* Rounded preview card */}
-                        <div className="flex-1 px-4 py-2.5 rounded-2xl bg-black/60 border border-white/[0.08] group-hover:border-amber-500/40 transition-all text-left shadow-lg backdrop-blur-md">
-                          <p className="font-mono text-xs text-[#71717a] mb-0.5 leading-none">...</p>
-                          <p className="font-display font-medium text-sm text-[#e4e4e7] group-hover:text-white transition-colors truncate">
-                            {currentTrack.lyrics?.[currentLyricIndex]?.text || currentTrack.title}
-                          </p>
-                          <div className="flex items-center justify-end gap-1 mt-1 text-amber-500 group-hover:text-amber-400 font-mono text-[0.68rem] tracking-wider uppercase transition-colors">
-                            <span>OPEN LYRICS</span>
-                            <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                          </div>
-                        </div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="font-mono text-[0.62rem] text-[#71717a] tracking-wider uppercase flex items-center gap-1.5">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full animate-pulse"
+                            style={{ background: currentTrack.accentColor || '#f59e0b' }}
+                          />
+                          <span>Paroles synchronisées</span>
+                        </span>
+                        <span className="text-amber-500 group-hover:text-amber-400 font-mono text-[0.68rem] tracking-wider uppercase flex items-center gap-1 transition-colors">
+                          <span>OPEN LYRICS</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </span>
                       </div>
-                    </div>
+
+                      <div className="h-6 flex items-center overflow-hidden">
+                        <AnimatePresence mode="wait">
+                          <motion.p
+                            key={currentTrack.lyrics?.[currentLyricIndex]?.text || currentTrack.title}
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -5 }}
+                            transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.1 }}
+                            className="font-sans font-medium text-sm text-[#f4f4f5] group-hover:text-white truncate"
+                          >
+                            {currentTrack.lyrics?.[currentLyricIndex]?.text || currentTrack.title}
+                          </motion.p>
+                        </AnimatePresence>
+                      </div>
+                    </motion.div>
                   </motion.div>
                 )}
 
