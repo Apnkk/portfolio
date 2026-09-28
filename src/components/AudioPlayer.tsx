@@ -24,11 +24,10 @@ interface AudioPlayerProps {
 export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isFullscreenLyrics, setIsFullscreenLyrics] = useState(false);
-  const [activeTab, setActiveTab] = useState<'player' | 'lyrics' | 'queue'>('player');
+  const [activeTab, setActiveTab] = useState<'player' | 'queue'>('player');
   const [playerState, setPlayerState] = useState<AudioPlayerState>(() => audioEngine.getState());
   const [hoverRatio, setHoverRatio] = useState<number | null>(null);
 
-  const activeLyricRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrameRef = useRef<number | null>(null);
 
@@ -64,15 +63,6 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
     return acc;
   }, 0) ?? 0;
 
-  // Smooth auto-scroll keeping the active lyric centered (Apple Music style)
-  useEffect(() => {
-    if (activeTab === 'lyrics' && activeLyricRef.current) {
-      activeLyricRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    }
-  }, [currentLyricIndex, activeTab]);
 
   // Audio frequency wave visualizer loop
   useEffect(() => {
@@ -207,24 +197,6 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
                   <button
                     type="button"
-                    onClick={() => setActiveTab('lyrics')}
-                    className={`relative px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1.5 cursor-pointer ${
-                      activeTab === 'lyrics' ? 'text-white font-semibold' : 'text-[#71717a] hover:text-white'
-                    }`}
-                  >
-                    {activeTab === 'lyrics' && (
-                      <motion.div
-                        layoutId="active-player-tab"
-                        className="absolute inset-0 rounded-full bg-white/[0.12]"
-                        transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.15 }}
-                      />
-                    )}
-                    <Mic2 className="w-3.5 h-3.5 relative z-10" />
-                    <span className="relative z-10">Paroles</span>
-                  </button>
-
-                  <button
-                    type="button"
                     onClick={() => setActiveTab('queue')}
                     className={`relative px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1.5 cursor-pointer ${
                       activeTab === 'queue' ? 'text-white font-semibold' : 'text-[#71717a] hover:text-white'
@@ -283,13 +255,6 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       {/* Subtle vinyl groove shine overlay */}
                       <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-white/20 pointer-events-none" />
 
-                      {/* Playing radar pulse */}
-                      {isPlaying && (
-                        <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/[0.1] text-[0.62rem] font-mono text-emerald-400">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>128K AAC</span>
-                        </div>
-                      )}
                     </div>
 
                     {/* Track Title & Artist */}
@@ -321,14 +286,8 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                       className="w-full relative group cursor-pointer select-none px-4 py-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.08] hover:border-amber-500/40 transition-colors shadow-lg backdrop-blur-md"
                       title="Ouvrir les paroles plein écran"
                     >
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="font-mono text-[0.62rem] text-[#71717a] tracking-wider uppercase flex items-center gap-1.5">
-                          <span
-                            className="w-1.5 h-1.5 rounded-full animate-pulse"
-                            style={{ background: currentTrack.accentColor || '#f59e0b' }}
-                          />
-                          <span>Paroles synchronisées</span>
-                        </span>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-mono text-xs text-[#71717a]">...</span>
                         <span className="text-amber-500 group-hover:text-amber-400 font-mono text-[0.68rem] tracking-wider uppercase flex items-center gap-1 transition-colors">
                           <span>OPEN LYRICS</span>
                           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -350,68 +309,6 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                         </AnimatePresence>
                       </div>
                     </motion.div>
-                  </motion.div>
-                )}
-
-                {/* Apple Music Style Synchronized Lyrics */}
-                {activeTab === 'lyrics' && (
-                  <motion.div
-                    key="lyrics-view"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="h-64 sm:h-72 flex flex-col relative"
-                  >
-                    {/* Lyrics Header with Open Lyrics Button */}
-                    <div className="flex items-center justify-between pb-2 mb-1 border-b border-white/[0.06] select-none">
-                      <span className="font-mono text-[0.65rem] text-[#71717a] uppercase tracking-wider">
-                        Karaoké en direct
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setIsFullscreenLyrics(true)}
-                        className="flex items-center gap-1 font-mono text-[0.68rem] text-amber-500 hover:text-amber-400 uppercase tracking-wider transition-colors cursor-pointer group"
-                      >
-                        <span>OPEN LYRICS</span>
-                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </button>
-                    </div>
-
-                    {/* Lyrics Scrollable Container with Smooth Edge Mask and Hidden Scrollbar */}
-                    <div
-                      data-lenis-prevent
-                      className="flex-1 overflow-y-auto space-y-5 px-3 py-12 scroll-smooth select-none text-left [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-                      style={{
-                        maskImage: 'linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%)',
-                        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%)',
-                      }}
-                    >
-                      {currentTrack.lyrics && currentTrack.lyrics.length > 0 ? (
-                        currentTrack.lyrics.map((line, lIdx) => {
-                          const isCurrent = lIdx === currentLyricIndex;
-
-                          return (
-                            <div
-                              key={lIdx}
-                              ref={isCurrent ? activeLyricRef : null}
-                              onClick={() => audioEngine.seek(line.time)}
-                              className={`transition-all duration-300 cursor-pointer py-1 ${
-                                isCurrent
-                                  ? 'text-white font-display font-bold text-xl sm:text-2xl leading-snug drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] scale-100 opacity-100'
-                                  : 'text-[#71717a] hover:text-[#d4d4d8] font-display font-medium text-base sm:text-lg leading-relaxed opacity-30 hover:opacity-80 blur-[0.3px] hover:blur-0'
-                              }`}
-                            >
-                              <span>{line.text}</span>
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <div className="text-center py-16 text-[#71717a] font-mono text-xs">
-                          Paroles indisponibles
-                        </div>
-                      )}
-                    </div>
                   </motion.div>
                 )}
 
@@ -584,10 +481,8 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                     </motion.button>
                   </div>
 
-                  {/* Mode badge */}
-                  <span className="font-mono text-[0.62rem] text-[#71717a] uppercase tracking-wider">
-                    HD AUDIO
-                  </span>
+                  {/* Spacer for clean visual balance */}
+                  <div className="w-16 hidden sm:block" />
                 </div>
               </div>
             </motion.div>

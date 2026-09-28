@@ -336,16 +336,6 @@ export const FullscreenLyrics = ({
                   {currentTrack.artist}
                 </p>
               </div>
-
-              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/[0.08] backdrop-blur-md ml-3">
-                <span
-                  className="w-1.5 h-1.5 rounded-full animate-pulse shadow-sm"
-                  style={{ background: theme.accent }}
-                />
-                <span className="font-mono text-[0.62rem] text-white/70 uppercase tracking-wider">
-                  Live Sync
-                </span>
-              </div>
             </div>
 
             {/* Right: Minimalist Close Button */}
