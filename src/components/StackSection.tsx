@@ -5,11 +5,7 @@ import {
   Code2, 
   Smartphone, 
   Server, 
-  Cloud, 
-  ShieldCheck, 
-  Zap, 
-  Cpu, 
-  Check 
+  Cloud 
 } from 'lucide-react';
 
 export const StackSection = () => {
@@ -133,10 +129,10 @@ export const StackSection = () => {
             </>
           )}
         </h2>
-        <p className="text-[#a1a1aa] text-base mt-3 max-w-xl font-normal leading-relaxed">
+        <p className="text-[#a1a1aa] text-sm mt-3 max-w-lg font-normal leading-relaxed">
           {language === 'fr'
-            ? 'Une sélection réfléchie de technologies éprouvées en production pour bâtir des logiciels rapides, robustes et maintenables.'
-            : 'A deliberate selection of production-tested tools to build fast, resilient, and maintainable software.'}
+            ? 'Technologies et architectures éprouvées en production.'
+            : 'Production-tested stack and resilient architecture.'}
         </p>
       </div>
 
@@ -146,7 +142,7 @@ export const StackSection = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-40px' }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-2xl bg-[#09090b] border border-white/[0.08] p-6 sm:p-8 lg:p-10 mb-10 shadow-[0_8px_30px_rgba(0,0,0,0.7)]"
+        className="rounded-2xl bg-[#09090b] border border-white/[0.08] p-6 sm:p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.7)]"
       >
         {/* Category Selector Tabs - Centered */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pb-6 border-b border-white/[0.08] w-full">
@@ -186,13 +182,10 @@ export const StackSection = () => {
           transition={{ duration: 0.25 }}
           className="pt-8"
         >
-          <div className="max-w-2xl mb-8">
-            <h3 className="font-display font-semibold text-2xl sm:text-3xl text-white tracking-tight mb-2">
+          <div className="max-w-2xl mb-6">
+            <h3 className="font-display font-semibold text-xl sm:text-2xl text-white tracking-tight">
               {currentCategory.headline[language]}
             </h3>
-            <p className="text-[#a1a1aa] text-sm sm:text-base leading-relaxed">
-              {currentCategory.description[language]}
-            </p>
           </div>
 
           {/* Skills Grid */}
@@ -215,65 +208,6 @@ export const StackSection = () => {
           </div>
         </motion.div>
       </motion.div>
-
-      {/* Engineering Principles Bento (3 Pillars) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          {
-            icon: ShieldCheck,
-            title: language === 'fr' ? 'Typage strict & Intégrité' : 'Strict Types & Integrity',
-            desc:
-              language === 'fr'
-                ? 'TypeScript configuré en mode strict, validation runtime des schémas (Zod) et zéro type any toléré en production.'
-                : 'Strict TypeScript compiler settings, unified runtime schema validation (Zod), and zero any types tolerated.',
-          },
-          {
-            icon: Zap,
-            title: language === 'fr' ? 'Latence basse (<50ms)' : 'Sub-50ms Latency',
-            desc:
-              language === 'fr'
-                ? 'Stratégies de cache Redis multi-niveaux, edge CDN distribué et découpage minutieux des flux pour des réponses instantanées.'
-                : 'Multi-layer Redis caching strategies, distributed edge CDN, and streaming responses engineered for speed.',
-          },
-          {
-            icon: Cpu,
-            title: language === 'fr' ? 'Reverse & Résilience' : 'Resilient Engineering',
-            desc:
-              language === 'fr'
-                ? 'Compréhension intime des protocoles réseau, gestion élégante des interruptions et maintien continu de la disponibilité.'
-                : 'Deep inspection of network protocols, graceful degradation, and continuous stream availability under heavy loads.',
-          },
-        ].map((pillar, pIdx) => {
-          const Icon = pillar.icon;
-          return (
-            <motion.div
-              key={pIdx}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: pIdx * 0.1 }}
-              className="p-6 rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-white/20 transition-colors flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#ff1e38] mb-4">
-                  <Icon className="w-4 h-4" />
-                </div>
-                <h4 className="font-display font-semibold text-lg text-white mb-2">
-                  {pillar.title}
-                </h4>
-                <p className="text-xs sm:text-sm text-[#a1a1aa] leading-relaxed">
-                  {pillar.desc}
-                </p>
-              </div>
-
-              <div className="mt-6 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[0.66rem] text-[#71717a]">
-                <span>STANDARDS DE QUALITÉ</span>
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
     </section>
   );
 };

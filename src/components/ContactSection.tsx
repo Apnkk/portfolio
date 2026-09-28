@@ -109,10 +109,10 @@ export const ContactSection = () => {
           )}
         </h2>
 
-        <p className="text-[#a1a1aa] text-base max-w-lg mx-auto mb-10 leading-relaxed font-normal">
+        <p className="text-[#a1a1aa] text-sm max-w-md mx-auto mb-10 leading-relaxed font-normal">
           {language === 'fr'
-            ? 'Une question, un projet ou un échange technique ? Écrivez-moi directement.'
-            : 'Have a question, software project, or technical inquiry? Reach out directly.'}
+            ? 'Un projet, une opportunité ou une question ? Écrivez-moi directement.'
+            : 'Have a project, opportunity, or inquiry? Reach out directly.'}
         </p>
 
         {/* Direct Email Pill Button */}

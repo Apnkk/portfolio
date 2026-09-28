@@ -10,46 +10,31 @@ export const MethodSection = () => {
       num: '01',
       icon: Lightbulb,
       name: language === 'fr' ? 'Idée' : 'Concept',
-      desc:
-        language === 'fr'
-          ? "Identifier le problème qui mérite d'être résolu. Si je l'utiliserais tous les jours, cela vaut la peine d'être développé."
-          : "Identify a real friction point worth eliminating. If I would use it every single day, it is worth engineering.",
+      desc: language === 'fr' ? 'Cibler un vrai besoin utile au quotidien.' : 'Pinpoint a genuine daily need.',
     },
     {
       num: '02',
       icon: Rocket,
       name: language === 'fr' ? 'Prototype' : 'Prototype',
-      desc:
-        language === 'fr'
-          ? "Développer une première version interactive pour valider l'expérience et le ressenti utilisateur au plus tôt."
-          : 'Build an interactive working proof of concept to validate real feel, latency, and viability early.',
+      desc: language === 'fr' ? "Valider vite l'expérience et le rendu." : 'Fast validation of feel and UX.',
     },
     {
       num: '03',
       icon: ShieldCheck,
       name: language === 'fr' ? 'Architecture' : 'Architecture',
-      desc:
-        language === 'fr'
-          ? 'Industrialiser rigoureusement : typage TypeScript strict, validation de schémas (Zod), modularité et gestion des erreurs.'
-          : 'Engineer strictly: strict TypeScript, runtime schema validation (Zod), modular boundaries, and resilient error handling.',
+      desc: language === 'fr' ? 'Typage strict et modularité résiliente.' : 'Strict types and resilient design.',
     },
     {
       num: '04',
       icon: Sparkles,
       name: language === 'fr' ? 'Finition' : 'Polish',
-      desc:
-        language === 'fr'
-          ? 'Micro-interactions, fluidité 120 FPS, typographie soignée et gestion des cas limites. Les 10 derniers % font le produit.'
-          : 'Micro-interactions, 120 FPS fluidity, typographic hierarchy, and edge cases. The last 10% defines the product.',
+      desc: language === 'fr' ? 'Fluidité 120 FPS et micro-interactions.' : '120 FPS motion and micro-details.',
     },
     {
       num: '05',
       icon: Send,
       name: language === 'fr' ? 'Livraison' : 'Ship',
-      desc:
-        language === 'fr'
-          ? 'Conteneurisation Docker, Edge CDN, monitoring continu — déployé en production et utilisé par de vraies personnes.'
-          : 'Docker containerization, Edge CDN, continuous observability — live in production with real users.',
+      desc: language === 'fr' ? 'Docker, Edge CDN et production live.' : 'Docker, Edge CDN, and live users.',
     },
   ];
 
@@ -82,10 +67,10 @@ export const MethodSection = () => {
               </>
             )}
           </h2>
-          <p className="text-[#a1a1aa] text-base mt-3 max-w-xl font-normal leading-relaxed">
+          <p className="text-[#a1a1aa] text-sm mt-3 max-w-lg font-normal leading-relaxed">
             {language === 'fr'
-              ? 'Un processus de travail direct et itératif pour transformer une intuition technique en logiciel fiable et élégant.'
-              : 'A direct, iterative loop turning technical ideas into dependable, fluid, and polished software.'}
+              ? 'Un cycle direct de l’intuition technique au produit déployé.'
+              : 'A direct loop from technical spark to production release.'}
           </p>
         </div>
 

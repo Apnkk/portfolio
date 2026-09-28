@@ -49,8 +49,8 @@ export const Hero = () => {
           <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
           <span className="font-mono text-xs text-[#a1a1aa] tracking-wide">
             {language === 'fr'
-              ? 'Conception logicielle & Architecture haute performance'
-              : 'Software Engineering & High-Performance Systems'}
+              ? 'Développeur Full-Stack & Systèmes'
+              : 'Full-Stack & Systems Engineer'}
           </span>
         </motion.div>
 
@@ -72,16 +72,16 @@ export const Hero = () => {
           )}
         </motion.h1>
 
-        {/* Value Proposition Statement */}
+        {/* Value Proposition Statement - Concise */}
         <motion.p
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-[#a1a1aa] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-10 text-balance font-normal"
+          className="text-[#a1a1aa] text-base sm:text-lg max-w-xl mx-auto leading-relaxed mb-8 sm:mb-10 text-balance font-normal"
         >
           {language === 'fr'
-            ? 'Je conçois des applications de streaming, des clients mobiles iOS, du reverse d’APIs et des interfaces web modernes alliant vélocité technique et rigueur d’exécution.'
-            : 'I architect streaming applications, native iOS tools, reverse-engineered APIs, and modern web products combining technical velocity with rigorous craftsmanship.'}
+            ? "Créateur d'applications de streaming, d'outils iOS et d'interfaces web rapides et réactives."
+            : 'Building streaming applications, native iOS tools, and high-performance web products.'}
         </motion.p>
 
         {/* Action Buttons */}
@@ -129,19 +129,19 @@ export const Hero = () => {
           {[
             {
               value: '10+',
-              label: language === 'fr' ? 'Projets livrés en production' : 'Shipped to production',
+              label: language === 'fr' ? 'Projets livrés' : 'Shipped',
             },
             {
               value: '< 50ms',
-              label: language === 'fr' ? 'Latence APIs moyenne' : 'Average API response',
+              label: language === 'fr' ? 'Latence APIs' : 'API Latency',
             },
             {
               value: 'Web & iOS',
-              label: language === 'fr' ? 'Écosystème multiplateforme' : 'Multi-platform runtime',
+              label: language === 'fr' ? 'Plateformes' : 'Platforms',
             },
             {
               value: '100%',
-              label: language === 'fr' ? 'Autonomie de bout en bout' : 'Solo execution',
+              label: language === 'fr' ? 'Autonomie' : 'End-to-End',
             },
           ].map((metric, i) => (
             <div

@@ -152,7 +152,7 @@ const ProjectCard = ({ project, isWide, idx, onOpenModal }: ProjectCardProps) =>
             onClick={() => onOpenModal(project)}
             className="flex-1 py-2 px-3 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-white font-mono text-[0.7rem] uppercase tracking-wider transition-colors flex items-center justify-center cursor-pointer"
           >
-            <span>{language === 'fr' ? 'Architecture & Détails' : 'Case Study'}</span>
+            <span>{language === 'fr' ? 'Détails' : 'Case Study'}</span>
           </button>
 
           {project.liveUrl && (
@@ -216,10 +216,10 @@ export const WorkSection = () => {
             </>
           )}
         </h2>
-        <p className="text-[#a1a1aa] text-base mt-3 max-w-xl font-normal leading-relaxed">
+        <p className="text-[#a1a1aa] text-sm mt-3 max-w-md font-normal leading-relaxed">
           {language === 'fr'
-            ? 'Des produits complets créés de bout en bout, de l’architecture système jusqu’au déploiement et à l’expérience utilisateur.'
-            : 'End-to-end applications designed, engineered, and maintained in production with real user traffic.'}
+            ? 'Sélection de logiciels et applications déployés en production.'
+            : 'Selected production-tested software and applications.'}
         </p>
       </div>
 
