@@ -9,8 +9,7 @@ import {
   SkipForward, 
   Volume2, 
   VolumeX, 
-  Music2,
-  Sparkles
+  Music2
 } from 'lucide-react';
 
 interface FullscreenLyricsProps {
@@ -393,14 +392,6 @@ export const FullscreenLyrics = ({
             >
               {/* Pure Typography Lyrics List (No sidebar, no vertical bar) */}
               <div className="relative select-none">
-                {/* Subtle synchronized tag */}
-                <div className="flex items-center gap-2 py-3 mb-4 select-none opacity-60">
-                  <Sparkles className="w-3.5 h-3.5 text-white/80" />
-                  <span className="font-mono text-[0.68rem] text-white/70 uppercase tracking-widest">
-                    Paroles synchronisées en direct
-                  </span>
-                </div>
-
                 {currentTrack.lyrics && currentTrack.lyrics.length > 0 ? (
                   currentTrack.lyrics.map((line, idx) => {
                     const isCurrent = idx === currentLyricIndex;
