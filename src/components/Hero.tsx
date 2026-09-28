@@ -204,13 +204,9 @@ export const Hero = () => {
           </motion.div>
         </motion.a>
 
-        {/* Hero Bottom Meta Strip */}
-        <div className="w-full pt-4 sm:pt-5 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#71717a]">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]" />
-            <span>PRODUCTION STACK</span>
-          </div>
-          <div className="text-center sm:text-right text-[#a1a1aa] text-[0.68rem] tracking-wider uppercase">
+        {/* Hero Bottom Meta Strip - Centered Tech Stack */}
+        <div className="w-full pt-4 sm:pt-5 border-t border-white/[0.08] flex items-center justify-center text-center font-mono">
+          <div className="text-[#a1a1aa] text-[0.68rem] sm:text-xs tracking-wider uppercase">
             REACT 19 · TYPESCRIPT · NEXT.JS · IOS · DOCKER · TAILWIND 4
           </div>
         </div>
