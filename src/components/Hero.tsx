@@ -91,7 +91,7 @@ export const Hero = () => {
         </motion.h1>
 
         {/* Lower Content Cluster: Description, CTAs & Metrics pushed lower down */}
-        <div className="flex flex-col items-center w-full mt-16 sm:mt-24 lg:mt-32">
+        <div className="flex flex-col items-center w-full mt-20 sm:mt-32 lg:mt-40">
           {/* Value Proposition Statement - Concise */}
           <motion.p
             variants={itemVariants}
