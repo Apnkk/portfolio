@@ -186,12 +186,17 @@ export const Hero = () => {
             </motion.div>
           ))}
         </motion.div>
+      </motion.div>
 
+      {/* Hero Bottom Group: Scroll Indicator comfortably close to bottom + Meta Strip */}
+      <div className="relative z-10 w-full max-w-5xl lg:max-w-6xl mx-auto flex flex-col items-center">
         {/* Subtle Web Design Flow Scroll Indicator */}
         <motion.a
           href="#work"
           variants={itemVariants}
-          className="flex flex-col items-center justify-center gap-2 text-[#71717a] hover:text-white transition-colors cursor-pointer select-none group mt-1"
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col items-center justify-center gap-2 text-[#71717a] hover:text-white transition-colors cursor-pointer select-none group mb-4 sm:mb-5"
           aria-label={language === 'fr' ? 'Défiler vers les projets' : 'Scroll to explore'}
         >
           <span className="font-mono text-[0.62rem] tracking-[0.22em] pl-[0.22em] uppercase group-hover:text-[#a1a1aa] transition-colors">
@@ -205,16 +210,16 @@ export const Hero = () => {
             <div className="w-1 h-1.5 rounded-full bg-[#ff1e38]" />
           </motion.div>
         </motion.a>
-      </motion.div>
 
-      {/* Hero Bottom Meta Strip */}
-      <div className="relative z-10 w-full max-w-5xl lg:max-w-6xl mx-auto pt-5 sm:pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#71717a]">
-        <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]" />
-          <span>PRODUCTION STACK</span>
-        </div>
-        <div className="text-center sm:text-right text-[#a1a1aa] text-[0.68rem] tracking-wider uppercase">
-          REACT 19 · TYPESCRIPT · NEXT.JS · IOS · DOCKER · TAILWIND 4
+        {/* Hero Bottom Meta Strip */}
+        <div className="w-full pt-4 sm:pt-5 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#71717a]">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38]" />
+            <span>PRODUCTION STACK</span>
+          </div>
+          <div className="text-center sm:text-right text-[#a1a1aa] text-[0.68rem] tracking-wider uppercase">
+            REACT 19 · TYPESCRIPT · NEXT.JS · IOS · DOCKER · TAILWIND 4
+          </div>
         </div>
       </div>
     </section>
