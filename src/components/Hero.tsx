@@ -67,9 +67,9 @@ export const Hero = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto flex-1 flex flex-col items-center w-full pt-4 sm:pt-8"
+        className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto my-auto flex flex-col items-center justify-center w-full"
       >
-        {/* Hero Title - Ares Monumental & Subtitle Positioned Lower */}
+        {/* Hero Title - Ares Centered & Iconic */}
         <motion.h1
           variants={itemVariants}
           className="font-display text-center mb-4 sm:mb-6"
@@ -77,7 +77,7 @@ export const Hero = () => {
           <span className="block font-bold text-[clamp(6rem,16.5vw,13.5rem)] text-white tracking-tighter leading-[0.9] select-none drop-shadow-[0_20px_60px_rgba(255,255,255,0.14)]">
             Ares
           </span>
-          <span className="block font-semibold text-[clamp(1.45rem,3.2vw,2.6rem)] text-white/90 tracking-tight leading-[1.22] max-w-3xl mx-auto text-balance mt-5 sm:mt-7 md:mt-8">
+          <span className="block font-semibold text-[clamp(1.45rem,3.2vw,2.6rem)] text-white/90 tracking-tight leading-[1.22] max-w-3xl mx-auto text-balance mt-5 sm:mt-6">
             {language === 'fr' ? (
               <>
                 Développeur full-stack <span className="text-[#ff1e38] font-bold">&amp;</span> créateur de produits.
@@ -90,13 +90,12 @@ export const Hero = () => {
           </span>
         </motion.h1>
 
-        {/* Lower Content Cluster: CTAs & Metrics pushed lower down near scroll indicator */}
-        <div className="flex flex-col items-center w-full mt-auto mb-4 sm:mb-6">
-
+        {/* Action Buttons & Metrics - Harmoniously positioned */}
+        <div className="flex flex-col items-center w-full mt-8 sm:mt-12">
           {/* Action Buttons with Magnetic cursor pull & spring taps */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12"
+            className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-7 sm:mb-9"
           >
             <MagneticButton>
               <motion.a
