@@ -67,7 +67,7 @@ export const Hero = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto my-auto flex flex-col items-center w-full"
+        className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto flex-1 flex flex-col items-center w-full pt-4 sm:pt-8"
       >
         {/* Hero Title - Ares Monumental & Subtitle Positioned Lower */}
         <motion.h1
@@ -90,8 +90,8 @@ export const Hero = () => {
           </span>
         </motion.h1>
 
-        {/* Lower Content Cluster: CTAs & Metrics pushed lower down */}
-        <div className="flex flex-col items-center w-full mt-24 sm:mt-36 lg:mt-48">
+        {/* Lower Content Cluster: CTAs & Metrics pushed lower down near scroll indicator */}
+        <div className="flex flex-col items-center w-full mt-auto mb-4 sm:mb-6">
 
           {/* Action Buttons with Magnetic cursor pull & spring taps */}
           <motion.div
