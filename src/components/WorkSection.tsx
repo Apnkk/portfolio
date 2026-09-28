@@ -217,8 +217,10 @@ export const WorkSection = () => {
               key={project.id}
               className="w-[86vw] sm:w-[480px] lg:w-[540px] shrink-0 snap-start flex flex-col"
             >
-              <div
-                className="group relative h-full rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-white/20 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.85)]"
+              <motion.div
+                whileHover={{ y: -5, scale: 1.012 }}
+                transition={{ type: 'spring', visualDuration: 0.28, bounce: 0.15 }}
+                className="group relative h-full rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-white/20 transition-colors flex flex-col justify-between overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.85)]"
               >
                 {/* Dynamic Laser Beam for Flagship */}
                 {isFlagship && (
@@ -373,7 +375,7 @@ export const WorkSection = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           );
         })}

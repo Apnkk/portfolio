@@ -98,14 +98,14 @@ export const MethodSection = () => {
               return (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25, filter: 'blur(4px)' }}
+                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  viewport={{ once: true, margin: '-50px' }}
                   transition={{
                     type: 'spring',
-                    visualDuration: 0.35,
-                    bounce: 0.12,
-                    delay: shouldReduceMotion ? 0 : idx * 0.07,
+                    visualDuration: 0.42,
+                    bounce: 0.14,
+                    delay: shouldReduceMotion ? 0 : idx * 0.08,
                   }}
                 >
                   <TiltCard

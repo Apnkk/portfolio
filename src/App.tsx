@@ -35,15 +35,14 @@ function PortfolioApp() {
 
   // Initialize Lenis Inertial Smooth Scrolling with native mobile touch momentum
   useEffect(() => {
-    const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
     const lenis = new Lenis({
-      duration: isTouch ? 0.95 : 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.082,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.0,
-      syncTouch: false, // Preserves hardware-accelerated 120Hz native touch momentum on mobile
+      wheelMultiplier: 0.88,
+      touchMultiplier: 1.6,
+      syncTouch: false,
     });
     lenisRef.current = lenis;
     (window as unknown as { __lenis: Lenis }).__lenis = lenis;

@@ -33,14 +33,15 @@ export const Hero = () => {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 18 },
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20, filter: 'blur(6px)' },
     visible: {
       opacity: 1,
       y: 0,
+      filter: 'blur(0px)',
       transition: {
         type: 'spring' as const,
-        visualDuration: 0.4,
-        bounce: 0.12,
+        visualDuration: 0.45,
+        bounce: 0.14,
       },
     },
   };

@@ -154,10 +154,13 @@ export const StackSection = () => {
             const Icon = cat.icon;
             const isActive = activeTab === cat.id;
             return (
-              <button
+              <motion.button
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveTab(cat.id)}
+                whileHover={{ scale: 1.025 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.15 }}
                 className={`relative flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-colors duration-200 cursor-pointer select-none ${
                   isActive
                     ? 'text-white font-semibold'
@@ -177,7 +180,7 @@ export const StackSection = () => {
                 )}
                 <Icon className={`relative z-10 w-3.5 h-3.5 transition-colors ${isActive ? 'text-[#ff1e38]' : ''}`} />
                 <span className="relative z-10">{cat.label}</span>
-              </button>
+              </motion.button>
             );
           })}
         </div>

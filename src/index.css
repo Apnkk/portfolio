@@ -56,6 +56,7 @@
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
+    overscroll-behavior-y: none;
   }
 
   html.lenis, html.lenis body {
@@ -230,3 +231,17 @@
 .eq-bar-1 { animation: eq-bounce-1 0.75s ease-in-out infinite; }
 .eq-bar-2 { animation: eq-bounce-2 0.85s ease-in-out infinite 0.15s; }
 .eq-bar-3 { animation: eq-bounce-3 0.65s ease-in-out infinite 0.3s; }
+
+/* 120 FPS Fluidity & Content Visibility optimizations */
+#stack, #method, #about, #contact {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 750px;
+}
+
+/* Hardware accelerated transform layers */
+.oled-card,
+button,
+a {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

@@ -31,10 +31,10 @@ export const AboutSection = () => {
 
         {/* Short, Punchy Bio (No essay) */}
         <motion.p
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15, filter: shouldReduceMotion ? 'none' : 'blur(4px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.4 }}
+          transition={{ type: 'spring', visualDuration: 0.45, bounce: 0.12 }}
           className="font-display font-medium text-[clamp(1.15rem,2.2vw,1.6rem)] text-white leading-relaxed tracking-tight max-w-2xl mx-auto text-balance"
         >
           {language === 'fr' ? (
@@ -59,13 +59,13 @@ export const AboutSection = () => {
           {portfolioData.experiences.map((exp, idx) => (
             <motion.div
               key={exp.id}
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20, filter: shouldReduceMotion ? 'none' : 'blur(4px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{
                 type: 'spring',
-                visualDuration: 0.35,
-                bounce: 0.12,
+                visualDuration: 0.45,
+                bounce: 0.14,
                 delay: shouldReduceMotion ? 0 : idx * 0.08,
               }}
             >

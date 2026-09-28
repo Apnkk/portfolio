@@ -138,10 +138,10 @@ export const ContactSection = () => {
 
         {/* Clean Direct Message Form with BorderBeam */}
         <motion.div
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20, filter: shouldReduceMotion ? 'none' : 'blur(4px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ type: 'spring', visualDuration: 0.35, bounce: 0.12 }}
+          transition={{ type: 'spring', visualDuration: 0.45, bounce: 0.12 }}
           className="relative overflow-hidden max-w-lg mx-auto p-6 sm:p-8 rounded-2xl bg-[#09090b] border border-white/[0.08] text-left shadow-2xl"
         >
           <BorderBeam duration={16} borderWidth={1.5} colorFrom="#ff1e38" colorTo="rgba(255, 30, 56, 0.2)" />
