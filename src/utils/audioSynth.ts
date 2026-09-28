@@ -46,7 +46,7 @@ export const TRACKS: Track[] = [
       { time: 5.27, text: "Gone a little far" },
       { time: 7.50, text: "Gone a little far this time with something" },
       { time: 14.95, text: "How was I to know?" },
-      { time: 17.24, text: "How was I to know this high came rushing?" },
+      { time: 17.24, text: "How was I to know? This high came rushing" },
       { time: 24.55, text: "We're on the borderline" },
       { time: 27.37, text: "Dangerously fine and unforgiving" },
       { time: 34.68, text: "Possibly a sign" },
