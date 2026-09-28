@@ -69,21 +69,6 @@ export const Hero = () => {
         animate="visible"
         className="relative z-10 max-w-4xl mx-auto my-auto flex flex-col items-center"
       >
-        {/* Understated Status Badge with live pulsing radar ring */}
-        <motion.div
-          variants={itemVariants}
-          className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6 sm:mb-8 hover:border-white/20 transition-colors"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff1e38] opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
-          </span>
-          <span className="font-mono text-xs text-[#a1a1aa] tracking-wide">
-            {language === 'fr'
-              ? 'Développeur Full-Stack & Systèmes'
-              : 'Full-Stack & Systems Engineer'}
-          </span>
-        </motion.div>
 
         {/* Hero Title */}
         <motion.h1

@@ -353,13 +353,13 @@ export const FullscreenLyrics = ({
           </header>
 
           {/* Main Lyrics Viewport (Broadened & Centered Scroll Tracking) */}
-          <main className="relative z-20 flex-1 flex flex-col justify-center overflow-hidden max-w-5xl lg:max-w-6xl xl:max-w-7xl w-full mx-auto px-6 sm:px-12 md:px-16 lg:px-24">
+          <main className="relative z-20 flex-1 flex flex-col justify-center overflow-hidden w-full max-w-[94vw] sm:max-w-[90vw] md:max-w-5xl lg:max-w-6xl xl:max-w-[1380px] 2xl:max-w-[1600px] mx-auto px-6 sm:px-10 md:px-14 lg:px-16 xl:px-20">
             <div
               ref={containerRef}
               onWheel={handleUserWheelOrTouch}
               onTouchMove={handleUserWheelOrTouch}
               data-lenis-prevent
-              className="h-[58vh] sm:h-[64vh] overflow-y-auto scroll-smooth py-24 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
+              className="h-[62vh] sm:h-[68vh] lg:h-[72vh] overflow-y-auto scroll-smooth py-24 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden relative"
               style={{
                 maskImage:
                   'linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)',
@@ -368,7 +368,7 @@ export const FullscreenLyrics = ({
               }}
             >
               {/* Lyrics List Container with Single True Gliding Bar */}
-              <div className="relative pl-6 sm:pl-8 select-none">
+              <div className="relative pl-7 sm:pl-10 md:pl-12 select-none">
                 {/* The Single True Gliding Indicator Bar (Physically moves, 0 Lag, 0 Stray) */}
                 <motion.div
                   initial={false}
@@ -379,16 +379,39 @@ export const FullscreenLyrics = ({
                   }}
                   transition={{
                     type: 'spring',
-                    visualDuration: 0.32,
+                    visualDuration: 0.35,
                     bounce: 0.12,
                   }}
-                  className="absolute left-0 w-1.5 rounded-full pointer-events-none shadow-[0_0_18px_rgba(255,255,255,0.85)] z-10"
-                  style={{ background: theme.accent }}
+                  className="absolute left-0 w-1.5 sm:w-2 rounded-full pointer-events-none z-10 transition-shadow duration-300"
+                  style={{
+                    background: theme.accent,
+                    boxShadow: `0 0 16px ${theme.accent}, 0 0 32px ${theme.accent}88`,
+                  }}
                 />
 
-                {/* Intro preamble dots */}
-                <div className="text-white/35 font-mono text-2xl sm:text-3xl tracking-[0.3em] py-4">
-                  • • •
+                {/* Animated Beat Preamble Dots */}
+                <div className="flex items-center gap-2.5 py-4 mb-2 select-none">
+                  {[0, 1, 2].map((i) => (
+                    <motion.span
+                      key={i}
+                      animate={
+                        isPlaying
+                          ? {
+                              scale: [1, 1.4, 1],
+                              opacity: [0.35, 0.95, 0.35],
+                            }
+                          : { scale: 1, opacity: 0.35 }
+                      }
+                      transition={{
+                        duration: 1.6,
+                        repeat: Infinity,
+                        delay: i * 0.25,
+                        ease: 'easeInOut',
+                      }}
+                      className="w-2 h-2 rounded-full"
+                      style={{ background: theme.accent }}
+                    />
+                  ))}
                 </div>
 
                 {currentTrack.lyrics && currentTrack.lyrics.length > 0 ? (
@@ -404,33 +427,31 @@ export const FullscreenLyrics = ({
                         onClick={() => handleLyricClick(line.time)}
                         initial={false}
                         animate={{
-                          scale: isCurrent ? 1.02 : 0.98,
+                          scale: isCurrent ? 1.025 : 1,
                           opacity: isCurrent ? 1 : 0.28,
-                          x: isCurrent ? 8 : 0,
-                          filter: isCurrent ? 'blur(0px)' : 'blur(0.5px)',
+                          x: isCurrent ? 14 : 0,
                         }}
                         whileHover={{
-                          scale: isCurrent ? 1.02 : 1.0,
+                          scale: isCurrent ? 1.025 : 1.01,
                           opacity: isCurrent ? 1 : 0.75,
-                          filter: 'blur(0px)',
-                          x: isCurrent ? 8 : 4,
+                          x: isCurrent ? 14 : 6,
                         }}
-                        whileTap={{ scale: 0.98 }}
+                        whileTap={{ scale: 0.985 }}
                         transition={{
                           type: 'spring',
-                          visualDuration: 0.35,
-                          bounce: 0.12,
+                          visualDuration: 0.38,
+                          bounce: 0.14,
                         }}
-                        className={`py-3.5 sm:py-4.5 cursor-pointer select-none origin-left transition-colors ${
+                        className={`py-3.5 sm:py-4.5 lg:py-5 cursor-pointer select-none origin-left transition-colors ${
                           isCurrent ? 'text-white' : 'text-white/60'
                         }`}
                       >
-                        {/* Lyric Text */}
+                        {/* Lyric Text - Broad, Crisp & Apple Music-Grade */}
                         <span
-                          className={`font-display font-black tracking-tight leading-[1.24] text-2xl sm:text-3xl md:text-4xl lg:text-[2.85rem] xl:text-[3.35rem] transition-all duration-300 break-normal ${
+                          className={`font-display font-bold tracking-tight leading-[1.28] text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[3.15rem] 2xl:text-[3.5rem] transition-all duration-300 break-normal block ${
                             isCurrent
-                              ? 'text-white drop-shadow-[0_4px_35px_rgba(255,255,255,0.45)]'
-                              : 'text-white/40 hover:text-white/80'
+                              ? 'text-white [text-shadow:0_0_35px_rgba(255,255,255,0.5),0_0_70px_rgba(255,255,255,0.2)]'
+                              : 'text-white/35 hover:text-white/80'
                           }`}
                         >
                           {line.text}
