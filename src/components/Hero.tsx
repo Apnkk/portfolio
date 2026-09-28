@@ -69,15 +69,15 @@ export const Hero = () => {
         animate="visible"
         className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto my-auto flex flex-col items-center w-full"
       >
-        {/* Hero Title - Ares Grand, Monumental & Centered */}
+        {/* Hero Title - Ares Monumental & Subtitle Positioned Lower */}
         <motion.h1
           variants={itemVariants}
           className="font-display text-center mb-4 sm:mb-6"
         >
-          <span className="block font-bold text-[clamp(4.8rem,13vw,9.5rem)] text-white tracking-tighter leading-[0.92] select-none drop-shadow-[0_15px_45px_rgba(255,255,255,0.12)]">
+          <span className="block font-bold text-[clamp(6rem,16.5vw,13.5rem)] text-white tracking-tighter leading-[0.9] select-none drop-shadow-[0_20px_60px_rgba(255,255,255,0.14)]">
             Ares
           </span>
-          <span className="block font-semibold text-[clamp(1.4rem,3.2vw,2.5rem)] text-white/90 tracking-tight leading-[1.2] max-w-3xl mx-auto text-balance mt-2 sm:mt-3">
+          <span className="block font-semibold text-[clamp(1.45rem,3.2vw,2.6rem)] text-white/90 tracking-tight leading-[1.22] max-w-3xl mx-auto text-balance mt-5 sm:mt-7 md:mt-8">
             {language === 'fr' ? (
               <>
                 Développeur full-stack <span className="text-[#ff1e38] font-bold">&amp;</span> créateur de produits.
