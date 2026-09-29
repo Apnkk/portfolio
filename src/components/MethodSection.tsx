@@ -11,39 +11,44 @@ export const MethodSection = () => {
     {
       num: '01',
       icon: Lightbulb,
-      name: language === 'fr' ? 'Idée' : 'Concept',
-      desc: language === 'fr' ? 'Cibler un vrai besoin utile au quotidien.' : 'Pinpoint a genuine daily need.',
+      name: language === 'fr' ? 'Intuition & Ciblage' : 'Concept & Target',
+      desc: language === 'fr' ? 'Identifier un besoin quotidien réel sans sur-ingénierie.' : 'Pinpoint a genuine everyday need without over-engineering.',
+      detail: language === 'fr' ? 'Recherche utilisateurs & benchmark technique.' : 'User insight & technical benchmark.',
     },
     {
       num: '02',
       icon: Rocket,
-      name: language === 'fr' ? 'Prototype' : 'Prototype',
-      desc: language === 'fr' ? "Valider vite l'expérience et le rendu." : 'Fast validation of feel and UX.',
+      name: language === 'fr' ? 'Prototype Express' : 'Fast Prototype',
+      desc: language === 'fr' ? "Sortir rapidement une version fonctionnelle entre les mains." : 'Ship a working build quickly into hands to test feel.',
+      detail: language === 'fr' ? 'Validation UX, flux réels & ergonomie.' : 'UX validation, real streams & ergonomics.',
     },
     {
       num: '03',
       icon: ShieldCheck,
-      name: language === 'fr' ? 'Architecture' : 'Architecture',
-      desc: language === 'fr' ? 'Typage strict et modularité résiliente.' : 'Strict types and resilient design.',
+      name: language === 'fr' ? 'Architecture Stricte' : 'Strict Architecture',
+      desc: language === 'fr' ? 'Consolider : TypeScript strict, gestion des erreurs et modularité.' : 'Harden: strict TypeScript, resilient fallback & modularity.',
+      detail: language === 'fr' ? 'Zéro "any", latence < 50ms, sécurité.' : 'Zero "any", sub-50ms latency, security.',
     },
     {
       num: '04',
       icon: Sparkles,
-      name: language === 'fr' ? 'Finition' : 'Polish',
-      desc: language === 'fr' ? 'Fluidité 120 FPS et micro-interactions.' : '120 FPS motion and micro-details.',
+      name: language === 'fr' ? 'Finition & Micro-détails' : 'Polish & Micro-UI',
+      desc: language === 'fr' ? 'Fluidité 120 FPS, physique de ressorts, son et accessibilité.' : '120 FPS motion, spring physics, sound & accessibility.',
+      detail: language === 'fr' ? 'Respect WCAG 2.2 AA & retours haptiques.' : 'WCAG 2.2 AA compliant & haptic feedback.',
     },
     {
       num: '05',
       icon: Send,
-      name: language === 'fr' ? 'Livraison' : 'Ship',
-      desc: language === 'fr' ? 'Docker, Edge CDN et production live.' : 'Docker, Edge CDN, and live users.',
+      name: language === 'fr' ? 'Livraison & Production' : 'Deploy & Ship',
+      desc: language === 'fr' ? 'Conteneurs Docker, Edge CDN Cloudflare et monitoring live.' : 'Docker containers, Cloudflare Edge CDN & live observability.',
+      detail: language === 'fr' ? 'CI/CD automatisée & releases GitHub.' : 'Automated CI/CD & GitHub releases.',
     },
   ];
 
   return (
     <section
       id="method"
-      className="py-24 sm:py-32 px-5 sm:px-10 lg:px-16 bg-black border-y border-white/[0.08] text-left relative"
+      className="scroll-mt-24 sm:scroll-mt-28 py-24 sm:py-32 px-5 sm:px-10 lg:px-16 bg-black border-y border-white/[0.08] text-left relative overflow-hidden"
       aria-labelledby="method-title"
     >
       <div className="max-w-7xl mx-auto">
@@ -52,7 +57,7 @@ export const MethodSection = () => {
           <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38]" />
             <p className="font-mono text-xs text-[#a1a1aa] tracking-widest uppercase">
-              {language === 'fr' ? 'MÉTHODOLOGIE & PROCESS' : 'ENGINEERING PROCESS'}
+              {language === 'fr' ? 'MÉTHODOLOGIE D’INGÉNIERIE' : 'ENGINEERING PROCESS'}
             </p>
           </div>
           <h2
@@ -65,29 +70,29 @@ export const MethodSection = () => {
               </>
             ) : (
               <>
-                From spark <span className="text-[#ff1e38]">to</span> reliable software
+                From spark <span className="text-[#ff1e38]">to</span> production software
               </>
             )}
           </h2>
-          <p className="text-[#a1a1aa] text-sm mt-3 max-w-lg font-normal leading-relaxed">
+          <p className="text-[#a1a1aa] text-sm sm:text-base mt-3 max-w-xl font-normal leading-relaxed">
             {language === 'fr'
-              ? 'Un cycle direct de l’intuition technique au produit déployé.'
-              : 'A direct loop from technical spark to production release.'}
+              ? 'Un cycle pragmatique et direct pour transformer un problème complexe en produit simple, rapide et élégant.'
+              : 'A pragmatic loop designed to turn complex challenges into simple, rapid, and refined production software.'}
           </p>
         </div>
 
-        {/* Steps Grid with Flow Connector and traveling pulse */}
+        {/* Steps Grid */}
         <div className="relative">
-          {/* Subtle desktop horizontal connecting flow line with traveling laser pulse */}
+          {/* Connecting Flow Pulse */}
           {!shouldReduceMotion && (
             <div
-              className="hidden lg:block absolute top-10 left-[8%] right-[8%] h-[1px] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent pointer-events-none overflow-hidden"
+              className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent pointer-events-none overflow-hidden"
               aria-hidden="true"
             >
               <motion.div
                 animate={{ x: ['-100%', '800%'] }}
                 transition={{ repeat: Infinity, duration: 4.5, ease: 'easeInOut' }}
-                className="w-28 h-full bg-gradient-to-r from-transparent via-[#ff1e38] to-transparent shadow-[0_0_8px_#ff1e38]"
+                className="w-32 h-full bg-gradient-to-r from-transparent via-[#ff1e38] to-transparent shadow-[0_0_10px_#ff1e38]"
               />
             </div>
           )}
@@ -98,34 +103,40 @@ export const MethodSection = () => {
               return (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25, filter: 'blur(4px)' }}
-                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{
                     type: 'spring',
-                    visualDuration: 0.42,
-                    bounce: 0.14,
+                    visualDuration: 0.4,
+                    bounce: 0.12,
                     delay: shouldReduceMotion ? 0 : idx * 0.08,
                   }}
                 >
                   <TiltCard
                     scale={1.02}
-                    spotlightColor="rgba(255, 30, 56, 0.12)"
-                    className="p-6 rounded-2xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/40 transition-colors flex flex-col justify-between group shadow-[0_4px_20px_rgba(0,0,0,0.4)] h-full"
+                    spotlightColor="rgba(255, 30, 56, 0.14)"
+                    className="p-6 rounded-3xl bg-[#09090b] border border-white/[0.08] hover:border-[#ff1e38]/40 transition-colors flex flex-col justify-between group shadow-[0_10px_30px_rgba(0,0,0,0.6)] h-full"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <span className="font-mono font-bold text-xs text-[#ff1e38] group-hover:drop-shadow-[0_0_8px_rgba(255,30,56,0.6)] transition-all">
                           {step.num}
                         </span>
-                        <Icon className="w-4 h-4 text-[#71717a] group-hover:text-white transition-colors" />
+                        <div className="p-2 rounded-xl bg-white/[0.04] text-[#71717a] group-hover:text-white transition-colors">
+                          <Icon className="w-4 h-4" />
+                        </div>
                       </div>
-                      <h3 className="font-display font-semibold text-lg text-white mb-2 tracking-tight">
+                      <h3 className="font-display font-semibold text-lg text-white mb-2 tracking-tight group-hover:text-[#ff1e38] transition-colors">
                         {step.name}
                       </h3>
-                      <p className="text-xs sm:text-sm text-[#a1a1aa] leading-relaxed">
+                      <p className="text-xs sm:text-sm text-[#a1a1aa] leading-relaxed mb-4">
                         {step.desc}
                       </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-white/[0.06] font-mono text-[0.65rem] text-[#71717a] group-hover:text-[#d4d4d8] transition-colors">
+                      {step.detail}
                     </div>
                   </TiltCard>
                 </motion.div>

@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { VolumeX, Menu, X } from 'lucide-react';
+import { VolumeX, Menu, X, Terminal } from 'lucide-react';
 import { MagneticButton } from './motion/MagneticButton';
 
 interface NavbarProps {
   isPlaying?: boolean;
   onTogglePlay?: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
-export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
+export const Navbar = ({ isPlaying, onTogglePlay, onOpenCommandPalette }: NavbarProps) => {
   const { language, setLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -76,7 +77,7 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
           <MagneticButton pullFactor={0.2}>
             <a
               href="#hero"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] text-white hover:border-white/20 transition-all select-none"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] text-white hover:border-white/20 transition-all select-none shadow-sm"
               aria-label="Ares — retour au début"
             >
               <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
@@ -87,9 +88,9 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
           </MagneticButton>
         </div>
 
-        {/* Center: Minimalist Desktop Navigation - Geometrically Centered */}
+        {/* Center: Minimalist Desktop Navigation */}
         <nav
-          className="pointer-events-auto hidden md:flex items-center gap-1 p-1 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.7rem] uppercase tracking-wider select-none shadow-[0_8px_30px_rgba(0,0,0,0.8)] absolute left-1/2 -translate-x-1/2"
+          className="pointer-events-auto hidden md:flex items-center gap-1 p-1 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.7rem] uppercase tracking-wider select-none shadow-[0_8px_30px_rgba(0,0,0,0.8)] absolute left-1/2 -translate-x-1/2"
           aria-label="Navigation principale"
         >
           {navLinks.map((link) => {
@@ -107,7 +108,7 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
                 {isActive && (
                   <motion.div
                     layoutId="active-nav-pill"
-                    className="absolute inset-0 rounded-full bg-white/[0.1] border border-white/[0.12] shadow-[0_0_12px_rgba(255,255,255,0.06)]"
+                    className="absolute inset-0 rounded-full bg-white/[0.12] border border-white/[0.12] shadow-[0_0_12px_rgba(255,255,255,0.06)]"
                     transition={{
                       type: 'spring',
                       visualDuration: shouldReduceMotion ? 0.01 : 0.28,
@@ -121,15 +122,31 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
           })}
         </nav>
 
-        {/* Right: Audio Control + Language Switcher + Mobile Menu Trigger */}
+        {/* Right: Command Menu Trigger + Audio + Language Switcher */}
         <div className="pointer-events-auto flex items-center gap-2">
-          {/* Audio Button with Magnetic Pull */}
+          {/* Command Palette Trigger */}
+          {onOpenCommandPalette && (
+            <MagneticButton pullFactor={0.2}>
+              <button
+                type="button"
+                onClick={onOpenCommandPalette}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] hover:border-white/25 text-[#a1a1aa] hover:text-white transition-all text-xs font-mono select-none cursor-pointer"
+                title="Ouvrir la console (Cmd+K)"
+              >
+                <Terminal className="w-3.5 h-3.5 text-[#ff1e38]" />
+                <span className="text-[0.66rem] tracking-wider uppercase">CLI</span>
+                <kbd className="px-1 py-0.2 rounded bg-white/[0.08] text-[0.58rem] text-[#71717a]">⌘K</kbd>
+              </button>
+            </MagneticButton>
+          )}
+
+          {/* Audio Button */}
           {onTogglePlay && (
             <MagneticButton pullFactor={0.2}>
               <button
                 type="button"
                 onClick={onTogglePlay}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 text-[#a1a1aa] hover:text-white transition-all text-xs font-mono select-none cursor-pointer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 text-[#a1a1aa] hover:text-white transition-all text-xs font-mono select-none cursor-pointer"
                 title={isPlaying ? 'Pause audio' : 'Play audio'}
                 aria-label="Contrôle audio"
               >
@@ -154,8 +171,8 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
             </MagneticButton>
           )}
 
-          {/* Language Switcher Pill with Shared Element Spring Transition */}
-          <div className="relative inline-flex items-center p-0.5 rounded-full bg-black/70 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.66rem] select-none">
+          {/* Language Switcher */}
+          <div className="relative inline-flex items-center p-0.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.66rem] select-none">
             <button
               type="button"
               onClick={() => setLanguage('en')}
@@ -243,6 +260,23 @@ export const Navbar = ({ isPlaying, onTogglePlay }: NavbarProps) => {
                   <span className="text-[#71717a] text-sm">↗</span>
                 </a>
               ))}
+
+              {onOpenCommandPalette && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenCommandPalette();
+                  }}
+                  className="mt-4 flex items-center justify-between p-3 rounded-2xl bg-white/[0.05] border border-white/[0.1] text-white font-mono text-xs cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Terminal className="w-4 h-4 text-[#ff1e38]" />
+                    <span>Console de commandes (CLI)</span>
+                  </span>
+                  <span className="text-[#71717a]">⌘K</span>
+                </button>
+              )}
             </nav>
 
             <div className="pt-6 border-t border-white/[0.08]">

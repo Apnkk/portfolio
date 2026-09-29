@@ -10,12 +10,15 @@ import { MethodSection } from './components/MethodSection';
 import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
 import { AudioPlayer } from './components/AudioPlayer';
+import { CommandPalette } from './components/CommandPalette';
 import { audioEngine } from './utils/audioSynth';
 import { ArrowUp } from 'lucide-react';
 
 function PortfolioApp() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [scrollPercent, setScrollPercent] = useState(0);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
   // Smooth scroll progress bar at the very top
@@ -32,6 +35,18 @@ function PortfolioApp() {
       setScrollPercent(Math.round(latest * 100));
     });
   }, [scrollYProgress]);
+
+  // Global shortcut to open Command Palette with Ctrl+K or Cmd+K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Initialize Lenis Inertial Smooth Scrolling with native mobile touch momentum
   useEffect(() => {
@@ -97,6 +112,10 @@ function PortfolioApp() {
     }
   };
 
+  const handleOpenProjectFromPalette = (projectId: string) => {
+    setActiveProjectId(projectId);
+  };
+
   return (
     <div className="relative min-h-screen bg-black text-[#f4f4f5] selection:bg-[#ff1e38] selection:text-white">
       {/* Top Hairline Scroll Progress */}
@@ -108,10 +127,21 @@ function PortfolioApp() {
       </div>
 
       {/* Top Navigation Bar */}
-      <Navbar isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
+      <Navbar 
+        isPlaying={isPlaying} 
+        onTogglePlay={handleTogglePlay}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+      />
 
-      {/* Persistent Audio Player Dock (Bottom Right on desktop, Mini dock on mobile) */}
+      {/* Persistent Audio Player Dock */}
       <AudioPlayer isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
+
+      {/* Interactive Command Palette / Dev Terminal Modal */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onOpenProject={handleOpenProjectFromPalette}
+      />
 
       {/* Floating Scroll Percentage / Return to Top Pill */}
       {scrollPercent > 10 && (
@@ -131,10 +161,13 @@ function PortfolioApp() {
         </motion.button>
       )}
 
-      {/* Main Single-Page Scrollytelling Architecture */}
+      {/* Main Content Architecture */}
       <main id="main" className="pb-24 sm:pb-0">
-        <Hero />
-        <WorkSection />
+        <Hero onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
+        <WorkSection 
+          activeProjectId={activeProjectId} 
+          onSelectProject={(p) => setActiveProjectId(p ? p.id : null)}
+        />
         <StackSection />
         <MethodSection />
         <AboutSection />

@@ -2,10 +2,19 @@ import { useState, type FormEvent } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { portfolioData } from '../data/portfolioData';
-import { Check, Copy, Send, Loader2, Mail, AlertCircle, MessageSquare } from 'lucide-react';
+import { 
+  Check, 
+  Copy, 
+  Send, 
+  Loader2, 
+  Mail, 
+  AlertCircle, 
+  MessageSquare
+} from 'lucide-react';
 import { GithubIcon } from './icons/BrandIcons';
 import { MagneticButton } from './motion/MagneticButton';
 import { BorderBeam } from './motion/BorderBeam';
+import confetti from 'canvas-confetti';
 
 export const ContactSection = () => {
   const { language } = useLanguage();
@@ -18,6 +27,7 @@ export const ContactSection = () => {
   const copyEmail = () => {
     navigator.clipboard.writeText(portfolioData.personal.email);
     setCopiedEmail(true);
+    confetti({ particleCount: 35, spread: 60, origin: { y: 0.85 } });
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
@@ -49,6 +59,7 @@ export const ContactSection = () => {
 
       if (response.ok && (data.success === 'true' || data.success === true)) {
         setStatus('success');
+        confetti({ particleCount: 60, spread: 80, origin: { y: 0.7 } });
         setFormState({ name: '', email: '', message: '' });
       } else if (data.message && data.message.includes('Activation')) {
         setStatus('needs_activation');
@@ -76,19 +87,25 @@ export const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="pt-24 sm:pt-36 pb-0 px-5 sm:px-10 lg:px-16 bg-black border-t border-white/[0.08] text-center relative"
+      className="scroll-mt-32 pt-28 sm:pt-40 pb-0 px-5 sm:px-10 lg:px-16 bg-black border-t border-white/[0.08] text-center relative overflow-hidden bg-grid"
       aria-labelledby="contact-title"
     >
+      {/* Background ambient spotlight */}
+      <div 
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-600/10 blur-[140px] pointer-events-none"
+        aria-hidden="true"
+      />
+
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Section Index */}
         <div className="flex items-center justify-center gap-2 mb-3">
           <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e38] shadow-[0_0_6px_#ff1e38]" />
           <p className="font-mono text-xs text-[#a1a1aa] tracking-widest uppercase">
-            {language === 'fr' ? 'CONTACT & COLLABORATION' : 'CONTACT & COLLABORATION'}
+            {language === 'fr' ? 'CONTACT & COLLABORATION' : 'GET IN TOUCH'}
           </p>
         </div>
 
-        {/* Clean Typographic Heading */}
+        {/* Heading */}
         <h2
           id="contact-title"
           className="font-display font-semibold text-[clamp(2.2rem,6vw,4.5rem)] text-white tracking-tight leading-tight mb-4"
@@ -104,13 +121,13 @@ export const ContactSection = () => {
           )}
         </h2>
 
-        <p className="text-[#a1a1aa] text-sm max-w-md mx-auto mb-10 leading-relaxed font-normal">
+        <p className="text-[#a1a1aa] text-sm sm:text-base max-w-lg mx-auto mb-10 leading-relaxed font-normal">
           {language === 'fr'
-            ? 'Un projet, une opportunité ou une question ? Écrivez-moi directement.'
-            : 'Have a project, opportunity, or inquiry? Reach out directly.'}
+            ? 'Un projet de streaming, une application web ou un tweak iOS ? Écrivez-moi directement.'
+            : 'Looking to build a media app, SaaS platform, or custom iOS software? Reach out directly.'}
         </p>
 
-        {/* Direct Email Pill Button with Magnetic Hover & spring taps */}
+        {/* Direct Email Action Pill */}
         <div className="flex flex-col items-center mb-12">
           <MagneticButton>
             <motion.button
@@ -119,7 +136,7 @@ export const ContactSection = () => {
               whileTap={{ scale: 0.96 }}
               transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.15 }}
               onClick={copyEmail}
-              className="group inline-flex items-center justify-center gap-3 font-mono text-sm sm:text-base tracking-wide py-3.5 px-6 sm:px-8 rounded-full border border-white/[0.12] bg-[#09090b] hover:border-white/30 text-white transition-all cursor-pointer shadow-lg"
+              className="group inline-flex items-center justify-center gap-3 font-mono text-sm sm:text-base tracking-wide py-3.5 px-6 sm:px-8 rounded-full border border-white/[0.12] bg-[#09090b]/90 hover:border-[#ff1e38]/50 text-white transition-all cursor-pointer shadow-2xl backdrop-blur-xl"
               title="Copier l'adresse email"
             >
               <Mail className="w-4 h-4 text-[#ff1e38]" />
@@ -127,7 +144,7 @@ export const ContactSection = () => {
               {copiedEmail ? (
                 <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-semibold ml-1">
                   <Check className="w-3.5 h-3.5" />
-                  <span>{language === 'fr' ? 'Copié' : 'Copied'}</span>
+                  <span>{language === 'fr' ? 'Copié !' : 'Copied!'}</span>
                 </span>
               ) : (
                 <Copy className="w-3.5 h-3.5 text-[#71717a] group-hover:text-white transition-colors ml-1" />
@@ -136,45 +153,46 @@ export const ContactSection = () => {
           </MagneticButton>
         </div>
 
-        {/* Clean Direct Message Form with BorderBeam */}
+        {/* Message Form */}
         <motion.div
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20, filter: shouldReduceMotion ? 'none' : 'blur(4px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ type: 'spring', visualDuration: 0.45, bounce: 0.12 }}
-          className="relative overflow-hidden max-w-lg mx-auto p-6 sm:p-8 rounded-2xl bg-[#09090b] border border-white/[0.08] text-left shadow-2xl"
+          className="relative overflow-hidden max-w-lg mx-auto p-6 sm:p-8 rounded-3xl bg-[#09090b]/95 border border-white/[0.08] text-left shadow-2xl backdrop-blur-2xl"
         >
           <BorderBeam duration={16} borderWidth={1.5} colorFrom="#ff1e38" colorTo="rgba(255, 30, 56, 0.2)" />
+
           {status === 'success' ? (
-            <div className="text-center py-6 space-y-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20">
-                <Check className="w-5 h-5" />
+            <div className="text-center py-8 space-y-3">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20">
+                <Check className="w-6 h-6" />
               </div>
-              <p className="text-white font-display font-semibold text-lg">
-                {language === 'fr' ? 'Message envoyé' : 'Message delivered'}
+              <p className="text-white font-display font-semibold text-xl">
+                {language === 'fr' ? 'Message transmis avec succès' : 'Message delivered'}
               </p>
-              <p className="text-xs text-[#a1a1aa] leading-relaxed max-w-sm mx-auto">
+              <p className="text-xs sm:text-sm text-[#a1a1aa] leading-relaxed max-w-sm mx-auto">
                 {language === 'fr'
-                  ? 'Votre message a bien été transmis. Je vous répondrai dans les plus brefs délais.'
-                  : 'Your note has been dispatched. I will follow up shortly.'}
+                  ? 'Merci pour votre message ! Je vous répondrai sous 24 heures.'
+                  : 'Thanks for reaching out! I will respond within 24 hours.'}
               </p>
               <button
                 type="button"
                 onClick={() => setStatus('idle')}
-                className="font-mono text-xs text-[#ff1e38] hover:underline pt-2 inline-block cursor-pointer font-medium"
+                className="font-mono text-xs text-[#ff1e38] hover:underline pt-3 inline-block cursor-pointer font-medium"
               >
                 {language === 'fr' ? 'Envoyer un autre message' : 'Send another note'}
               </button>
             </div>
           ) : status === 'needs_activation' ? (
-            <div className="text-center py-6 space-y-3">
-              <div className="w-10 h-10 rounded-full bg-white/[0.05] text-[#ff1e38] flex items-center justify-center mx-auto border border-white/[0.1]">
-                <Mail className="w-5 h-5" />
+            <div className="text-center py-8 space-y-3">
+              <div className="w-12 h-12 rounded-full bg-white/[0.05] text-[#ff1e38] flex items-center justify-center mx-auto border border-white/[0.1]">
+                <Mail className="w-6 h-6" />
               </div>
-              <p className="text-white font-display font-semibold text-lg">
+              <p className="text-white font-display font-semibold text-xl">
                 {language === 'fr' ? 'Confirmation requise' : 'Activation required'}
               </p>
-              <p className="text-xs text-[#a1a1aa] leading-relaxed max-w-sm mx-auto">
+              <p className="text-xs sm:text-sm text-[#a1a1aa] leading-relaxed max-w-sm mx-auto">
                 {language === 'fr'
                   ? "Un email de confirmation vient d'être envoyé. Merci de valider la réception une seule fois."
                   : 'An activation email was sent. Confirm once in your inbox to enable submissions.'}
@@ -182,7 +200,7 @@ export const ContactSection = () => {
               <button
                 type="button"
                 onClick={() => setStatus('idle')}
-                className="font-mono text-xs text-[#ff1e38] hover:underline pt-2 inline-block cursor-pointer font-medium"
+                className="font-mono text-xs text-[#ff1e38] hover:underline pt-3 inline-block cursor-pointer font-medium"
               >
                 {language === 'fr' ? 'Revenir au formulaire' : 'Return to form'}
               </button>
@@ -190,7 +208,7 @@ export const ContactSection = () => {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {status === 'error' && (
-                <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-[#ff1e38] text-xs flex items-start gap-2">
+                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-[#ff1e38] text-xs flex items-start gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                   <span>{errorMessage}</span>
                 </div>
@@ -211,7 +229,7 @@ export const ContactSection = () => {
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                   placeholder="Alexandre..."
                   disabled={status === 'submitting'}
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-white/[0.1] text-white text-xs font-mono focus:border-white/40 focus:outline-none transition-colors disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/[0.1] text-white text-xs font-mono focus:border-[#ff1e38] focus:outline-none transition-colors disabled:opacity-50"
                 />
               </div>
 
@@ -230,7 +248,7 @@ export const ContactSection = () => {
                   onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                   placeholder="contact@exemple.com"
                   disabled={status === 'submitting'}
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-white/[0.1] text-white text-xs font-mono focus:border-white/40 focus:outline-none transition-colors disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/[0.1] text-white text-xs font-mono focus:border-[#ff1e38] focus:outline-none transition-colors disabled:opacity-50"
                 />
               </div>
 
@@ -239,7 +257,7 @@ export const ContactSection = () => {
                   htmlFor="contact-message"
                   className="block text-xs font-mono uppercase tracking-wider text-[#a1a1aa] mb-1.5"
                 >
-                  {language === 'fr' ? 'Message' : 'Message'}
+                  {language === 'fr' ? 'Votre message' : 'Your Message'}
                 </label>
                 <textarea
                   id="contact-message"
@@ -253,7 +271,7 @@ export const ContactSection = () => {
                       : 'Tell me about your project, goals, and timeline...'
                   }
                   disabled={status === 'submitting'}
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-white/[0.1] text-white text-xs font-mono focus:border-white/40 focus:outline-none transition-colors resize-none leading-relaxed disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/[0.1] text-white text-xs font-mono focus:border-[#ff1e38] focus:outline-none transition-colors resize-none leading-relaxed disabled:opacity-50"
                 />
               </div>
 
@@ -263,16 +281,16 @@ export const ContactSection = () => {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.15 }}
-                className="w-full py-3 rounded-lg btn--crimson font-mono font-medium text-xs tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer uppercase mt-2"
+                className="w-full py-3.5 rounded-xl btn--crimson font-mono font-medium text-xs tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer uppercase mt-3"
               >
                 {status === 'submitting' ? (
                   <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                     <span>{language === 'fr' ? 'Envoi en cours...' : 'Sending...'}</span>
                   </>
                 ) : (
                   <>
-                    <Send className="w-3.5 h-3.5" />
+                    <Send className="w-4 h-4" />
                     <span>{language === 'fr' ? 'Envoyer le message' : 'Send message'}</span>
                   </>
                 )}
@@ -281,7 +299,7 @@ export const ContactSection = () => {
           )}
         </motion.div>
 
-        {/* Social Links Row with tactile spring hover */}
+        {/* Social Badges Row */}
         <div className="flex flex-wrap justify-center items-center gap-4 mt-12 font-mono text-xs text-[#a1a1aa]">
           <motion.a
             whileHover={{ scale: 1.03, y: -2 }}
@@ -290,12 +308,13 @@ export const ContactSection = () => {
             href="https://github.com/Apnkk"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:border-white/20 hover:text-white transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/[0.04] border border-white/[0.08] hover:border-white/20 hover:text-white transition-colors"
           >
-            <GithubIcon className="w-3.5 h-3.5" />
+            <GithubIcon className="w-4 h-4" />
             <span>GitHub (@Apnkk)</span>
             <span className="text-[#71717a]">↗</span>
           </motion.a>
+
           <motion.a
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
@@ -303,23 +322,25 @@ export const ContactSection = () => {
             href="https://discord.com/users/498671450996342794"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:border-white/20 hover:text-white transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/[0.04] border border-white/[0.08] hover:border-white/20 hover:text-white transition-colors"
           >
-            <MessageSquare className="w-3.5 h-3.5" />
+            <MessageSquare className="w-4 h-4 text-[#5865F2]" />
             <span>Discord (Ares)</span>
             <span className="text-[#71717a]">↗</span>
           </motion.a>
         </div>
 
-        {/* Footer Bar */}
+        {/* Footer */}
         <footer className="mt-24 sm:mt-32 py-8 border-t border-white/[0.08] grid grid-cols-1 sm:grid-cols-3 items-center gap-4 font-mono text-xs text-[#71717a]">
           <div className="text-center sm:text-left">
-            <span>© 2026 ARES</span>
+            <span>© 2026 ARES — FRANCE</span>
           </div>
           <div className="text-center text-[#a1a1aa]">
-            <span>REACT 19 · TYPESCRIPT · TAILWIND CSS</span>
+            <span>REACT 19 · TYPESCRIPT · TAILWIND 4 · MOTION</span>
           </div>
-          <div className="hidden sm:block" aria-hidden="true" />
+          <div className="text-center sm:text-right text-[#71717a]">
+            <span>120 FPS FLUIDITY</span>
+          </div>
         </footer>
       </div>
     </section>
