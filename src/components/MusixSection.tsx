@@ -12,9 +12,9 @@ export const MusixSection = () => {
 
   return (
     <section
-      id="musix"
+      id="z-music"
       className="relative z-10 py-[clamp(70px,11vh,130px)] px-[var(--pad)] bg-[var(--bg-2)] border-y border-[var(--line)] overflow-hidden text-center"
-      aria-label="Musix Teaser"
+      aria-label="Z-Music Teaser"
     >
       {/* Ambient center radial glow */}
       <div
@@ -22,10 +22,10 @@ export const MusixSection = () => {
         aria-hidden="true"
       />
 
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Kicker */}
         <div className="font-mono text-[0.72rem] tracking-widest text-[var(--amber)] uppercase mb-3">
-          02 / LA SUITE
+          {language === 'fr' ? '02 / LA SUITE' : "02 / WHAT'S NEXT"}
         </div>
 
         {/* Title */}
@@ -38,9 +38,9 @@ export const MusixSection = () => {
           — {language === 'fr' ? 'BIENTÔT' : 'SOON'} —
         </div>
 
-        {/* Giant Outlined Typography: Z-MUSIC */}
-        <div className="my-[clamp(20px,4vh,44px)] select-none">
-          <span className="font-display font-bold text-[clamp(4.2rem,16vw,14rem)] leading-none tracking-tight outline-amber opacity-90 block drop-shadow-[0_0_40px_rgba(242,163,60,0.18)]">
+        {/* Giant Outlined Typography: Z-MUSIC strictly on a single line */}
+        <div className="my-[clamp(20px,4vh,44px)] select-none flex items-center justify-center overflow-hidden">
+          <span className="font-display font-bold text-[clamp(2.6rem,8.8vw,7.6rem)] leading-none tracking-normal outline-amber opacity-95 block whitespace-nowrap drop-shadow-[0_0_40px_rgba(242,163,60,0.18)]">
             Z-MUSIC
           </span>
         </div>

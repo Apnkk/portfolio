@@ -17,7 +17,7 @@ export const Navbar = () => {
 
   const navLinks = [
     { href: '#work', label: language === 'fr' ? 'PROJETS' : 'PROJECTS' },
-    { href: '#musix', label: 'MUSIX' },
+    { href: '#z-music', label: 'Z-MUSIC' },
     { href: '#stack', label: 'STACK' },
     { href: '#about', label: language === 'fr' ? 'À PROPOS' : 'ABOUT' },
     { href: '#contact', label: 'CONTACT', isAccent: true },
