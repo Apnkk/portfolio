@@ -265,16 +265,41 @@
   gap: 12px;
   padding: 8px 12px 8px 8px;
   border-radius: 999px;
-  background: rgba(18, 16, 12, 0.85);
-  border: 1px solid var(--line-strong);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 8px 36px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   overflow: hidden;
-  transition: border-color .3s, box-shadow .3s, transform .3s var(--ease-out);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.dock:hover {
-  border-color: rgba(242, 163, 60, 0.5);
+
+/* Standby / Éteint State */
+.dock.is-dormant {
+  background: rgba(14, 12, 10, 0.72);
+  border: 1px solid rgba(237, 232, 221, 0.09);
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.45);
+  opacity: 0.88;
 }
+.dock.is-dormant:hover {
+  opacity: 1;
+  background: rgba(18, 16, 13, 0.85);
+  border-color: rgba(237, 232, 221, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Active / Allumé State */
+.dock.is-playing {
+  background: rgba(18, 15, 11, 0.94);
+  border: 1px solid rgba(242, 163, 60, 0.45);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(242, 163, 60, 0.2);
+  opacity: 1;
+}
+.dock.is-playing:hover {
+  border-color: var(--amber);
+  box-shadow: 0 12px 44px rgba(0, 0, 0, 0.7), 0 0 32px rgba(242, 163, 60, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Circular Play Button */
 .dock__play {
   flex: 0 0 auto;
   width: 38px;
@@ -282,24 +307,89 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--amber);
-  color: var(--bg);
-  transition: transform .25s var(--ease-out), background .25s;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
-.dock__play:hover {
+
+/* Éteint: subtle stealth dark glass circle with cream icon, zero glaring yellow */
+.dock.is-dormant .dock__play {
+  background: rgba(237, 232, 221, 0.06);
+  color: var(--cream-dim);
+  border: 1px solid rgba(237, 232, 221, 0.14);
+}
+.dock.is-dormant .dock__play:hover {
+  background: rgba(242, 163, 60, 0.16);
+  color: var(--amber);
+  border-color: rgba(242, 163, 60, 0.5);
   transform: scale(1.08);
 }
+
+/* Allumé: bright golden amber, glowing */
+.dock.is-playing .dock__play {
+  background: var(--amber);
+  color: var(--bg);
+  border: 1px solid var(--amber);
+  box-shadow: 0 0 20px rgba(242, 163, 60, 0.55);
+}
+.dock.is-playing .dock__play:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 28px rgba(242, 163, 60, 0.75);
+}
+
+/* Status Pulse Dot */
+.dock__title-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.dock__pulse-dot {
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(237, 232, 221, 0.28);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.dock__pulse-dot--active {
+  background: var(--amber);
+  box-shadow: 0 0 8px rgba(242, 163, 60, 0.8);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
 .dock__track {
   font-family: var(--font-mono);
   font-size: 0.66rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--cream-dim);
   white-space: nowrap;
   overflow: hidden;
+  max-width: 170px;
   mask-image: linear-gradient(to right, black 80%, transparent);
+  transition: color 0.3s;
 }
+.dock.is-dormant .dock__track {
+  color: var(--muted);
+}
+.dock.is-playing .dock__track {
+  color: var(--cream);
+}
+
+.dock__bars {
+  display: block;
+  margin-top: 3px;
+  transition: opacity 0.3s;
+}
+.dock.is-dormant .dock__bars {
+  opacity: 0.55;
+}
+.dock.is-playing .dock__bars {
+  opacity: 1;
+}
+
 .dock__expand {
   flex: 0 0 auto;
   width: 32px;
@@ -307,14 +397,40 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  color: var(--cream-dim);
-  border: 1px solid var(--line);
+  color: var(--muted);
+  border: 1px solid rgba(237, 232, 221, 0.08);
   transition: color .25s, border-color .25s, transform .3s var(--ease-out);
   cursor: pointer;
+}
+.dock.is-playing .dock__expand {
+  color: var(--cream-dim);
+  border-color: rgba(237, 232, 221, 0.16);
 }
 .dock__expand:hover {
   color: var(--amber);
   border-color: rgba(242, 163, 60, 0.5);
+  transform: scale(1.05);
+}
+
+/* Hairline bottom progress bar */
+.dock__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(237, 232, 221, 0.04);
+  pointer-events: none;
+}
+.dock__progress span {
+  display: block;
+  height: 100%;
+  background: var(--amber);
+  transition: width 0.15s linear;
+}
+.dock.is-dormant .dock__progress span {
+  opacity: 0.25;
+  background: rgba(237, 232, 221, 0.35);
 }
 
 /* Expanded Player Panel */
@@ -482,18 +598,30 @@
   cursor: pointer;
 }
 .panel__controls .ctrl--main {
-  background: var(--cream);
-  color: var(--bg);
+  background: rgba(237, 232, 221, 0.08);
+  color: var(--cream);
+  border: 1px solid rgba(237, 232, 221, 0.16);
   width: 44px;
   height: 44px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  transition: background .25s, transform .25s;
+  transition: all .25s var(--ease-out);
 }
 .panel__controls .ctrl--main:hover {
-  background: var(--amber);
+  background: rgba(242, 163, 60, 0.2);
+  border-color: rgba(242, 163, 60, 0.5);
+  color: var(--amber);
   transform: scale(1.06);
+}
+.is-playing .panel__controls .ctrl--main {
+  background: var(--amber);
+  color: var(--bg);
+  border-color: var(--amber);
+  box-shadow: 0 0 20px rgba(242, 163, 60, 0.45);
+}
+.is-playing .panel__controls .ctrl--main:hover {
+  box-shadow: 0 0 26px rgba(242, 163, 60, 0.65);
 }
 .panel__vol {
   display: flex;

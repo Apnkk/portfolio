@@ -60,6 +60,29 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
   // Draw audio equalizer bars on dock & panel
   useEffect(() => {
+    const dockCanvas = dockCanvasRef.current;
+
+    // If not playing, draw resting dormant baseline once and do not loop RAF
+    if (!isPlaying) {
+      if (dockCanvas) {
+        const ctx = dockCanvas.getContext('2d');
+        if (ctx) {
+          const w = dockCanvas.width;
+          const h = dockCanvas.height;
+          ctx.clearRect(0, 0, w, h);
+          const barCount = 18;
+          const barWidth = 3;
+          const gap = (w - barCount * barWidth) / (barCount - 1);
+          ctx.fillStyle = 'rgba(237, 232, 221, 0.15)';
+          for (let i = 0; i < barCount; i++) {
+            const x = i * (barWidth + gap);
+            ctx.fillRect(x, h - 2, barWidth, 2);
+          }
+        }
+      }
+      return;
+    }
+
     const draw = () => {
       const analyser = audioEngine.getAnalyser();
       let data: Uint8Array<ArrayBuffer> | null = null;
@@ -70,8 +93,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
         analyser.getByteFrequencyData(data);
       }
 
-      // Draw dock mini bars
-      const dockCanvas = dockCanvasRef.current;
+      // Draw dock active spectrum bars
       if (dockCanvas) {
         const ctx = dockCanvas.getContext('2d');
         if (ctx) {
@@ -85,11 +107,11 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
           for (let i = 0; i < barCount; i++) {
             const freqVal = data ? (data[i * 2] || 0) / 255 : Math.sin(time * 3 + i * 0.4) * 0.4 + 0.5;
-            const barH = isPlaying ? Math.max(3, freqVal * h) : 2.5;
+            const barH = Math.max(3, freqVal * h);
             const x = i * (barWidth + gap);
             const y = h - barH;
 
-            ctx.fillStyle = isPlaying ? '#f2a33c' : 'rgba(237, 232, 221, 0.25)';
+            ctx.fillStyle = '#f2a33c';
             ctx.fillRect(x, y, barWidth, barH);
           }
         }
@@ -303,18 +325,18 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
         </AnimatePresence>
 
         {/* Minimalist Floating Audio Dock (.dock) */}
-        <div className="dock">
-          {/* Circular Amber Play Button */}
+        <div className={`dock ${isPlaying ? 'is-playing' : 'is-dormant'}`}>
+          {/* Circular Play Button */}
           <button
             type="button"
             onClick={onTogglePlay}
             className="dock__play"
-            aria-label={isPlaying ? 'Pause' : 'Lecture'}
+            aria-label={isPlaying ? 'Mettre en pause' : 'Lancer la lecture'}
           >
             {isPlaying ? (
-              <Pause className="w-4 h-4 fill-current text-[var(--bg)]" />
+              <Pause className="w-4 h-4 fill-current" />
             ) : (
-              <Play className="w-4 h-4 fill-current text-[var(--bg)] ml-0.5" />
+              <Play className="w-4 h-4 fill-current ml-0.5" />
             )}
           </button>
 
@@ -323,9 +345,15 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
             onClick={() => setIsExpanded(!isExpanded)}
             className="dock__mid cursor-pointer"
           >
-            <p className="dock__track">
-              <span>{`${currentTrack.artist} — ${currentTrack.title}`}</span>
-            </p>
+            <div className="dock__title-row">
+              <span
+                className={`dock__pulse-dot ${isPlaying ? 'dock__pulse-dot--active' : ''}`}
+                aria-hidden="true"
+              />
+              <p className="dock__track">
+                <span>{`${currentTrack.artist} — ${currentTrack.title}`}</span>
+              </p>
+            </div>
             <canvas
               ref={dockCanvasRef}
               width={138}
