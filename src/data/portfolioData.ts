@@ -66,7 +66,7 @@ export const portfolioData: PortfolioData = {
   projects: [
     {
       id: "zflix-desktop",
-      title: "Z-Flix Desktop",
+      title: "Z-Flix",
       year: "2024 - 2026",
       category: "fullstack",
       categoryLabel: { fr: "Streaming & Médias", en: "Streaming & Media" },
@@ -79,17 +79,17 @@ export const portfolioData: PortfolioData = {
         en: "Streaming client for movies, series, and anime featuring studio hubs (Netflix, Disney+, HBO Max), seamless HLS player, and cinematic dark UI."
       },
       longDescription: {
-        fr: "Z-Flix Desktop offre une expérience de streaming fluide sans publicité. L'application agrège et indexe les catalogues de plusieurs plateformes majeures, propose un sélecteur de sources vidéo résilient et un lecteur avec reprise de lecture automatique.",
-        en: "Z-Flix Desktop delivers an ad-free streaming experience. Aggregates and indexes multi-platform catalogs, resilient stream resolvers, and hardware-accelerated playback with resume state."
+        fr: "Z-Flix offre une expérience de streaming fluide sans publicité. L'application agrège et indexe les catalogues de plusieurs plateformes majeures, propose un sélecteur de sources vidéo résilient et un lecteur avec reprise de lecture automatique.",
+        en: "Z-Flix delivers an ad-free streaming experience. Aggregates and indexes multi-platform catalogs, resilient stream resolvers, and hardware-accelerated playback with resume state."
       },
       tags: ["Electron", "TypeScript", "React", "HLS Streaming", "Video Player"],
-      image: "/projects/zflix-desktop.png",
+      image: "/projects/z-flix.jpg",
       metrics: { fr: "Z-Movies & Z-Animes", en: "Z-Movies & Z-Animes" },
       featured: true,
       status: "production",
       statusLabel: { fr: "En production", en: "In Production" },
       githubUrl: "https://github.com/Apnkk/Z-FLIX-app",
-      liveUrl: "https://github.com/Apnkk/Z-FLIX-app",
+      liveUrl: "https://z-flix.site",
       gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
       features: {
         fr: [
@@ -129,7 +129,7 @@ export const portfolioData: PortfolioData = {
         en: "ShopCore is an automated e-commerce web platform engineered for digital subscriptions. Features a hybrid payment engine (Stripe + Crypto gateways), real-time order fulfillment, and a high-performance Next.js storefront."
       },
       tags: ["Next.js", "TypeScript", "Stripe", "Tailwind CSS", "Crypto Payments"],
-      image: "/projects/shopcore.png",
+      image: "/projects/shopcore.jpg",
       metrics: { fr: "shopcore.buzz", en: "shopcore.buzz" },
       featured: true,
       status: "production",

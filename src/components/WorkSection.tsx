@@ -12,26 +12,27 @@ export const WorkSection = () => {
     {
       id: 'z-flix',
       num: '01',
-      title: 'Z-Flix Desktop',
-      badge: 'STREAMING DESKTOP V2 — PRODUCTION',
-      image: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=1200&q=80',
+      title: 'Z-Flix',
+      badge: 'STREAMING WEB & MULTI-PLATEFORME — LIVE',
+      image: '/projects/z-flix.jpg',
       gradient: 'radial-gradient(ellipse 80% 90% at 75% 15%, rgba(242,163,60,0.22), transparent 60%), linear-gradient(140deg, #1a1409, #0c0a07 70%)',
       desc: {
-        fr: "Plateforme de streaming vidéo pour desktop (macOS & Windows), made in France et 100% autonome. Moteur de lecture vidéo customisé avec support HLS multi-qualités, synchronisation en temps réel de watch-parties, et scraping automatisé de catalogues haute définition.",
-        en: "Autonomous cross-platform desktop streaming application (macOS & Windows). Custom video engine with multi-bitrate HLS streams, real-time watch-party synchronization via WebSockets, and automated metadata scraping.",
+        fr: "Plateforme de streaming média made in France et 100% autonome. Moteur de lecture vidéo customisé avec support HLS multi-qualités, synchronisation en temps réel de watch-parties et catalogue unifié cinéma, séries et animés.",
+        en: "Autonomous cross-platform streaming platform built for web and desktop. Custom video engine with multi-bitrate HLS streams, real-time watch-party synchronization, and unified catalog scraping.",
       },
-      tags: ['REACT 19', 'TAURI / RUST', 'TYPESCRIPT', 'HLS STREAMING', 'TAILWIND 4', 'NODE 22', 'FFMPEG'],
+      tags: ['REACT 19', 'TYPESCRIPT', 'HLS STREAMING', 'TAURI / RUST', 'TAILWIND 4', 'NODE 22', 'FFMPEG'],
       meta: {
-        fr: 'RÔLE — DESIGN, FRONT, BACK, INFRA · CANAL OFFICIEL — T.ME/ZFLIX_APP',
-        en: 'ROLE — DESIGN, FRONT, BACK, REVERSE INFRA · OFFICIAL — T.ME/ZFLIX_APP',
+        fr: 'RÔLE — DESIGN, FULL-STACK & INFRA · EN LIGNE — Z-FLIX.SITE',
+        en: 'ROLE — DESIGN, FULL-STACK & INFRA · LIVE — Z-FLIX.SITE',
       },
+      link: 'https://z-flix.site',
     },
     {
       id: 'shopcore',
       num: '02',
       title: 'ShopCore',
       badge: 'SAAS E-COMMERCE & AUTOMATION',
-      image: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=1200&q=80',
+      image: '/projects/shopcore.jpg',
       gradient: 'radial-gradient(ellipse 80% 90% at 25% 85%, rgba(255,61,46,0.2), transparent 60%), linear-gradient(220deg, #190d0a, #0c0807 70%)',
       desc: {
         fr: "Plateforme e-commerce automatisée de distribution numérique. Intégration de paiements sécurisés Stripe, génération instantanée de clés de licence chiffrées, système anti-fraude, webhooks et portail client temps réel.",
@@ -39,16 +40,17 @@ export const WorkSection = () => {
       },
       tags: ['REACT 19', 'TYPESCRIPT', 'STRIPE', 'DRIZZLE ORM', 'MYSQL', 'REDIS', 'WEBHOOKS'],
       meta: {
-        fr: 'RÔLE — ARCHITECTURE SYSTÈME, FRONT & PAIEMENTS · LIVE — SHOPCORE.BUZZ',
-        en: 'ROLE — SYSTEM ARCHITECTURE, FRONT & BILLING · LIVE — SHOPCORE.BUZZ',
+        fr: 'RÔLE — ARCHITECTURE SYSTÈME & STRIPE · EN LIGNE — SHOPCORE.BUZZ',
+        en: 'ROLE — SYSTEM ARCHITECTURE & STRIPE · LIVE — SHOPCORE.BUZZ',
       },
+      link: 'https://shopcore.buzz',
     },
     {
       id: 'spoti-liquid',
       num: '03',
       title: 'Spoti Liquid Glass',
       badge: 'IOS TWEAK & NATIVE MODDING',
-      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1200&q=80',
+      image: '/projects/spoti-liquid-glass-3d.webp',
       gradient: 'radial-gradient(ellipse 80% 90% at 70% 80%, rgba(61,214,140,0.18), transparent 60%), linear-gradient(160deg, #0a1410, #070c0a 70%)',
       desc: {
         fr: "Tweak iOS natif développé en Objective-C et Swift. Injection dynamique de flous d’arrière-plan Liquid Glass en temps réel dans l'interface de lecture, sans dégradation de batterie et à 120 FPS constants via CoreAnimation.",
@@ -59,13 +61,14 @@ export const WorkSection = () => {
         fr: 'RÔLE — REVERSE ENGINEERING, TWEAK DEV · REPO — GITHUB.COM/APNKK',
         en: 'ROLE — REVERSE ENGINEERING, TWEAK DEV · REPO — GITHUB.COM/APNKK',
       },
+      link: 'https://github.com/Apnkk',
     },
     {
       id: 'z-launcher',
       num: '04',
       title: 'Z-Launcher',
       badge: 'CROSS-PLATFORM DESKTOP LAUNCHER',
-      image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&q=80',
+      image: '/projects/zlauncher.png',
       gradient: 'radial-gradient(ellipse 80% 90% at 40% 20%, rgba(242,163,60,0.15), transparent 60%), linear-gradient(130deg, #14120c, #0a0908 70%)',
       desc: {
         fr: "Launcher desktop moderne pour jeux et modpacks. Téléchargements concurrents ultra-rapides, vérification d'intégrité de fichiers par hash SHA-256, injection de mods et profils utilisateurs isolés.",
@@ -76,6 +79,7 @@ export const WorkSection = () => {
         fr: 'RÔLE — CONCEPTION, RUNTIME RUST & UI · STATUS — PRODUCTION',
         en: 'ROLE — CONCEPTION, RUST RUNTIME & UI · STATUS — PRODUCTION',
       },
+      link: 'https://github.com/Apnkk',
     },
   ];
 

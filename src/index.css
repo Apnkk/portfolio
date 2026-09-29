@@ -682,19 +682,20 @@
   display: none;
 }
 .immersive__lines {
-  --DefaultLyricsSize: clamp(1.85rem, 4.8vw, 3.6rem);
+  --DefaultLyricsSize: clamp(2.4rem, 6.2vw, 4.6rem);
   font-family: var(--font-display);
   font-weight: 700;
   display: flex;
   flex-direction: column;
-  padding: 34vh var(--pad) 40vh;
-  max-width: 1080px;
+  padding: 28vh clamp(20px, 6vw, 100px) 38vh;
+  max-width: 1440px;
+  width: 100%;
 }
 .immersive__lines .line {
-  margin: clamp(10px, 1.8vh, 20px) 0;
+  margin: clamp(12px, 2.2vh, 26px) 0;
   font-size: var(--DefaultLyricsSize);
-  line-height: 1.2;
-  letter-spacing: -0.015em;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
   text-align: left;
   cursor: pointer;
   transition: opacity 0.25s, transform 0.25s;
