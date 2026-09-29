@@ -3,17 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { audioEngine, TRACKS, type AudioPlayerState } from '../utils/audioSynth';
 import { FullscreenLyrics } from './FullscreenLyrics';
 import { 
-  Volume2, 
-  VolumeX, 
-  ChevronDown, 
   Play, 
   Pause, 
   SkipBack, 
   SkipForward, 
-  Mic2, 
-  Music2, 
-  ListMusic,
-  ArrowUpRight
+  ChevronDown, 
+  ChevronUp, 
+  Volume2, 
+  VolumeX, 
 } from 'lucide-react';
 
 interface AudioPlayerProps {
@@ -24,11 +21,10 @@ interface AudioPlayerProps {
 export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isFullscreenLyrics, setIsFullscreenLyrics] = useState(false);
-  const [activeTab, setActiveTab] = useState<'player' | 'queue'>('player');
   const [playerState, setPlayerState] = useState<AudioPlayerState>(() => audioEngine.getState());
   const [hoverRatio, setHoverRatio] = useState<number | null>(null);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const dockCanvasRef = useRef<HTMLCanvasElement>(null);
   const animFrameRef = useRef<number | null>(null);
 
   // Subscribe to audio engine updates
@@ -38,7 +34,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
     });
   }, []);
 
-  // Format time in mm:ss
+  // Format mm:ss
   const formatTime = (seconds: number) => {
     if (!seconds || isNaN(seconds) || seconds <= 0) return '0:00';
     const mins = Math.floor(seconds / 60);
@@ -47,15 +43,10 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
   };
 
   const currentTrack = playerState.currentTrack;
-  const currentDuration =
-    playerState.duration > 0
-      ? formatTime(playerState.duration)
-      : currentTrack.defaultDuration;
-
-  const durationSec = playerState.duration > 0 ? playerState.duration : 180;
+  const durationSec = playerState.duration > 0 ? playerState.duration : 237;
   const progressRatio = durationSec > 0 ? Math.min(1, playerState.currentTime / durationSec) : 0;
 
-  // Active lyric index based on verified timestamps
+  // Active lyric index based on timestamps
   const currentLyricIndex = currentTrack.lyrics?.reduce((acc, lyric, idx) => {
     if (playerState.currentTime >= lyric.time) {
       return idx;
@@ -63,67 +54,46 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
     return acc;
   }, 0) ?? 0;
 
+  const prevLyric = currentTrack.lyrics?.[currentLyricIndex - 1]?.text || '';
+  const nowLyric = currentTrack.lyrics?.[currentLyricIndex]?.text || currentTrack.title;
+  const nextLyric = currentTrack.lyrics?.[currentLyricIndex + 1]?.text || '';
 
-  // Audio frequency wave visualizer loop
+  // Draw audio equalizer bars on dock & panel
   useEffect(() => {
-    if (!isExpanded || activeTab !== 'player') {
-      if (animFrameRef.current) {
-        cancelAnimationFrame(animFrameRef.current);
-        animFrameRef.current = null;
-      }
-      return;
-    }
-
     const draw = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) {
-        animFrameRef.current = requestAnimationFrame(draw);
-        return;
-      }
-
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      const width = canvas.width;
-      const height = canvas.height;
-      ctx.clearRect(0, 0, width, height);
-
-      // Measure real audio frequency energy from Web Audio analyser
       const analyser = audioEngine.getAnalyser();
-      let energy = 0;
+      let data: Uint8Array<ArrayBuffer> | null = null;
+
       if (analyser && isPlaying) {
-        const data = new Uint8Array(analyser.frequencyBinCount);
+        const buffer = new ArrayBuffer(analyser.frequencyBinCount);
+        data = new Uint8Array(buffer);
         analyser.getByteFrequencyData(data);
-        let sum = 0;
-        for (let k = 0; k < data.length; k++) sum += data[k];
-        energy = sum / (data.length * 255);
       }
 
-      const time = performance.now() / 1000;
-      const midY = height / 2;
-      const dynamicAmp = isPlaying ? 3 + energy * 26 : 2;
+      // Draw dock mini bars
+      const dockCanvas = dockCanvasRef.current;
+      if (dockCanvas) {
+        const ctx = dockCanvas.getContext('2d');
+        if (ctx) {
+          const w = dockCanvas.width;
+          const h = dockCanvas.height;
+          ctx.clearRect(0, 0, w, h);
+          const barCount = 18;
+          const barWidth = 3;
+          const gap = (w - barCount * barWidth) / (barCount - 1);
+          const time = performance.now() / 1000;
 
-      const layers = [
-        { color: currentTrack.accentColor || '#ff1e38', lineWidth: 2, freq: 0.035, speed: 2.8, phase: 0 },
-        { color: 'rgba(255, 255, 255, 0.45)', lineWidth: 1.2, freq: 0.045, speed: -2.2, phase: 1.8 },
-      ];
+          for (let i = 0; i < barCount; i++) {
+            const freqVal = data ? (data[i * 2] || 0) / 255 : Math.sin(time * 3 + i * 0.4) * 0.4 + 0.5;
+            const barH = isPlaying ? Math.max(3, freqVal * h) : 2.5;
+            const x = i * (barWidth + gap);
+            const y = h - barH;
 
-      layers.forEach((layer) => {
-        ctx.beginPath();
-        ctx.lineWidth = layer.lineWidth;
-        ctx.strokeStyle = layer.color;
-
-        for (let x = 0; x < width; x++) {
-          const envelope = Math.sin((x / width) * Math.PI);
-          const y =
-            midY +
-            Math.sin(x * layer.freq + time * layer.speed + layer.phase) *
-              dynamicAmp *
-              envelope;
-          if (x === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+            ctx.fillStyle = isPlaying ? '#f2a33c' : 'rgba(237, 232, 221, 0.25)';
+            ctx.fillRect(x, y, barWidth, barH);
+          }
         }
-        ctx.stroke();
-      });
+      }
 
       animFrameRef.current = requestAnimationFrame(draw);
     };
@@ -132,7 +102,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
-  }, [isExpanded, isPlaying, activeTab, currentTrack]);
+  }, [isPlaying]);
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -142,427 +112,252 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
   return (
     <>
-      {/* Expanded Floating Music Player (Desktop & Mobile) */}
-      <AnimatePresence>
-        {isExpanded && (
-          <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[980] flex items-end sm:items-auto justify-center sm:justify-start pointer-events-auto">
-            {/* Mobile backdrop */}
+      {/* Floating Bottom-Right Audio Dock & Expanded Panel */}
+      <div className="fixed bottom-6 right-6 z-40 select-none">
+        {/* Expanded Panel (MysticSaba .panel style) */}
+        <AnimatePresence>
+          {isExpanded && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsExpanded(false)}
-              className="sm:hidden fixed inset-0 bg-black/80 backdrop-blur-md"
-              aria-hidden="true"
-            />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: 20 }}
-              transition={{ type: 'spring', visualDuration: 0.32, bounce: 0.15 }}
-              className="relative w-full sm:w-[410px] max-h-[85vh] sm:max-h-[590px] bg-[#09090b]/94 backdrop-blur-2xl border border-white/[0.12] rounded-t-3xl sm:rounded-3xl p-6 shadow-[0_25px_60px_rgba(0,0,0,0.9)] flex flex-col justify-between overflow-hidden"
-              style={{
-                boxShadow: `0 20px 50px -10px ${currentTrack.accentColor}30, 0 10px 30px rgba(0,0,0,0.8)`,
-              }}
+              id="panel"
+              role="dialog"
+              aria-label="Lecteur audio complet"
+              initial={{ opacity: 0, y: 16, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 16, scale: 0.96 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className={`panel ${isPlaying ? 'is-playing' : ''}`}
             >
-              {/* Dynamic ambient color glow in background */}
-              <div
-                className="absolute -top-24 -right-24 w-64 h-64 rounded-full pointer-events-none blur-3xl opacity-35 transition-colors duration-700"
-                style={{ background: currentTrack.accentColor }}
-                aria-hidden="true"
-              />
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsExpanded(false)}
+                className="panel__close"
+                aria-label="Réduire le lecteur"
+              >
+                <ChevronDown className="w-4 h-4" />
+              </button>
 
-              {/* Player Header */}
-              <div className="relative z-10 flex items-center justify-between pb-3 border-b border-white/[0.08]">
-                {/* Mode Tabs with Spring LayoutId */}
-                <div className="flex items-center gap-1 p-0.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-[0.68rem] font-mono select-none">
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('player')}
-                    className={`relative px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1.5 cursor-pointer ${
-                      activeTab === 'player' ? 'text-white font-semibold' : 'text-[#71717a] hover:text-white'
-                    }`}
-                  >
-                    {activeTab === 'player' && (
-                      <motion.div
-                        layoutId="active-player-tab"
-                        className="absolute inset-0 rounded-full bg-white/[0.12]"
-                        transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.15 }}
-                      />
-                    )}
-                    <Music2 className="w-3.5 h-3.5 relative z-10" />
-                    <span className="relative z-10">Lecteur</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('queue')}
-                    className={`relative px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1.5 cursor-pointer ${
-                      activeTab === 'queue' ? 'text-white font-semibold' : 'text-[#71717a] hover:text-white'
-                    }`}
-                  >
-                    {activeTab === 'queue' && (
-                      <motion.div
-                        layoutId="active-player-tab"
-                        className="absolute inset-0 rounded-full bg-white/[0.12]"
-                        transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.15 }}
-                      />
-                    )}
-                    <ListMusic className="w-3.5 h-3.5 relative z-10" />
-                    <span className="relative z-10">Morceaux</span>
-                  </button>
+              {/* Track Info with Spinning Vinyl Record */}
+              <div className="panel__now">
+                <div className="panel__art">
+                  <span className="panel__art-disc" />
+                  {currentTrack.coverImage && (
+                    <img
+                      src={currentTrack.coverImage}
+                      alt={currentTrack.title}
+                      className="panel__cover"
+                    />
+                  )}
                 </div>
+                <div className="min-w-0">
+                  <p className="panel__title">{currentTrack.title}</p>
+                  <p className="panel__artist">{currentTrack.artist}</p>
+                </div>
+              </div>
 
-                {/* Close button */}
+              {/* Lyric Peek Box with PAROLES ⤢ Button */}
+              <div className="panel__lyricpeek">
+                <p className="panel__lyricline">{prevLyric}</p>
+                <p className="panel__lyricline panel__lyricline--active">{nowLyric}</p>
+                <p className="panel__lyricline">{nextLyric}</p>
+
                 <button
                   type="button"
-                  onClick={() => setIsExpanded(false)}
-                  className="p-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
-                  aria-label="Réduire le lecteur"
+                  onClick={() => {
+                    setIsFullscreenLyrics(true);
+                  }}
+                  className="panel__immersive mono"
+                  aria-label="Ouvrir les paroles en plein écran"
                 >
-                  <ChevronDown className="w-4 h-4" />
+                  PAROLES ⤢
                 </button>
               </div>
 
-              {/* Main Content Area */}
-              <div className="relative z-10 my-auto py-3 overflow-hidden">
-                {activeTab === 'player' && (
-                  <motion.div
-                    key="player-view"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex flex-col items-center text-center space-y-4"
-                  >
-                    {/* Vinyl / Cover Art */}
-                    <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border border-white/[0.15] shadow-2xl group shrink-0">
-                      {currentTrack.coverImage ? (
-                        <img
-                          src={currentTrack.coverImage}
-                          alt={currentTrack.title}
-                          className={`w-full h-full object-cover transition-transform duration-700 ${
-                            isPlaying ? 'scale-105' : 'scale-100'
-                          }`}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-white">
-                          <Music2 className="w-10 h-10 text-[#ff1e38]" />
-                        </div>
-                      )}
+              {/* Seek Bar */}
+              <div className="panel__seek">
+                <span className="panel__time mono">{formatTime(playerState.currentTime)}</span>
 
-                      {/* Subtle vinyl groove shine overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-white/20 pointer-events-none" />
-
-                    </div>
-
-                    {/* Track Title & Artist */}
-                    <div>
-                      <h3 className="font-display font-semibold text-lg sm:text-xl text-white tracking-tight">
-                        {currentTrack.title}
-                      </h3>
-                      <p className="font-mono text-xs text-[#a1a1aa] mt-0.5 font-medium">
-                        {currentTrack.artist}
-                      </p>
-                    </div>
-
-                    {/* Real-time Web Audio Harmonic Wave Canvas */}
-                    <div className="w-full h-9 rounded-xl bg-black/40 border border-white/[0.06] overflow-hidden flex items-center justify-center p-1">
-                      <canvas
-                        ref={canvasRef}
-                        width={360}
-                        height={36}
-                        className="w-full h-full"
-                      />
-                    </div>
-
-                    {/* Sleek Lyrical Preview Card (Propre & Minimaliste) */}
-                    <motion.div
-                      onClick={() => setIsFullscreenLyrics(true)}
-                      whileHover={{ scale: 1.01, y: -1 }}
-                      whileTap={{ scale: 0.99 }}
-                      transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.1 }}
-                      className="w-full relative group cursor-pointer select-none px-4 py-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.08] hover:border-amber-500/40 transition-colors shadow-lg backdrop-blur-md"
-                      title="Ouvrir les paroles plein écran"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-mono text-xs text-[#71717a]">...</span>
-                        <span className="text-amber-500 group-hover:text-amber-400 font-mono text-[0.68rem] tracking-wider uppercase flex items-center gap-1 transition-colors">
-                          <span>OPEN LYRICS</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </span>
-                      </div>
-
-                      <div className="h-6 flex items-center overflow-hidden">
-                        <AnimatePresence mode="wait">
-                          <motion.p
-                            key={currentTrack.lyrics?.[currentLyricIndex]?.text || currentTrack.title}
-                            initial={{ opacity: 0, y: 5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -5 }}
-                            transition={{ type: 'spring', visualDuration: 0.25, bounce: 0.1 }}
-                            className="font-sans font-medium text-sm text-[#f4f4f5] group-hover:text-white truncate"
-                          >
-                            {currentTrack.lyrics?.[currentLyricIndex]?.text || currentTrack.title}
-                          </motion.p>
-                        </AnimatePresence>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'queue' && (
-                  <motion.div
-                    key="queue-view"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="h-64 sm:h-72 overflow-y-auto space-y-2 text-left [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-                  >
-                    {TRACKS.map((t, idx) => {
-                      const isSelected = playerState.currentTrackIndex === idx;
-                      return (
-                        <motion.button
-                          key={t.id}
-                          type="button"
-                          onClick={() => audioEngine.setTrack(idx, true)}
-                          whileHover={{ scale: 1.01, x: 2 }}
-                          whileTap={{ scale: 0.98 }}
-                          className={`w-full p-3 rounded-2xl border flex items-center justify-between gap-3 text-left transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-white/[0.08] border-white/20 text-white shadow-md'
-                              : 'bg-black/30 border-white/[0.06] text-[#a1a1aa] hover:bg-white/[0.04] hover:text-white'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span
-                              className={`font-mono text-xs ${
-                                isSelected ? 'text-white font-bold' : 'text-[#71717a]'
-                              }`}
-                            >
-                              0{idx + 1}
-                            </span>
-                            <div className="truncate">
-                              <p className="font-display font-medium text-sm text-white truncate">
-                                {t.title}
-                              </p>
-                              <p className="font-mono text-[0.65rem] text-[#71717a] truncate">
-                                {t.artist}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            {isSelected && isPlaying && (
-                              <div className="flex items-end gap-[2px] h-3 w-3 text-[#ff1e38]">
-                                <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-1" />
-                                <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-2" />
-                                <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-3" />
-                              </div>
-                            )}
-                            <span className="font-mono text-xs text-[#71717a]">
-                              {t.defaultDuration}
-                            </span>
-                          </div>
-                        </motion.button>
-                      );
-                    })}
-                  </motion.div>
-                )}
-              </div>
-
-              {/* Player Controls & Scrubber */}
-              <div className="relative z-10 pt-3 border-t border-white/[0.08] space-y-3">
-                {/* Time & Scrubber */}
-                <div>
-                  <div
-                    onClick={handleSeek}
-                    onMouseMove={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      setHoverRatio((e.clientX - rect.left) / rect.width);
-                    }}
-                    onMouseLeave={() => setHoverRatio(null)}
-                    className="relative w-full h-2 rounded-full bg-white/[0.08] hover:h-2.5 transition-all cursor-pointer overflow-hidden group"
-                  >
-                    {/* Hover ghost scrubber */}
+                <div
+                  onClick={handleSeek}
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setHoverRatio((e.clientX - rect.left) / rect.width);
+                  }}
+                  onMouseLeave={() => setHoverRatio(null)}
+                  className="flex-1 h-3 flex items-center cursor-pointer relative group"
+                >
+                  <div className="w-full h-1 bg-[rgba(237,232,221,0.15)] rounded-full relative overflow-hidden group-hover:h-1.5 transition-all">
                     {hoverRatio !== null && (
                       <div
-                        className="absolute inset-y-0 left-0 bg-white/20 pointer-events-none"
+                        className="absolute inset-y-0 left-0 bg-[rgba(237,232,221,0.25)] pointer-events-none"
                         style={{ width: `${hoverRatio * 100}%` }}
                       />
                     )}
-                    {/* Active progress fill */}
                     <div
-                      className="absolute inset-y-0 left-0 transition-all duration-100 rounded-full"
-                      style={{
-                        width: `${progressRatio * 100}%`,
-                        background: currentTrack.accentColor || '#ff1e38',
-                        boxShadow: `0 0 10px ${currentTrack.accentColor || '#ff1e38'}80`,
-                      }}
+                      className="absolute inset-y-0 left-0 bg-[var(--amber)] rounded-full"
+                      style={{ width: `${progressRatio * 100}%` }}
                     />
-                  </div>
-
-                  <div className="flex items-center justify-between font-mono text-[0.65rem] text-[#71717a] mt-1.5">
-                    <span>{formatTime(playerState.currentTime)}</span>
-                    <span>{currentDuration}</span>
                   </div>
                 </div>
 
-                {/* Tactile Playback Action Bar */}
-                <div className="flex items-center justify-between">
-                  {/* Volume Control */}
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => audioEngine.toggleMute()}
-                      className="p-1.5 rounded-lg text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
-                      title={playerState.isMuted ? 'Activer le son' : 'Couper le son'}
-                    >
-                      {playerState.isMuted || playerState.volume === 0 ? (
-                        <VolumeX className="w-4 h-4 text-[#ff1e38]" />
-                      ) : (
-                        <Volume2 className="w-4 h-4" />
-                      )}
-                    </button>
-                    <input
-                      type="range"
-                      min={0}
-                      max={1}
-                      step={0.02}
-                      value={playerState.isMuted ? 0 : playerState.volume}
-                      onChange={(e) => audioEngine.setVolume(parseFloat(e.target.value))}
-                      className="w-16 h-1 bg-white/[0.1] rounded-lg appearance-none cursor-pointer accent-[#ff1e38]"
-                    />
-                  </div>
+                <span className="panel__time mono">
+                  {durationSec > 0 ? formatTime(durationSec) : currentTrack.defaultDuration}
+                </span>
+              </div>
 
-                  {/* Previous / Play / Next */}
-                  <div className="flex items-center gap-3">
-                    <motion.button
-                      type="button"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => audioEngine.previous()}
-                      className="p-2 rounded-full text-[#a1a1aa] hover:text-white hover:bg-white/[0.05] transition-colors cursor-pointer"
-                      aria-label="Piste précédente"
-                    >
-                      <SkipBack className="w-4 h-4" />
-                    </motion.button>
+              {/* Controls (Prev, Main Play, Next, Volume) */}
+              <div className="panel__controls">
+                <button
+                  type="button"
+                  onClick={() => audioEngine.previous()}
+                  className="ctrl"
+                  aria-label="Titre précédent"
+                >
+                  <SkipBack className="w-4 h-4" />
+                </button>
 
-                    <motion.button
-                      type="button"
-                      whileHover={{ scale: 1.08 }}
-                      whileTap={{ scale: 0.94 }}
-                      onClick={onTogglePlay}
-                      className="w-11 h-11 rounded-full flex items-center justify-center text-white shadow-lg cursor-pointer transition-transform"
-                      style={{
-                        background: currentTrack.accentColor || '#ff1e38',
-                        boxShadow: `0 0 20px ${currentTrack.accentColor || '#ff1e38'}60`,
-                      }}
-                      aria-label={isPlaying ? 'Pause' : 'Lecture'}
-                    >
-                      {isPlaying ? (
-                        <Pause className="w-5 h-5 fill-white" />
-                      ) : (
-                        <Play className="w-5 h-5 fill-white ml-0.5" />
-                      )}
-                    </motion.button>
+                <button
+                  type="button"
+                  onClick={onTogglePlay}
+                  className="ctrl ctrl--main"
+                  aria-label={isPlaying ? 'Pause' : 'Lecture'}
+                >
+                  {isPlaying ? (
+                    <Pause className="w-4 h-4 fill-current" />
+                  ) : (
+                    <Play className="w-4 h-4 fill-current ml-0.5" />
+                  )}
+                </button>
 
-                    <motion.button
-                      type="button"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => audioEngine.next()}
-                      className="p-2 rounded-full text-[#a1a1aa] hover:text-white hover:bg-white/[0.05] transition-colors cursor-pointer"
-                      aria-label="Piste suivante"
-                    >
-                      <SkipForward className="w-4 h-4" />
-                    </motion.button>
-                  </div>
+                <button
+                  type="button"
+                  onClick={() => audioEngine.next()}
+                  className="ctrl"
+                  aria-label="Titre suivant"
+                >
+                  <SkipForward className="w-4 h-4" />
+                </button>
 
-                  {/* Spacer for clean visual balance */}
-                  <div className="w-16 hidden sm:block" />
+                {/* Volume Slider */}
+                <div className="panel__vol">
+                  <button
+                    type="button"
+                    onClick={() => audioEngine.toggleMute()}
+                    className="text-[var(--muted)] hover:text-white transition-colors cursor-pointer"
+                    aria-label={playerState.isMuted ? 'Activer le son' : 'Couper le son'}
+                  >
+                    {playerState.isMuted || playerState.volume === 0 ? (
+                      <VolumeX className="w-3.5 h-3.5 text-[var(--amber)]" />
+                    ) : (
+                      <Volume2 className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.02}
+                    value={playerState.isMuted ? 0 : playerState.volume}
+                    onChange={(e) => audioEngine.setVolume(parseFloat(e.target.value))}
+                    className="w-16 h-1 bg-[rgba(237,232,221,0.2)] accent-[var(--amber)] rounded-lg appearance-none cursor-pointer"
+                    aria-label="Volume"
+                  />
                 </div>
               </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
-      {/* Mini Dock (Bottom Right on Desktop / Bottom Center on Mobile) */}
-      {!isExpanded && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 15 }}
-          transition={{ type: 'spring', visualDuration: 0.28, bounce: 0.15 }}
-          className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[950] pointer-events-auto"
-        >
-          <div
-            onClick={() => setIsExpanded(true)}
-            className="flex items-center gap-3 p-2 pr-3.5 rounded-full bg-[#12100cd1] backdrop-blur-xl border border-[var(--line-strong)] hover:border-[var(--amber)] text-[var(--cream)] shadow-[0_8px_36px_rgba(0,0,0,0.6)] cursor-pointer group transition-all"
-            style={{
-              boxShadow: isPlaying
-                ? '0 8px 36px rgba(0,0,0,0.6), 0 0 26px rgba(242, 163, 60, 0.22)'
-                : undefined,
-            }}
+              {/* Tracklist List */}
+              <ul className="panel__list" aria-label="Liste des morceaux">
+                {TRACKS.map((t, idx) => {
+                  const isCurrent = playerState.currentTrackIndex === idx;
+                  return (
+                    <li
+                      key={t.id}
+                      className={`panel__item ${isCurrent ? 'is-current' : ''}`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => audioEngine.setTrack(idx, true)}
+                        aria-label={`Lire ${t.title} — ${t.artist}`}
+                      >
+                        <span className="panel__item-num mono">0{idx + 1}</span>
+                        <span className="panel__item-name">
+                          {t.title}
+                          <small>{t.artist}</small>
+                        </span>
+                        {isCurrent && isPlaying ? (
+                          <span className="panel__item-eq" aria-hidden="true">
+                            <i />
+                            <i />
+                            <i />
+                          </span>
+                        ) : (
+                          <span className="panel__item-dur mono">{t.defaultDuration}</span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Minimalist Floating Audio Dock (.dock) */}
+        <div className="dock">
+          {/* Circular Amber Play Button */}
+          <button
+            type="button"
+            onClick={onTogglePlay}
+            className="dock__play"
+            aria-label={isPlaying ? 'Pause' : 'Lecture'}
           >
-            {/* Amber Circular Play Button */}
-            <motion.div
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                onTogglePlay();
-              }}
-              className="relative w-10 h-10 rounded-full overflow-hidden flex items-center justify-center shrink-0 bg-[var(--amber)] text-[var(--bg)] shadow-sm"
-              title={isPlaying ? 'Pause' : 'Lecture'}
-            >
-              {isPlaying ? (
-                <Pause className="w-4 h-4 fill-current text-[var(--bg)]" />
-              ) : (
-                <Play className="w-4 h-4 fill-current text-[var(--bg)] ml-0.5" />
-              )}
-            </motion.div>
-
-            {/* Track Info */}
-            <div className="text-left select-none max-w-[130px] sm:max-w-[160px] truncate">
-              <p className="font-mono text-[0.66rem] uppercase tracking-wider text-[var(--cream)] truncate group-hover:text-[var(--amber)] transition-colors">
-                {currentTrack.title}
-              </p>
-              <p className="font-mono text-[0.6rem] text-[var(--muted)] truncate uppercase">
-                {currentTrack.artist}
-              </p>
-            </div>
-
-            {/* Quick Open Fullscreen Lyrics Icon */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsFullscreenLyrics(true);
-              }}
-              className="p-1 rounded-full text-[var(--cream-dim)] hover:text-[var(--amber)] transition-colors cursor-pointer"
-              title="Paroles en plein écran"
-              aria-label="Ouvrir les paroles en plein écran"
-            >
-              <Mic2 className="w-3.5 h-3.5" />
-            </button>
-
-            {/* Equalizer Wave Bars */}
             {isPlaying ? (
-              <div className="flex items-end gap-[2px] h-3.5 w-3 text-[var(--amber)] shrink-0">
-                <span className="w-[2px] rounded-full eq-bar-1 bg-[var(--amber)]" />
-                <span className="w-[2px] rounded-full eq-bar-2 bg-[var(--amber)]" />
-                <span className="w-[2px] rounded-full eq-bar-3 bg-[var(--amber)]" />
-              </div>
-            ) : null}
-          </div>
-        </motion.div>
-      )}
+              <Pause className="w-4 h-4 fill-current text-[var(--bg)]" />
+            ) : (
+              <Play className="w-4 h-4 fill-current text-[var(--bg)] ml-0.5" />
+            )}
+          </button>
 
-      {/* Fullscreen Apple Music / Spotify Live Lyrics Experience */}
+          {/* Middle Track Title + Audio Spectrum Bars */}
+          <div
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="dock__mid cursor-pointer"
+          >
+            <p className="dock__track">
+              <span>{`${currentTrack.artist} — ${currentTrack.title}`}</span>
+            </p>
+            <canvas
+              ref={dockCanvasRef}
+              width={138}
+              height={14}
+              className="dock__bars"
+              aria-hidden="true"
+            />
+          </div>
+
+          {/* Hairline Progress on Bottom Edge */}
+          <div className="dock__progress" aria-hidden="true">
+            <span style={{ width: `${progressRatio * 100}%` }} />
+          </div>
+
+          {/* Expand Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="dock__expand"
+            aria-label={isExpanded ? 'Réduire le lecteur' : 'Ouvrir le lecteur'}
+            aria-expanded={isExpanded}
+          >
+            {isExpanded ? (
+              <ChevronDown className="w-4 h-4" />
+            ) : (
+              <ChevronUp className="w-4 h-4" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Fullscreen Immersive Lyrics View */}
       <FullscreenLyrics
         isOpen={isFullscreenLyrics}
         onClose={() => setIsFullscreenLyrics(false)}

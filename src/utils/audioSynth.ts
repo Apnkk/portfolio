@@ -35,14 +35,14 @@ export const TRACKS: Track[] = [
     artist: 'Tame Impala',
     src: '/music/borderline.m4a',
     defaultDuration: '3:57',
-    accentColor: '#ff1e38',
-    coverImage: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=80',
+    accentColor: '#f2a33c',
+    coverImage: '/music/borderline-cover.jpg',
     waveform: [
       0.45, 0.65, 0.85, 0.95, 0.78, 0.82, 0.68, 0.9, 0.75, 0.88, 0.92, 0.7, 0.85, 0.95, 0.8, 0.6,
       0.75, 0.9, 0.85, 0.7, 0.65, 0.8, 0.95, 0.88, 0.72, 0.65, 0.82, 0.9, 0.78, 0.65, 0.75, 0.85,
     ],
     lyrics: [
-      { time: 0, text: "♪ (Intro - Synth Groove) ♪" },
+      { time: 0, text: "• • •" },
       { time: 5.27, text: "Gone a little far" },
       { time: 7.50, text: "Gone a little far this time with something" },
       { time: 14.95, text: "How was I to know?" },

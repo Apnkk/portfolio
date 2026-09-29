@@ -254,3 +254,538 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* ==========================================================================
+   MysticSaba Player Dock, Panel & Fullscreen Immersive Lyrics
+   ========================================================================== */
+.dock {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 8px 8px;
+  border-radius: 999px;
+  background: rgba(18, 16, 12, 0.85);
+  border: 1px solid var(--line-strong);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 36px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: border-color .3s, box-shadow .3s, transform .3s var(--ease-out);
+}
+.dock:hover {
+  border-color: rgba(242, 163, 60, 0.5);
+}
+.dock__play {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--amber);
+  color: var(--bg);
+  transition: transform .25s var(--ease-out), background .25s;
+  cursor: pointer;
+}
+.dock__play:hover {
+  transform: scale(1.08);
+}
+.dock__track {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, black 80%, transparent);
+}
+.dock__expand {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--cream-dim);
+  border: 1px solid var(--line);
+  transition: color .25s, border-color .25s, transform .3s var(--ease-out);
+  cursor: pointer;
+}
+.dock__expand:hover {
+  color: var(--amber);
+  border-color: rgba(242, 163, 60, 0.5);
+}
+
+/* Expanded Player Panel */
+.panel {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  right: 0;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  border-radius: 20px;
+  background: rgba(16, 14, 11, 0.90);
+  border: 1px solid var(--line-strong);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 18px 64px rgba(0, 0, 0, 0.65);
+  padding: 16px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 100;
+}
+.panel__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  color: var(--cream-dim);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.25s, background 0.25s;
+}
+.panel__close:hover {
+  color: var(--cream);
+  background: rgba(237, 232, 221, 0.08);
+}
+.panel__now {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-right: 34px;
+}
+.panel__art {
+  flex: 0 0 auto;
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #2a2113, #15100a);
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.panel__cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.panel__art-disc {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba(237, 232, 221, 0.8);
+  position: relative;
+}
+.panel__art-disc::after {
+  content: "";
+  position: absolute;
+  inset: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+.is-playing .panel__art-disc {
+  animation: spin 2.8s linear infinite;
+}
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+.panel__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.panel__artist {
+  color: var(--muted);
+  margin-top: 3px;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.panel__lyricpeek {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px 28px;
+  background: rgba(237, 232, 221, 0.024);
+  min-height: 88px;
+}
+.panel__lyricline {
+  font-size: 0.82rem;
+  color: var(--muted);
+  opacity: 0.55;
+  line-height: 1.45;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 1.2em;
+  transition: opacity 0.4s, color 0.4s;
+}
+.panel__lyricline--active {
+  color: var(--cream);
+  opacity: 1;
+  font-weight: 500;
+  text-shadow: 0 0 18px rgba(242, 163, 60, 0.25);
+}
+.panel__immersive {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--amber);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+.panel__immersive:hover {
+  background: rgba(242, 163, 60, 0.12);
+  transform: translateY(-1px);
+}
+.panel__seek {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.panel__time {
+  color: var(--muted);
+  font-size: 0.64rem;
+  min-width: 34px;
+}
+.panel__time:last-child {
+  text-align: right;
+}
+.panel__controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.panel__controls .ctrl {
+  color: var(--cream);
+  cursor: pointer;
+}
+.panel__controls .ctrl--main {
+  background: var(--cream);
+  color: var(--bg);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: background .25s, transform .25s;
+}
+.panel__controls .ctrl--main:hover {
+  background: var(--amber);
+  transform: scale(1.06);
+}
+.panel__vol {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  margin-left: 6px;
+}
+.panel__list {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(237, 232, 221, 0.2) transparent;
+}
+.panel__item {
+  width: 100%;
+}
+.panel__item button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px;
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.panel__item button:hover {
+  background: rgba(237, 232, 221, 0.05);
+}
+.panel__item-num {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  color: var(--muted);
+}
+.panel__item-name {
+  font-size: 0.85rem;
+  color: var(--cream-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.panel__item-name small {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+.panel__item-dur {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+.panel__item.is-current .panel__item-name,
+.panel__item.is-current .panel__item-num {
+  color: var(--amber);
+}
+.panel__item-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.panel__item-eq i {
+  width: 2.5px;
+  background: var(--amber);
+  animation: eq 0.9s ease-in-out infinite alternate;
+}
+.panel__item-eq i:nth-child(1) { height: 40%; animation-delay: 0s; }
+.panel__item-eq i:nth-child(2) { height: 100%; animation-delay: 0.2s; }
+.panel__item-eq i:nth-child(3) { height: 60%; animation-delay: 0.35s; }
+@keyframes eq {
+  0% { height: 25%; }
+  100% { height: 100%; }
+}
+
+/* ==========================================================================
+   Fullscreen Immersive Lyrics Modal (.immersive)
+   ========================================================================== */
+.immersive {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+}
+.immersive__bg {
+  position: absolute;
+  inset: -18%;
+  filter: blur(90px) saturate(1.25);
+  opacity: 0.6;
+  background: radial-gradient(circle at 28% 30%, var(--track-a, rgba(242, 163, 60, .55)), transparent 45%),
+              radial-gradient(circle at 75% 65%, var(--track-b, rgba(255, 61, 46, .4)), transparent 45%),
+              radial-gradient(circle at 50% 95%, rgba(237, 232, 221, .1), transparent 50%);
+  animation: 24s ease-in-out infinite alternate drift;
+}
+.immersive__bg-img {
+  position: absolute;
+  top: -18%;
+  left: -18%;
+  width: 136%;
+  height: 136%;
+  max-width: none;
+  object-fit: cover;
+  filter: blur(90px) saturate(1.35);
+  opacity: 0.85;
+  animation: 36s ease-in-out infinite alternate poster-drift;
+}
+@keyframes drift {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.15) translate(-3%, 4%); }
+}
+@keyframes poster-drift {
+  0% { transform: scale(1.05) translate(2%, -2%); }
+  100% { transform: scale(1.18) translate(-3%, 3%); }
+}
+.immersive__head {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px var(--pad);
+}
+.immersive__trackmeta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.immersive__cover {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(237, 232, 221, 0.25);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+.immersive__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--cream);
+}
+.immersive__artist {
+  color: var(--cream-dim);
+  margin-top: 2px;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.immersive__close {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  color: var(--cream-dim);
+  transition: color .25s, border-color .25s, transform .3s var(--ease-out);
+  cursor: pointer;
+}
+.immersive__close:hover {
+  color: var(--cream);
+  border-color: var(--amber);
+  transform: rotate(90deg);
+}
+.immersive__scroll {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  mask-image: linear-gradient(transparent, black 16%, black 80%, transparent);
+  -webkit-mask-image: linear-gradient(transparent, black 16%, black 80%, transparent);
+}
+.immersive__scroll::-webkit-scrollbar {
+  display: none;
+}
+.immersive__lines {
+  --DefaultLyricsSize: clamp(1.85rem, 4.8vw, 3.6rem);
+  font-family: var(--font-display);
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  padding: 34vh var(--pad) 40vh;
+  max-width: 1080px;
+}
+.immersive__lines .line {
+  margin: clamp(10px, 1.8vh, 20px) 0;
+  font-size: var(--DefaultLyricsSize);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.25s, transform 0.25s;
+  transform-origin: left center;
+}
+.immersive__lines .line.Active {
+  color: #ffffff;
+  opacity: 1;
+  transform: scale(1.04);
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.45), 0 0 45px rgba(242, 163, 60, 0.25);
+}
+.immersive__lines .line.NotSung {
+  color: rgba(237, 232, 221, 0.42);
+  opacity: 0.38;
+  filter: blur(0.8px);
+}
+.immersive__lines .line:hover {
+  opacity: 0.95;
+  filter: blur(0px);
+}
+.immersive__lines .dotGroup {
+  display: flex;
+  gap: 8px;
+  font-size: calc(var(--DefaultLyricsSize) * 0.9);
+  color: var(--cream);
+  opacity: 0.5;
+}
+.immersive__foot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px var(--pad) 26px;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+}
+.immersive__seekrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.immersive__time {
+  color: var(--cream-dim);
+  font-size: 0.68rem;
+  min-width: 36px;
+  font-family: var(--font-mono);
+}
+.immersive__time:last-child {
+  text-align: right;
+}
+.immersive__progress {
+  flex: 1;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.immersive__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  position: relative;
+}
+.immersive__controls .ctrl {
+  color: var(--cream);
+  cursor: pointer;
+  padding: 6px;
+}
+.immersive__controls .ctrl--main {
+  background: var(--cream);
+  color: var(--bg);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background .25s, transform .25s;
+}
+.immersive__controls .ctrl--main:hover {
+  background: var(--amber);
+  transform: scale(1.08);
+}
+.immersive__vol {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
