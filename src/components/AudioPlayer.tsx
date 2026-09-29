@@ -501,51 +501,37 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
         >
           <div
             onClick={() => setIsExpanded(true)}
-            className="flex items-center gap-3 p-2 pr-3.5 rounded-full bg-[#09090b]/90 backdrop-blur-xl border border-white/[0.12] hover:border-white/30 text-white shadow-[0_10px_35px_rgba(0,0,0,0.85)] cursor-pointer group transition-all"
+            className="flex items-center gap-3 p-2 pr-3.5 rounded-full bg-[#12100cd1] backdrop-blur-xl border border-[var(--line-strong)] hover:border-[var(--amber)] text-[var(--cream)] shadow-[0_8px_36px_rgba(0,0,0,0.6)] cursor-pointer group transition-all"
             style={{
               boxShadow: isPlaying
-                ? `0 0 25px -5px ${currentTrack.accentColor}40, 0 10px 30px rgba(0,0,0,0.8)`
+                ? '0 8px 36px rgba(0,0,0,0.6), 0 0 26px rgba(242, 163, 60, 0.22)'
                 : undefined,
             }}
           >
-            {/* Spinning Album Disc Button */}
+            {/* Amber Circular Play Button */}
             <motion.div
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.92 }}
               onClick={(e) => {
                 e.stopPropagation();
                 onTogglePlay();
               }}
-              className="relative w-9 h-9 rounded-full overflow-hidden flex items-center justify-center shrink-0 border border-white/[0.15] shadow-sm"
-              style={{ background: currentTrack.accentColor || '#ff1e38' }}
+              className="relative w-10 h-10 rounded-full overflow-hidden flex items-center justify-center shrink-0 bg-[var(--amber)] text-[var(--bg)] shadow-sm"
               title={isPlaying ? 'Pause' : 'Lecture'}
             >
-              {currentTrack.coverImage ? (
-                <img
-                  src={currentTrack.coverImage}
-                  alt={currentTrack.title}
-                  className={`w-full h-full object-cover ${
-                    isPlaying ? 'animate-spin' : ''
-                  }`}
-                  style={{ animationDuration: '6s' }}
-                />
-              ) : null}
-
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                {isPlaying ? (
-                  <Pause className="w-3.5 h-3.5 text-white fill-white" />
-                ) : (
-                  <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
-                )}
-              </div>
+              {isPlaying ? (
+                <Pause className="w-4 h-4 fill-current text-[var(--bg)]" />
+              ) : (
+                <Play className="w-4 h-4 fill-current text-[var(--bg)] ml-0.5" />
+              )}
             </motion.div>
 
             {/* Track Info */}
-            <div className="text-left select-none max-w-[120px] sm:max-w-[160px] truncate">
-              <p className="font-display font-medium text-xs text-white truncate group-hover:text-[#ff1e38] transition-colors">
+            <div className="text-left select-none max-w-[130px] sm:max-w-[160px] truncate">
+              <p className="font-mono text-[0.66rem] uppercase tracking-wider text-[var(--cream)] truncate group-hover:text-[var(--amber)] transition-colors">
                 {currentTrack.title}
               </p>
-              <p className="font-mono text-[0.62rem] text-[#71717a] truncate">
+              <p className="font-mono text-[0.6rem] text-[var(--muted)] truncate uppercase">
                 {currentTrack.artist}
               </p>
             </div>
@@ -557,8 +543,8 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                 e.stopPropagation();
                 setIsFullscreenLyrics(true);
               }}
-              className="p-1 rounded-full text-[#a1a1aa] hover:text-amber-400 hover:bg-white/[0.08] transition-colors cursor-pointer"
-              title="Paroles en plein écran (OPEN LYRICS)"
+              className="p-1 rounded-full text-[var(--cream-dim)] hover:text-[var(--amber)] transition-colors cursor-pointer"
+              title="Paroles en plein écran"
               aria-label="Ouvrir les paroles en plein écran"
             >
               <Mic2 className="w-3.5 h-3.5" />
@@ -566,16 +552,12 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
 
             {/* Equalizer Wave Bars */}
             {isPlaying ? (
-              <div className="flex items-end gap-[2px] h-3.5 w-3 text-[#ff1e38] shrink-0">
-                <span className="w-[2px] rounded-full eq-bar-1" style={{ background: currentTrack.accentColor }} />
-                <span className="w-[2px] rounded-full eq-bar-2" style={{ background: currentTrack.accentColor }} />
-                <span className="w-[2px] rounded-full eq-bar-3" style={{ background: currentTrack.accentColor }} />
+              <div className="flex items-end gap-[2px] h-3.5 w-3 text-[var(--amber)] shrink-0">
+                <span className="w-[2px] rounded-full eq-bar-1 bg-[var(--amber)]" />
+                <span className="w-[2px] rounded-full eq-bar-2 bg-[var(--amber)]" />
+                <span className="w-[2px] rounded-full eq-bar-3 bg-[var(--amber)]" />
               </div>
-            ) : (
-              <span className="font-mono text-[0.62rem] text-[#71717a] shrink-0">
-                OFF
-              </span>
-            )}
+            ) : null}
           </div>
         </motion.div>
       )}

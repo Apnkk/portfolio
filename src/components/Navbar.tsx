@@ -1,292 +1,121 @@
 import { useState, useEffect } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { VolumeX, Menu, X, Terminal } from 'lucide-react';
-import { MagneticButton } from './motion/MagneticButton';
+import { Menu, X } from 'lucide-react';
 
-interface NavbarProps {
-  isPlaying?: boolean;
-  onTogglePlay?: () => void;
-  onOpenCommandPalette?: () => void;
-}
-
-export const Navbar = ({ isPlaying, onTogglePlay, onOpenCommandPalette }: NavbarProps) => {
+export const Navbar = () => {
   const { language, setLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const shouldReduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (!mobileMenuOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMobileMenuOpen(false);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-
-    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
-    document.body.style.overflow = 'hidden';
-    if (lenis) lenis.stop();
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-      if (lenis) lenis.start();
-    };
-  }, [mobileMenuOpen]);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
-
-      const sections = ['hero', 'work', 'stack', 'method', 'about', 'contact'];
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 200 && rect.bottom >= 200) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
+      setScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { href: '#work', id: 'work', label: language === 'fr' ? 'Projets' : 'Projects' },
-    { href: '#stack', id: 'stack', label: language === 'fr' ? 'Stack' : 'Stack' },
-    { href: '#method', id: 'method', label: language === 'fr' ? 'Méthode' : 'Process' },
-    { href: '#about', id: 'about', label: language === 'fr' ? 'Bio' : 'About' },
-    { href: '#contact', id: 'contact', label: 'Contact' },
+    { href: '#work', label: language === 'fr' ? 'PROJETS' : 'PROJECTS' },
+    { href: '#musix', label: 'MUSIX' },
+    { href: '#stack', label: 'STACK' },
+    { href: '#about', label: language === 'fr' ? 'À PROPOS' : 'ABOUT' },
+    { href: '#contact', label: 'CONTACT', isAccent: true },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-[960] transition-all duration-300 py-3 sm:py-4 px-4 sm:px-8 lg:px-12 flex items-center justify-between pointer-events-none ${
-          scrolled ? 'pt-2.5 sm:pt-3' : 'pt-4 sm:pt-6'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-[var(--pad)] py-4 flex items-center justify-between ${
+          scrolled
+            ? 'bg-[rgba(10,9,8,0.85)] backdrop-blur-md border-b border-[var(--line)] py-3'
+            : 'bg-transparent'
         }`}
       >
-        {/* Left: Brand Monogram with Magnetic pull */}
-        <div className="pointer-events-auto flex items-center gap-3">
-          <MagneticButton pullFactor={0.2}>
-            <a
-              href="#hero"
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] text-white hover:border-white/20 transition-all select-none shadow-sm"
-              aria-label="Ares — retour au début"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#ff1e38] shadow-[0_0_8px_#ff1e38]" />
-              <span className="font-mono text-xs font-semibold tracking-tight uppercase">
-                ares
-              </span>
-            </a>
-          </MagneticButton>
-        </div>
+        {/* Left: Brand Monogram */}
+        <a
+          href="#top"
+          className="flex items-center gap-2 select-none group"
+          aria-label="Ares — Accueil"
+        >
+          {/* Amber Ring Mark */}
+          <span className="w-3.5 h-3.5 rounded-full border-[1.5px] border-[var(--amber)] flex items-center justify-center shrink-0">
+            <span className="w-1 h-1 rounded-full bg-[var(--amber)]" />
+          </span>
+          <span className="font-display font-semibold text-sm tracking-tight text-[var(--cream)] group-hover:text-[var(--amber)] transition-colors">
+            ares®
+          </span>
+        </a>
 
-        {/* Center: Minimalist Desktop Navigation */}
+        {/* Desktop Navigation */}
         <nav
-          className="pointer-events-auto hidden md:flex items-center gap-1 p-1 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.7rem] uppercase tracking-wider select-none shadow-[0_8px_30px_rgba(0,0,0,0.8)] absolute left-1/2 -translate-x-1/2"
+          className="hidden md:flex items-center gap-7 font-mono text-[0.72rem] tracking-widest uppercase select-none"
           aria-label="Navigation principale"
         >
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.id;
-            return (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`relative px-3.5 py-1.5 rounded-full transition-colors duration-200 ${
-                  isActive
-                    ? 'text-white font-semibold'
-                    : 'text-[#a1a1aa] hover:text-white hover:bg-white/[0.04]'
-                }`}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="active-nav-pill"
-                    className="absolute inset-0 rounded-full bg-white/[0.12] border border-white/[0.12] shadow-[0_0_12px_rgba(255,255,255,0.06)]"
-                    transition={{
-                      type: 'spring',
-                      visualDuration: shouldReduceMotion ? 0.01 : 0.28,
-                      bounce: 0.15,
-                    }}
-                  />
-                )}
-                <span className="relative z-10">{link.label}</span>
-              </a>
-            );
-          })}
-        </nav>
-
-        {/* Right: Command Menu Trigger + Audio + Language Switcher */}
-        <div className="pointer-events-auto flex items-center gap-2">
-          {/* Command Palette Trigger */}
-          {onOpenCommandPalette && (
-            <MagneticButton pullFactor={0.2}>
-              <button
-                type="button"
-                onClick={onOpenCommandPalette}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] hover:border-white/25 text-[#a1a1aa] hover:text-white transition-all text-xs font-mono select-none cursor-pointer"
-                title="Ouvrir la console (Cmd+K)"
-              >
-                <Terminal className="w-3.5 h-3.5 text-[#ff1e38]" />
-                <span className="text-[0.66rem] tracking-wider uppercase">CLI</span>
-                <kbd className="px-1 py-0.2 rounded bg-white/[0.08] text-[0.58rem] text-[#71717a]">⌘K</kbd>
-              </button>
-            </MagneticButton>
-          )}
-
-          {/* Audio Button */}
-          {onTogglePlay && (
-            <MagneticButton pullFactor={0.2}>
-              <button
-                type="button"
-                onClick={onTogglePlay}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] hover:border-white/20 text-[#a1a1aa] hover:text-white transition-all text-xs font-mono select-none cursor-pointer"
-                title={isPlaying ? 'Pause audio' : 'Play audio'}
-                aria-label="Contrôle audio"
-              >
-                {isPlaying ? (
-                  <>
-                    <div className="flex items-end gap-[2px] h-3 w-3 text-[#ff1e38]">
-                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-1" />
-                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-2" />
-                      <span className="w-[2px] bg-[#ff1e38] rounded-full eq-bar-3" />
-                    </div>
-                    <span className="text-[0.66rem] font-semibold text-white tracking-wider">
-                      SOUND ON
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <VolumeX className="w-3.5 h-3.5 text-[#71717a]" />
-                    <span className="text-[0.66rem] tracking-wider">SOUND</span>
-                  </>
-                )}
-              </button>
-            </MagneticButton>
-          )}
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={`transition-colors ${
+                link.isAccent
+                  ? 'text-[var(--amber)] hover:text-white font-medium'
+                  : 'text-[var(--cream-dim)] hover:text-white'
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
 
           {/* Language Switcher */}
-          <div className="relative inline-flex items-center p-0.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/[0.08] font-mono text-[0.66rem] select-none">
-            <button
-              type="button"
-              onClick={() => setLanguage('en')}
-              className={`relative px-2 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
-                language === 'en' ? 'text-white font-bold' : 'text-[#71717a] hover:text-white'
-              }`}
-            >
-              {language === 'en' && (
-                <motion.div
-                  layoutId="active-lang-pill"
-                  className="absolute inset-0 rounded-full bg-white/[0.12] border border-white/[0.1]"
-                  transition={{
-                    type: 'spring',
-                    visualDuration: shouldReduceMotion ? 0.01 : 0.24,
-                    bounce: 0.12,
-                  }}
-                />
-              )}
-              <span className="relative z-10">EN</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setLanguage('fr')}
-              className={`relative px-2 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
-                language === 'fr' ? 'text-white font-bold' : 'text-[#71717a] hover:text-white'
-              }`}
-            >
-              {language === 'fr' && (
-                <motion.div
-                  layoutId="active-lang-pill"
-                  className="absolute inset-0 rounded-full bg-white/[0.12] border border-white/[0.1]"
-                  transition={{
-                    type: 'spring',
-                    visualDuration: shouldReduceMotion ? 0.01 : 0.24,
-                    bounce: 0.12,
-                  }}
-                />
-              )}
-              <span className="relative z-10">FR</span>
-            </button>
-          </div>
-
-          {/* Mobile Menu Hamburger */}
           <button
             type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.1] text-white cursor-pointer"
-            aria-label="Menu"
-            aria-expanded={mobileMenuOpen}
+            onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+            className="text-[var(--muted)] hover:text-white transition-colors cursor-pointer pl-2"
           >
-            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            <span className={language === 'en' ? 'text-[var(--cream)] font-bold' : ''}>EN</span>
+            <span className="mx-1 opacity-40">/</span>
+            <span className={language === 'fr' ? 'text-[var(--cream)] font-bold' : ''}>FR</span>
+          </button>
+        </nav>
+
+        {/* Mobile Hamburger Toggle */}
+        <div className="flex md:hidden items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+            className="font-mono text-xs text-[var(--cream-dim)]"
+          >
+            {language.toUpperCase()}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="p-1 text-[var(--cream)]"
+            aria-label="Menu"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{
-              type: 'spring',
-              visualDuration: shouldReduceMotion ? 0.01 : 0.25,
-              bounce: 0.05,
-            }}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Menu"
-            className="fixed inset-0 z-[950] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-6 pt-24 pb-12"
-          >
-            <nav className="flex flex-col gap-3">
-              <span className="font-mono text-xs text-[#71717a] tracking-wider uppercase mb-2">
-                Navigation
-              </span>
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="font-display font-medium text-2xl text-white py-2 border-b border-white/[0.06] hover:text-[#ff1e38] transition-colors flex items-center justify-between"
-                >
-                  <span>{link.label}</span>
-                  <span className="text-[#71717a] text-sm">↗</span>
-                </a>
-              ))}
-
-              {onOpenCommandPalette && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenCommandPalette();
-                  }}
-                  className="mt-4 flex items-center justify-between p-3 rounded-2xl bg-white/[0.05] border border-white/[0.1] text-white font-mono text-xs cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <Terminal className="w-4 h-4 text-[#ff1e38]" />
-                    <span>Console de commandes (CLI)</span>
-                  </span>
-                  <span className="text-[#71717a]">⌘K</span>
-                </button>
-              )}
-            </nav>
-
-            <div className="pt-6 border-t border-white/[0.08]">
-              <p className="font-mono text-xs text-[#71717a]">
-                France · Full-Stack &amp; Systems Developer
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile Drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 bg-[var(--bg)] flex flex-col justify-center items-center gap-6 p-6 md:hidden">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className={`font-display font-semibold text-2xl tracking-tight ${
+                link.isAccent ? 'text-[var(--amber)]' : 'text-[var(--cream)]'
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
     </>
   );
 };

@@ -340,6 +340,40 @@ class PortfolioAudioEngine {
     return this.analyser;
   }
 
+  private freqData: Uint8Array<ArrayBuffer> | null = null;
+
+  public getBands(): { bass: number; mid: number; treble: number; level: number } {
+    if (!this.analyser || !this.isPlaying) {
+      return { bass: 0, mid: 0, treble: 0, level: 0 };
+    }
+    if (!this.freqData || this.freqData.length !== this.analyser.frequencyBinCount) {
+      this.freqData = new Uint8Array(new ArrayBuffer(this.analyser.frequencyBinCount));
+    }
+    this.analyser.getByteFrequencyData(this.freqData);
+
+    const len = this.freqData.length;
+    const bassCount = Math.max(1, Math.floor(len * 0.05));
+    let bassSum = 0;
+    for (let i = 0; i < bassCount; i++) bassSum += this.freqData[i];
+
+    const midCount = Math.max(1, Math.floor(len * 0.25));
+    let midSum = 0;
+    for (let i = bassCount; i < bassCount + midCount; i++) midSum += this.freqData[i];
+
+    const trebleCount = Math.max(1, Math.floor(len * 0.4));
+    let trebleSum = 0;
+    for (let i = bassCount + midCount; i < Math.min(len, bassCount + midCount + trebleCount); i++) {
+      trebleSum += this.freqData[i];
+    }
+
+    const bass = bassSum / (bassCount * 255);
+    const mid = midSum / (midCount * 255);
+    const treble = trebleSum / (trebleCount * 255);
+    const level = bass * 0.5 + mid * 0.3 + treble * 0.2;
+
+    return { bass, mid, treble, level };
+  }
+
   public getState(): AudioPlayerState {
     const currentTrack = this.tracks[this.currentTrackIndex] || this.tracks[0];
     return {
