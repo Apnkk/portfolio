@@ -144,7 +144,7 @@ function PortfolioApp() {
         <Hero />
         <Marquee />
         <WorkSection />
-        <MusixSection />
+        <MusixSection isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
         <StackSection />
         <ProcessSection />
         <AboutSection />

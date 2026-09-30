@@ -1,4 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
+import { ScrollReveal } from './motion/ScrollReveal';
 
 export const AboutSection = () => {
   const { language } = useLanguage();
@@ -10,18 +11,21 @@ export const AboutSection = () => {
       aria-label="À propos"
     >
       <div className="max-w-4xl mx-auto">
-        {/* Section Kicker */}
-        <div className="font-mono text-[0.72rem] tracking-widest text-[var(--amber)] uppercase mb-3">
-          05 / À PROPOS
-        </div>
+        <ScrollReveal y={40} blur={8}>
+          {/* Section Kicker */}
+          <div className="font-mono text-[0.72rem] tracking-widest text-[var(--amber)] uppercase mb-3">
+            05 / À PROPOS
+          </div>
 
-        {/* Section Headline */}
-        <h2 className="font-display font-semibold text-[clamp(2.4rem,6vw,5.5rem)] leading-tight tracking-tight text-[var(--cream)] mb-10">
-          {language === 'fr' ? "Salut, moi c'est Ares" : "Hey, I'm Ares"}
-        </h2>
+          {/* Section Headline */}
+          <h2 className="font-display font-semibold text-[clamp(2.4rem,6vw,5.5rem)] leading-tight tracking-tight text-[var(--cream)] mb-10">
+            {language === 'fr' ? "Salut, moi c'est Ares" : "Hey, I'm Ares"}
+          </h2>
+        </ScrollReveal>
 
         {/* Candid Builder Narrative */}
         <div className="space-y-7 text-[clamp(1.05rem,1.8vw,1.3rem)] leading-relaxed text-[var(--cream)] font-normal">
+          <ScrollReveal delay={0.05} amount={0.3}>
           <p>
             {language === 'fr' ? (
               <>
@@ -33,7 +37,9 @@ export const AboutSection = () => {
               </>
             )}
           </p>
+          </ScrollReveal>
 
+          <ScrollReveal delay={0.1} amount={0.3}>
           <p>
             {language === 'fr' ? (
               <>
@@ -45,7 +51,9 @@ export const AboutSection = () => {
               </>
             )}
           </p>
+          </ScrollReveal>
 
+          <ScrollReveal delay={0.15} amount={0.3}>
           <p className="text-[var(--cream-dim)] text-[clamp(0.95rem,1.5vw,1.15rem)]">
             {language === 'fr' ? (
               <>
@@ -57,6 +65,7 @@ export const AboutSection = () => {
               </>
             )}
           </p>
+          </ScrollReveal>
         </div>
       </div>
     </section>

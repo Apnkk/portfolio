@@ -1,19 +1,16 @@
 import { useLanguage } from '../context/LanguageContext';
-import { useState } from 'react';
-import { ProjectModal } from './ProjectModal';
-import { portfolioData } from '../data/portfolioData';
-import type { Project } from '../types';
+import { ScrollReveal } from './motion/ScrollReveal';
+import { Parallax } from './motion/Parallax';
 
 export const WorkSection = () => {
   const { language } = useLanguage();
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const projectsData = [
     {
       id: 'z-flix',
       num: '01',
       title: 'Z-Flix',
-      badge: 'STREAMING WEB & MULTI-PLATEFORME — LIVE',
+      badge: 'STREAMING WEB & MULTI-PLATEFORME — REPO GITHUB',
       image: '/projects/z-flix.jpg',
       gradient: 'radial-gradient(ellipse 80% 90% at 75% 15%, rgba(242,163,60,0.22), transparent 60%), linear-gradient(140deg, #1a1409, #0c0a07 70%)',
       desc: {
@@ -22,16 +19,17 @@ export const WorkSection = () => {
       },
       tags: ['REACT 19', 'TYPESCRIPT', 'HLS STREAMING', 'TAURI / RUST', 'TAILWIND 4', 'NODE 22', 'FFMPEG'],
       meta: {
-        fr: 'RÔLE — DESIGN, FULL-STACK & INFRA · EN LIGNE — Z-FLIX.SITE',
-        en: 'ROLE — DESIGN, FULL-STACK & INFRA · LIVE — Z-FLIX.SITE',
+        fr: 'RÔLE — DESIGN, FULL-STACK & INFRA · GITHUB — APNKK/Z-FLIX-APP',
+        en: 'ROLE — DESIGN, FULL-STACK & INFRA · GITHUB — APNKK/Z-FLIX-APP',
       },
+      githubUrl: 'https://github.com/Apnkk/Z-FLIX-app',
       link: 'https://z-flix.site',
     },
     {
       id: 'shopcore',
       num: '02',
       title: 'ShopCore',
-      badge: 'SAAS E-COMMERCE & AUTOMATION',
+      badge: 'SAAS E-COMMERCE & AUTOMATION — GITHUB',
       image: '/projects/shopcore.jpg',
       gradient: 'radial-gradient(ellipse 80% 90% at 25% 85%, rgba(255,61,46,0.2), transparent 60%), linear-gradient(220deg, #190d0a, #0c0807 70%)',
       desc: {
@@ -40,16 +38,17 @@ export const WorkSection = () => {
       },
       tags: ['REACT 19', 'TYPESCRIPT', 'STRIPE', 'DRIZZLE ORM', 'MYSQL', 'REDIS', 'WEBHOOKS'],
       meta: {
-        fr: 'RÔLE — ARCHITECTURE SYSTÈME & STRIPE · EN LIGNE — SHOPCORE.BUZZ',
-        en: 'ROLE — SYSTEM ARCHITECTURE & STRIPE · LIVE — SHOPCORE.BUZZ',
+        fr: 'RÔLE — ARCHITECTURE SYSTÈME & STRIPE · GITHUB — GITHUB.COM/APNKK',
+        en: 'ROLE — SYSTEM ARCHITECTURE & STRIPE · GITHUB — GITHUB.COM/APNKK',
       },
+      githubUrl: 'https://github.com/Apnkk',
       link: 'https://shopcore.buzz',
     },
     {
       id: 'spoti-liquid',
       num: '03',
       title: 'Spoti Liquid Glass',
-      badge: 'IOS TWEAK & NATIVE MODDING',
+      badge: 'IOS TWEAK & NATIVE MODDING — OPEN SOURCE',
       image: '/projects/spoti-liquid-glass-3d.webp',
       gradient: 'radial-gradient(ellipse 80% 90% at 70% 80%, rgba(61,214,140,0.18), transparent 60%), linear-gradient(160deg, #0a1410, #070c0a 70%)',
       desc: {
@@ -58,16 +57,17 @@ export const WorkSection = () => {
       },
       tags: ['SWIFT', 'OBJECTIVE-C', 'THEOS / CYDIA', 'COREANIMATION', 'IOS 16-18', 'JAILBREAK / TROLLSTORE'],
       meta: {
-        fr: 'RÔLE — REVERSE ENGINEERING, TWEAK DEV · REPO — GITHUB.COM/APNKK',
-        en: 'ROLE — REVERSE ENGINEERING, TWEAK DEV · REPO — GITHUB.COM/APNKK',
+        fr: 'RÔLE — REVERSE ENGINEERING, TWEAK DEV · GITHUB — APNKK/SPOTI.PW',
+        en: 'ROLE — REVERSE ENGINEERING, TWEAK DEV · GITHUB — APNKK/SPOTI.PW',
       },
-      link: 'https://github.com/Apnkk',
+      githubUrl: 'https://github.com/Apnkk/spoti.pw',
+      link: 'https://github.com/Apnkk/spoti.pw',
     },
     {
       id: 'z-launcher',
       num: '04',
       title: 'Z-Launcher',
-      badge: 'CROSS-PLATFORM DESKTOP LAUNCHER',
+      badge: 'CROSS-PLATFORM DESKTOP LAUNCHER — GITHUB REPO',
       image: '/projects/zlauncher.png',
       gradient: 'radial-gradient(ellipse 80% 90% at 40% 20%, rgba(242,163,60,0.15), transparent 60%), linear-gradient(130deg, #14120c, #0a0908 70%)',
       desc: {
@@ -76,17 +76,13 @@ export const WorkSection = () => {
       },
       tags: ['TAURI', 'RUST', 'REACT 19', 'TYPESCRIPT', 'LOCAL PROCESS IPC', 'TAILWIND 4'],
       meta: {
-        fr: 'RÔLE — CONCEPTION, RUNTIME RUST & UI · STATUS — PRODUCTION',
-        en: 'ROLE — CONCEPTION, RUST RUNTIME & UI · STATUS — PRODUCTION',
+        fr: 'RÔLE — CONCEPTION, RUNTIME RUST & UI · GITHUB — APNKK/ZFLIX-LAUNCHER',
+        en: 'ROLE — CONCEPTION, RUST RUNTIME & UI · GITHUB — APNKK/ZFLIX-LAUNCHER',
       },
-      link: 'https://github.com/Apnkk',
+      githubUrl: 'https://github.com/Apnkk/zflix-launcher',
+      link: 'https://github.com/Apnkk/zflix-launcher',
     },
   ];
-
-  const handleOpenProject = (projectId: string) => {
-    const found = portfolioData.projects.find((p: Project) => p.id === projectId);
-    if (found) setSelectedProject(found);
-  };
 
   return (
     <section
@@ -105,20 +101,30 @@ export const WorkSection = () => {
           </h2>
           <p className="text-[var(--cream-dim)] text-[0.95rem] max-w-xl mt-3 leading-relaxed">
             {language === 'fr'
-              ? 'Des produits en ligne aux projets archivés — pensés, codés et déployés de A à Z.'
-              : 'From shipped production apps to archived experiments — conceived, coded, and deployed end-to-end.'}
+              ? 'Des produits en ligne aux projets open source — clique sur un projet pour accéder directement à son repository GitHub.'
+              : 'From shipped production apps to open source builds — click any project to view its GitHub repository.'}
           </p>
         </div>
 
-        {/* Project Rows */}
+        {/* Project Rows linking to GitHub */}
         <div className="flex flex-col border-b border-[var(--line)]">
-          {projectsData.map((project) => (
-            <div
+          {projectsData.map((project, pIdx) => (
+            <ScrollReveal
               key={project.id}
-              className="work__row group py-[clamp(26px,4vh,44px)] border-t border-[var(--line)] cursor-pointer"
-              onClick={() => handleOpenProject(project.id)}
+              as="div"
+              y={48}
+              blur={6}
+              delay={pIdx * 0.06}
+              amount={0.15}
             >
-              {/* Row Header: Number, Title, Arrow */}
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="work__row group block py-[clamp(26px,4vh,44px)] border-t border-[var(--line)] cursor-pointer text-inherit no-underline"
+              aria-label={`${project.title} sur GitHub`}
+            >
+              {/* Row Header: Number, Title, GitHub Arrow Tag */}
               <div className="flex items-baseline gap-[clamp(14px,3vw,30px)] w-full mb-[clamp(18px,3vh,30px)]">
                 <span className="font-mono text-base text-[var(--muted)] shrink-0">
                   {project.num}
@@ -128,15 +134,20 @@ export const WorkSection = () => {
                   {project.title}
                 </h3>
 
-                <span className="ml-auto text-[clamp(1.4rem,2.8vw,2.4rem)] text-[var(--muted)] group-hover:text-[var(--amber)] group-hover:translate-x-1.5 group-hover:-translate-y-1.5 transition-all duration-300">
-                  ↗
-                </span>
+                <div className="ml-auto flex items-center gap-2">
+                  <span className="hidden sm:inline font-mono text-[0.68rem] tracking-wider text-[var(--muted)] group-hover:text-[var(--amber)] uppercase transition-colors">
+                    GITHUB
+                  </span>
+                  <span className="text-[clamp(1.4rem,2.8vw,2.4rem)] text-[var(--muted)] group-hover:text-[var(--amber)] group-hover:translate-x-1.5 group-hover:-translate-y-1.5 transition-all duration-300">
+                    ↗
+                  </span>
+                </div>
               </div>
 
               {/* Row Body: 5fr / 7fr Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-[clamp(20px,4vw,56px)] items-start">
                 {/* Left: Device/Mockup Visual Container (5 cols) */}
-                <div className="lg:col-span-5 rounded-[14px] overflow-hidden border border-[var(--line)] relative group-hover:border-[var(--line-strong)] transition-colors">
+                <Parallax offset={48} className="lg:col-span-5 rounded-[14px] overflow-hidden border border-[var(--line)] relative group-hover:border-[var(--line-strong)] transition-colors">
                   <div
                     className="relative aspect-[16/10] overflow-hidden flex items-center justify-center p-3"
                     style={{ background: project.gradient }}
@@ -153,7 +164,7 @@ export const WorkSection = () => {
                       className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                     />
                   </div>
-                </div>
+                </Parallax>
 
                 {/* Right: Technical Info, Description & Pills (7 cols) */}
                 <div className="lg:col-span-7 flex flex-col justify-between h-full pt-1">
@@ -176,23 +187,20 @@ export const WorkSection = () => {
                   </div>
 
                   {/* Metadata Row */}
-                  <div className="pt-4 border-t border-[var(--line)] font-mono text-[0.68rem] tracking-wider text-[var(--muted)] uppercase">
-                    {project.meta[language]}
+                  <div className="pt-4 border-t border-[var(--line)] flex items-center justify-between font-mono text-[0.68rem] tracking-wider text-[var(--muted)] uppercase">
+                    <span>{project.meta[language]}</span>
+                    <span className="text-[var(--amber)] opacity-0 group-hover:opacity-100 transition-opacity">
+                      OUVRIR SUR GITHUB ↗
+                    </span>
                   </div>
                 </div>
               </div>
-            </div>
+            </a>
+            </ScrollReveal>
           ))}
         </div>
       </div>
 
-      {/* Case Study Modal */}
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
     </section>
   );
 };

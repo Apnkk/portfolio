@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0a0908;
-  --color-bg-alt: #121008;
-  --color-surface: #15120d;
-  --color-surface-hover: #1c1912;
-  --color-line: rgba(237, 232, 221, 0.1);
-  --color-line-strong: rgba(237, 232, 221, 0.22);
+  --color-bg: #000000;
+  --color-bg-alt: #0a0505;
+  --color-surface: #0e0808;
+  --color-surface-hover: #171010;
+  --color-line: rgba(245, 238, 238, 0.09);
+  --color-line-strong: rgba(245, 238, 238, 0.2);
   
-  --color-cream: #ede8dd;
-  --color-cream-dim: #b9b3a4;
-  --color-muted: #837e6f;
+  --color-cream: #f5eeee;
+  --color-cream-dim: #b3a9a9;
+  --color-muted: #7a6f6f;
   
-  --color-amber: #f2a33c;
-  --color-amber-soft: rgba(242, 163, 60, 0.14);
-  --color-red: #ff3d2e;
+  --color-amber: #ff1e38;
+  --color-amber-soft: rgba(255, 30, 56, 0.14);
+  --color-red: #ff1e38;
   --color-green: #3dd68c;
 
   --font-display: "Clash Display", "Satoshi", system-ui, sans-serif;
@@ -23,17 +23,17 @@
 }
 
 :root {
-  --bg: #0a0908;
-  --bg-2: #121008;
-  --surface: #15120d;
-  --line: rgba(237, 232, 221, 0.1);
-  --line-strong: rgba(237, 232, 221, 0.22);
-  --cream: #ede8dd;
-  --cream-dim: #b9b3a4;
-  --muted: #837e6f;
-  --amber: #f2a33c;
-  --amber-soft: rgba(242, 163, 60, 0.14);
-  --red: #ff3d2e;
+  --bg: #000000;
+  --bg-2: #0a0505;
+  --surface: #0e0808;
+  --line: rgba(245, 238, 238, 0.09);
+  --line-strong: rgba(245, 238, 238, 0.2);
+  --cream: #f5eeee;
+  --cream-dim: #b3a9a9;
+  --muted: #7a6f6f;
+  --amber: #ff1e38;
+  --amber-soft: rgba(255, 30, 56, 0.14);
+  --red: #ff1e38;
   --green: #3dd68c;
   --font-display: "Clash Display", "Satoshi", sans-serif;
   --font-body: "Satoshi", system-ui, sans-serif;
@@ -135,13 +135,13 @@
   .cursor__ring {
     width: 30px;
     height: 30px;
-    border: 1px solid rgba(242, 163, 60, 0.4);
+    border: 1px solid rgba(255, 30, 56, 0.4);
     transition: width 0.25s var(--ease-out), height 0.25s var(--ease-out), border-color 0.25s;
   }
   .cursor--hover .cursor__ring {
     width: 52px;
     height: 52px;
-    border-color: rgba(242, 163, 60, 0.85);
+    border-color: rgba(255, 30, 56, 0.85);
   }
   .cursor--down .cursor__ring {
     width: 22px;
@@ -198,24 +198,24 @@
 .btn--primary:hover {
   background: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(237, 232, 221, 0.18);
+  box-shadow: 0 6px 24px rgba(245, 238, 238, 0.18);
 }
 
 .btn--ghost {
-  background: rgba(21, 18, 13, 0.7);
+  background: rgba(14, 9, 9, 0.7);
   color: var(--cream);
   border: 1px solid var(--line);
   backdrop-filter: blur(8px);
 }
 
 .btn--ghost:hover {
-  border-color: rgba(242, 163, 60, 0.4);
-  background: rgba(242, 163, 60, 0.06);
+  border-color: rgba(255, 30, 56, 0.4);
+  background: rgba(255, 30, 56, 0.06);
   transform: translateY(-2px);
 }
 
 .btn--play {
-  background: rgba(21, 18, 13, 0.7);
+  background: rgba(14, 9, 9, 0.7);
   color: var(--cream);
   border: 1px solid var(--line);
   backdrop-filter: blur(8px);
@@ -223,7 +223,7 @@
 
 .btn--play:hover {
   border-color: var(--amber);
-  background: rgba(242, 163, 60, 0.08);
+  background: rgba(255, 30, 56, 0.08);
 }
 
 /* Typography Helpers */
@@ -256,6 +256,47 @@
 }
 
 /* ==========================================================================
+   Section 02 — Z-Music On / Off (éteint quand pas de son, allumé au play)
+   ========================================================================== */
+.musix--off {
+  background: #060303;
+}
+.musix--on {
+  background: var(--bg-2);
+  border-color: rgba(255, 30, 56, 0.22);
+}
+
+/* Ambient radial glow behind the section */
+.musix--off .musix__glow {
+  opacity: 0.05;
+}
+.musix--on .musix__glow {
+  opacity: 0.34;
+  animation: musix-glow-pulse 3.4s ease-in-out infinite;
+}
+@keyframes musix-glow-pulse {
+  0%, 100% { opacity: 0.26; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.42; transform: translate(-50%, -50%) scale(1.06); }
+}
+
+/* Giant Z-MUSIC wordmark */
+.musix__wordmark--off {
+  opacity: 0.5;
+  filter: saturate(0.4) brightness(0.7);
+  text-shadow: none;
+}
+.musix__wordmark--on {
+  opacity: 1;
+  filter: saturate(1);
+  text-shadow: 0 0 40px rgba(255, 30, 56, 0.4), 0 0 80px rgba(255, 30, 56, 0.2);
+}
+
+/* Active CTA gets a subtle red aura */
+.musix__cta--on {
+  box-shadow: 0 0 22px rgba(255, 30, 56, 0.4), 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
    MysticSaba Player Dock, Panel & Fullscreen Immersive Lyrics
    ========================================================================== */
 .dock {
@@ -273,29 +314,29 @@
 
 /* Standby / Éteint State */
 .dock.is-dormant {
-  background: rgba(14, 12, 10, 0.72);
-  border: 1px solid rgba(237, 232, 221, 0.09);
+  background: rgba(10, 6, 6, 0.72);
+  border: 1px solid rgba(245, 238, 238, 0.09);
   box-shadow: 0 6px 26px rgba(0, 0, 0, 0.45);
   opacity: 0.88;
 }
 .dock.is-dormant:hover {
   opacity: 1;
-  background: rgba(18, 16, 13, 0.85);
-  border-color: rgba(237, 232, 221, 0.2);
+  background: rgba(16, 11, 11, 0.85);
+  border-color: rgba(245, 238, 238, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   transform: translateY(-1px);
 }
 
 /* Active / Allumé State */
 .dock.is-playing {
-  background: rgba(18, 15, 11, 0.94);
-  border: 1px solid rgba(242, 163, 60, 0.45);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(242, 163, 60, 0.2);
+  background: rgba(16, 10, 10, 0.94);
+  border: 1px solid rgba(255, 30, 56, 0.45);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(255, 30, 56, 0.2);
   opacity: 1;
 }
 .dock.is-playing:hover {
   border-color: var(--amber);
-  box-shadow: 0 12px 44px rgba(0, 0, 0, 0.7), 0 0 32px rgba(242, 163, 60, 0.3);
+  box-shadow: 0 12px 44px rgba(0, 0, 0, 0.7), 0 0 32px rgba(255, 30, 56, 0.3);
   transform: translateY(-1px);
 }
 
@@ -313,14 +354,14 @@
 
 /* Éteint: subtle stealth dark glass circle with cream icon, zero glaring yellow */
 .dock.is-dormant .dock__play {
-  background: rgba(237, 232, 221, 0.06);
+  background: rgba(245, 238, 238, 0.06);
   color: var(--cream-dim);
-  border: 1px solid rgba(237, 232, 221, 0.14);
+  border: 1px solid rgba(245, 238, 238, 0.14);
 }
 .dock.is-dormant .dock__play:hover {
-  background: rgba(242, 163, 60, 0.16);
+  background: rgba(255, 30, 56, 0.16);
   color: var(--amber);
-  border-color: rgba(242, 163, 60, 0.5);
+  border-color: rgba(255, 30, 56, 0.5);
   transform: scale(1.08);
 }
 
@@ -329,11 +370,11 @@
   background: var(--amber);
   color: var(--bg);
   border: 1px solid var(--amber);
-  box-shadow: 0 0 20px rgba(242, 163, 60, 0.55);
+  box-shadow: 0 0 20px rgba(255, 30, 56, 0.55);
 }
 .dock.is-playing .dock__play:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 28px rgba(242, 163, 60, 0.75);
+  box-shadow: 0 0 28px rgba(255, 30, 56, 0.75);
 }
 
 /* Status Pulse Dot */
@@ -347,12 +388,12 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: rgba(237, 232, 221, 0.28);
+  background: rgba(245, 238, 238, 0.28);
   transition: background 0.3s, box-shadow 0.3s;
 }
 .dock__pulse-dot--active {
   background: var(--amber);
-  box-shadow: 0 0 8px rgba(242, 163, 60, 0.8);
+  box-shadow: 0 0 8px rgba(255, 30, 56, 0.8);
   animation: pulse-glow 2s ease-in-out infinite;
 }
 @keyframes pulse-glow {
@@ -398,17 +439,17 @@
   display: grid;
   place-items: center;
   color: var(--muted);
-  border: 1px solid rgba(237, 232, 221, 0.08);
+  border: 1px solid rgba(245, 238, 238, 0.08);
   transition: color .25s, border-color .25s, transform .3s var(--ease-out);
   cursor: pointer;
 }
 .dock.is-playing .dock__expand {
   color: var(--cream-dim);
-  border-color: rgba(237, 232, 221, 0.16);
+  border-color: rgba(245, 238, 238, 0.16);
 }
 .dock__expand:hover {
   color: var(--amber);
-  border-color: rgba(242, 163, 60, 0.5);
+  border-color: rgba(255, 30, 56, 0.5);
   transform: scale(1.05);
 }
 
@@ -419,7 +460,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: rgba(237, 232, 221, 0.04);
+  background: rgba(245, 238, 238, 0.04);
   pointer-events: none;
 }
 .dock__progress span {
@@ -430,7 +471,7 @@
 }
 .dock.is-dormant .dock__progress span {
   opacity: 0.25;
-  background: rgba(237, 232, 221, 0.35);
+  background: rgba(245, 238, 238, 0.35);
 }
 
 /* Expanded Player Panel */
@@ -441,7 +482,7 @@
   width: 380px;
   max-width: calc(100vw - 32px);
   border-radius: 20px;
-  background: rgba(16, 14, 11, 0.90);
+  background: rgba(14, 9, 9, 0.92);
   border: 1px solid var(--line-strong);
   backdrop-filter: blur(24px);
   box-shadow: 0 18px 64px rgba(0, 0, 0, 0.65);
@@ -467,7 +508,7 @@
 }
 .panel__close:hover {
   color: var(--cream);
-  background: rgba(237, 232, 221, 0.08);
+  background: rgba(245, 238, 238, 0.08);
 }
 .panel__now {
   display: flex;
@@ -482,7 +523,7 @@
   border-radius: 12px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, #2a2113, #15100a);
+  background: linear-gradient(135deg, #2a0e10, #150809);
   border: 1px solid var(--line);
   position: relative;
   overflow: hidden;
@@ -498,7 +539,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 2px solid rgba(237, 232, 221, 0.8);
+  border: 2px solid rgba(245, 238, 238, 0.8);
   position: relative;
 }
 .panel__art-disc::after {
@@ -539,7 +580,7 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 12px 14px 28px;
-  background: rgba(237, 232, 221, 0.024);
+  background: rgba(245, 238, 238, 0.024);
   min-height: 88px;
 }
 .panel__lyricline {
@@ -557,7 +598,7 @@
   color: var(--cream);
   opacity: 1;
   font-weight: 500;
-  text-shadow: 0 0 18px rgba(242, 163, 60, 0.25);
+  text-shadow: 0 0 18px rgba(255, 30, 56, 0.28);
 }
 .panel__immersive {
   position: absolute;
@@ -572,7 +613,7 @@
   transition: background 0.25s, transform 0.25s;
 }
 .panel__immersive:hover {
-  background: rgba(242, 163, 60, 0.12);
+  background: rgba(255, 30, 56, 0.12);
   transform: translateY(-1px);
 }
 .panel__seek {
@@ -598,9 +639,9 @@
   cursor: pointer;
 }
 .panel__controls .ctrl--main {
-  background: rgba(237, 232, 221, 0.08);
+  background: rgba(245, 238, 238, 0.08);
   color: var(--cream);
-  border: 1px solid rgba(237, 232, 221, 0.16);
+  border: 1px solid rgba(245, 238, 238, 0.16);
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -609,8 +650,8 @@
   transition: all .25s var(--ease-out);
 }
 .panel__controls .ctrl--main:hover {
-  background: rgba(242, 163, 60, 0.2);
-  border-color: rgba(242, 163, 60, 0.5);
+  background: rgba(255, 30, 56, 0.2);
+  border-color: rgba(255, 30, 56, 0.5);
   color: var(--amber);
   transform: scale(1.06);
 }
@@ -618,10 +659,10 @@
   background: var(--amber);
   color: var(--bg);
   border-color: var(--amber);
-  box-shadow: 0 0 20px rgba(242, 163, 60, 0.45);
+  box-shadow: 0 0 20px rgba(255, 30, 56, 0.45);
 }
 .is-playing .panel__controls .ctrl--main:hover {
-  box-shadow: 0 0 26px rgba(242, 163, 60, 0.65);
+  box-shadow: 0 0 26px rgba(255, 30, 56, 0.65);
 }
 .panel__vol {
   display: flex;
@@ -636,7 +677,7 @@
   max-height: 180px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(237, 232, 221, 0.2) transparent;
+  scrollbar-color: rgba(245, 238, 238, 0.2) transparent;
 }
 .panel__item {
   width: 100%;
@@ -654,7 +695,7 @@
   transition: background 0.2s;
 }
 .panel__item button:hover {
-  background: rgba(237, 232, 221, 0.05);
+  background: rgba(245, 238, 238, 0.05);
 }
 .panel__item-num {
   font-family: var(--font-mono);
@@ -718,10 +759,14 @@
   inset: -18%;
   filter: blur(90px) saturate(1.25);
   opacity: 0.6;
-  background: radial-gradient(circle at 28% 30%, var(--track-a, rgba(242, 163, 60, .55)), transparent 45%),
-              radial-gradient(circle at 75% 65%, var(--track-b, rgba(255, 61, 46, .4)), transparent 45%),
-              radial-gradient(circle at 50% 95%, rgba(237, 232, 221, .1), transparent 50%);
-  animation: 24s ease-in-out infinite alternate drift;
+  background: radial-gradient(circle at 28% 30%, var(--track-a, rgba(255, 30, 56, .55)), transparent 45%),
+              radial-gradient(circle at 75% 65%, var(--track-b, rgba(150, 12, 26, .45)), transparent 45%),
+              radial-gradient(circle at 50% 95%, rgba(245, 238, 238, .1), transparent 50%);
+  /* Dérive plus ample + respiration lumineuse : le mesh gradient bouge et
+     pulse doucement pour que le fond « vive » sans distraire des paroles. */
+  animation: drift 20s ease-in-out infinite alternate,
+             bg-breathe 9s ease-in-out infinite;
+  will-change: transform, opacity, filter;
 }
 .immersive__bg-img {
   position: absolute;
@@ -733,15 +778,40 @@
   object-fit: cover;
   filter: blur(90px) saturate(1.35);
   opacity: 0.85;
-  animation: 36s ease-in-out infinite alternate poster-drift;
+  /* Ken Burns : zoom/pan continu + très légère dérive de teinte, en deux
+     cycles décalés pour un mouvement organique jamais tout à fait répétitif. */
+  animation: poster-drift 28s ease-in-out infinite alternate,
+             poster-hue 46s linear infinite;
+  will-change: transform, filter;
 }
 @keyframes drift {
-  0% { transform: scale(1) translate(0, 0); }
-  100% { transform: scale(1.15) translate(-3%, 4%); }
+  0%   { transform: scale(1) translate(0, 0) rotate(0deg); }
+  50%  { transform: scale(1.12) translate(3%, -3%) rotate(0.6deg); }
+  100% { transform: scale(1.2) translate(-4%, 5%) rotate(-0.8deg); }
+}
+/* Respiration : la nappe de couleur s'éclaircit et s'assombrit très lentement */
+@keyframes bg-breathe {
+  0%, 100% { opacity: 0.5; filter: blur(90px) saturate(1.15); }
+  50%      { opacity: 0.72; filter: blur(78px) saturate(1.4); }
 }
 @keyframes poster-drift {
-  0% { transform: scale(1.05) translate(2%, -2%); }
-  100% { transform: scale(1.18) translate(-3%, 3%); }
+  0%   { transform: scale(1.05) translate(2%, -2%); }
+  50%  { transform: scale(1.14) translate(-2%, 1%); }
+  100% { transform: scale(1.22) translate(-4%, 4%); }
+}
+/* Glissement de teinte imperceptible pour un fond jamais figé */
+@keyframes poster-hue {
+  0%   { filter: blur(90px) saturate(1.35) hue-rotate(0deg); }
+  50%  { filter: blur(84px) saturate(1.5) hue-rotate(12deg); }
+  100% { filter: blur(90px) saturate(1.35) hue-rotate(0deg); }
+}
+
+/* Accessibilité : on fige le fond si l'utilisateur limite les animations */
+@media (prefers-reduced-motion: reduce) {
+  .immersive__bg,
+  .immersive__bg-img {
+    animation: none;
+  }
 }
 .immersive__head {
   position: relative;
@@ -764,7 +834,7 @@
   height: 48px;
   border-radius: 10px;
   object-fit: cover;
-  border: 1px solid rgba(237, 232, 221, 0.25);
+  border: 1px solid rgba(245, 238, 238, 0.25);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
 }
 .immersive__title {
@@ -810,39 +880,106 @@
   display: none;
 }
 .immersive__lines {
-  --DefaultLyricsSize: clamp(2.4rem, 6.2vw, 4.6rem);
+  --DefaultLyricsSize: clamp(2rem, 4.6vw, 3.7rem);
   font-family: var(--font-display);
   font-weight: 700;
   display: flex;
   flex-direction: column;
-  padding: 28vh clamp(20px, 6vw, 100px) 38vh;
-  max-width: 1440px;
+  padding: 28vh clamp(16px, 3.4vw, 56px) 38vh;
+  max-width: 1760px;
   width: 100%;
 }
 .immersive__lines .line {
-  margin: clamp(12px, 2.2vh, 26px) 0;
+  margin: clamp(10px, 1.9vh, 22px) 0;
   font-size: var(--DefaultLyricsSize);
-  line-height: 1.16;
-  letter-spacing: -0.025em;
+  line-height: 1.18;
+  letter-spacing: -0.028em;
   text-align: left;
+  text-wrap: balance;
   cursor: pointer;
-  transition: opacity 0.25s, transform 0.25s;
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out), filter 0.5s var(--ease-out);
   transform-origin: left center;
+  will-change: opacity, transform, filter;
 }
+
+/* Ligne active : conteneur du karaoké mot-à-mot */
 .immersive__lines .line.Active {
-  color: #ffffff;
   opacity: 1;
-  transform: scale(1.04);
-  text-shadow: 0 0 24px rgba(255, 255, 255, 0.45), 0 0 45px rgba(242, 163, 60, 0.25);
+  transform: scale(1.05);
+  filter: none;
 }
+.immersive__lines .line.karaoke {
+  display: flex;
+  flex-wrap: wrap;
+  color: transparent;
+  /* Halo rouge global sur la ligne active (une seule couche, pas par caractère
+     → beaucoup plus léger que N drop-shadow, donc plus fluide) */
+  filter: drop-shadow(0 0 26px rgba(255, 30, 56, 0.28));
+  animation: line-rise 0.6s var(--ease-out) both;
+}
+
+/* Entrée douce de la ligne quand elle devient active */
+@keyframes line-rise {
+  from { opacity: 0; transform: translateY(0.28em) scale(1.01); filter: blur(3px); }
+  to { opacity: 1; transform: translateY(0) scale(1.05); filter: blur(0); }
+}
+
+/* -------------------------------------------------------------------------
+   Nouvelle animation karaoké — « focus lumineux qui se lève »
+   Chaque caractère est piloté en continu par --sung (0 → 1), qui glisse à
+   60 fps depuis le JS. Trois effets combinés, tous composés sur le GPU
+   (aucun reflow) donc parfaitement fluides :
+     1. Couleur : gris flou → blanc lumineux, révélé par le front de balayage.
+     2. Élévation : le caractère chanté remonte et grossit très légèrement.
+     3. Focus : le caractère pas-encore-chanté est un peu flouté ; net une fois
+        atteint par le front → sensation de mise au point qui suit la voix.
+   ------------------------------------------------------------------------- */
+.karaoke__char {
+  display: inline-block;
+  white-space: pre;
+  background-image: linear-gradient(
+    to right,
+    #ffffff 0%,
+    #fff4f5 42%,
+    rgba(245, 238, 238, 0.22) 100%
+  );
+  background-size: 220% 100%;
+  /* --sung=0 → partie droite (gris) ; --sung=1 → partie gauche (blanc) */
+  background-position: calc((1 - var(--sung, 0)) * 100%) 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* Élévation + léger grossissement au fil du chant */
+  transform:
+    translateY(calc((1 - var(--sung, 0)) * -0.09em))
+    scale(calc(1 + var(--sung, 0) * 0.06));
+  transform-origin: center bottom;
+  /* Focus : flou léger tant que non chanté, net une fois atteint.
+     0.6px de blur max, s'estompe dès --sung > 0. */
+  filter: blur(calc((1 - var(--sung, 0)) * 0.6px));
+  opacity: calc(0.5 + var(--sung, 0) * 0.5);
+  will-change: background-position, transform, filter, opacity;
+}
+.karaoke__char.is-space {
+  transform: none;
+  filter: none;
+}
+
+/* Lignes non chantées : profondeur progressive selon la distance à la ligne active */
 .immersive__lines .line.NotSung {
-  color: rgba(237, 232, 221, 0.42);
-  opacity: 0.38;
-  filter: blur(0.8px);
+  color: rgba(237, 232, 221, 0.5);
+  opacity: calc(0.62 - var(--dist, 1) * 0.08);
+  filter: blur(calc(var(--dist, 1) * 0.7px));
+  transform: scale(calc(1 - var(--dist, 1) * 0.012));
+}
+.immersive__lines .line.NotSung.is-past {
+  opacity: calc(0.34 - var(--dist, 1) * 0.03);
 }
 .immersive__lines .line:hover {
-  opacity: 0.95;
-  filter: blur(0px);
+  opacity: 0.95 !important;
+  filter: blur(0) !important;
+  color: rgba(245, 238, 238, 0.85);
 }
 .immersive__lines .dotGroup {
   display: flex;

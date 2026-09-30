@@ -1,4 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
+import { ScrollReveal } from './motion/ScrollReveal';
 
 export const ProcessSection = () => {
   const { language } = useLanguage();
@@ -49,14 +50,14 @@ export const ProcessSection = () => {
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="mb-[clamp(32px,5vh,64px)]">
+        <ScrollReveal className="mb-[clamp(32px,5vh,64px)]" y={40} blur={8}>
           <div className="font-mono text-[0.72rem] tracking-widest text-[var(--amber)] uppercase mb-3">
             04 / PROCESS
           </div>
           <h2 className="font-display font-semibold text-[clamp(2.4rem,6vw,5rem)] leading-none tracking-tight text-[var(--cream)]">
             De la maquette au terminal
           </h2>
-        </div>
+        </ScrollReveal>
 
         {/* 5-Step Timeline Grid with Top Line */}
         <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-[clamp(24px,3vw,36px)] pt-8">
@@ -67,7 +68,7 @@ export const ProcessSection = () => {
           />
 
           {steps.map((step, i) => (
-            <div key={i} className="relative group pt-2">
+            <ScrollReveal key={i} className="relative group pt-2" delay={i * 0.08} amount={0.3}>
               {/* Timeline Dot Node */}
               <div
                 className="hidden lg:flex items-center justify-center absolute top-[-29px] left-0 w-[15px] h-[15px] rounded-full border border-[var(--amber)] bg-[var(--bg-2)]"
@@ -90,7 +91,7 @@ export const ProcessSection = () => {
               <p className="text-[var(--cream-dim)] text-[0.88rem] leading-relaxed">
                 {step.desc}
               </p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

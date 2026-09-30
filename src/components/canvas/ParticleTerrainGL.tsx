@@ -7,6 +7,7 @@ const vertexShader = `
   uniform float uBass;
   uniform float uMid;
   uniform float uTreble;
+  uniform float uIsPlaying;
   uniform vec2 uPointer;
   uniform float uDpr;
 
@@ -33,11 +34,11 @@ const vertexShader = `
 
   void main() {
     vec3 p = position;
-    float t = uTime * 0.18;
+    float t = uTime * (0.05 + uIsPlaying * 0.13);
 
-    // base rolling terrain
-    float h = noise(p.xy * 0.14 + vec2(t, t * 0.6)) * 0.9;
-    h += noise(p.xy * 0.45 - vec2(t * 0.7, 0.0)) * 0.28;
+    // base rolling terrain (calm and flat when dormant)
+    float h = noise(p.xy * 0.14 + vec2(t, t * 0.6)) * (0.35 + uIsPlaying * 0.55);
+    h += noise(p.xy * 0.45 - vec2(t * 0.7, 0.0)) * (0.10 + uIsPlaying * 0.18);
 
     // audio: bass swells the middle ridge, mids ripple, treble sparkles
     float ridge = exp(-abs(p.y) * 0.32);
@@ -45,9 +46,9 @@ const vertexShader = `
     h += uMid * noise(p.xy * 0.8 + uTime * 0.55) * 1.5;
     h += uTreble * noise(p.xy * 2.2 - uTime * 0.8) * 0.55;
 
-    // pointer attraction — subtle lift under the cursor
+    // pointer attraction
     float d = distance(p.xy * vec2(0.055, 0.11), uPointer);
-    h += smoothstep(0.45, 0.0, d) * 0.7;
+    h += smoothstep(0.45, 0.0, d) * (0.3 + uIsPlaying * 0.4);
 
     p.z = h;
     vH = h;
@@ -55,13 +56,14 @@ const vertexShader = `
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     vDist = -mv.z;
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = (1.1 + vH * 1.4 + uBass * 2.0) * uDpr * (26.0 / vDist);
+    gl_PointSize = (0.95 + vH * 1.1 + uBass * 1.8) * uDpr * (26.0 / vDist);
   }
 `;
 
 const fragmentShader = `
   precision mediump float;
   uniform float uLevel;
+  uniform float uIsPlaying;
   varying float vH;
   varying float vDist;
 
@@ -76,12 +78,20 @@ const fragmentShader = `
     vec3 ember = vec3(1.0, 0.24, 0.18);
 
     float a = clamp(vH * 0.6 + 0.25, 0.0, 1.0);
-    vec3 col = mix(cream * 0.5, amber, a);
-    col = mix(col, ember, smoothstep(1.4, 2.6, vH) * 0.7);
-    col += uLevel * 0.25;
+
+    // Dormant: subdued neutral smoke/cream
+    vec3 dormantCol = mix(vec3(0.38, 0.35, 0.32), cream * 0.6, a * 0.5);
+
+    // Active: glowing amber & ember
+    vec3 activeCol = mix(cream * 0.5, amber, a);
+    activeCol = mix(activeCol, ember, smoothstep(1.4, 2.6, vH) * 0.7);
+    activeCol += uLevel * 0.25;
+
+    vec3 col = mix(dormantCol, activeCol, uIsPlaying);
+    float alphaMultiplier = mix(0.35, 1.0, uIsPlaying);
 
     float fade = smoothstep(34.0, 10.0, vDist);
-    gl_FragColor = vec4(col, glow * (0.16 + a * 0.5) * fade);
+    gl_FragColor = vec4(col, glow * (0.16 + a * 0.5) * fade * alphaMultiplier);
   }
 `;
 

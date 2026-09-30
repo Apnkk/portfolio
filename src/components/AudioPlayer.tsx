@@ -73,7 +73,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
           const barCount = 18;
           const barWidth = 3;
           const gap = (w - barCount * barWidth) / (barCount - 1);
-          ctx.fillStyle = 'rgba(237, 232, 221, 0.15)';
+          ctx.fillStyle = 'rgba(245, 238, 238, 0.15)';
           for (let i = 0; i < barCount; i++) {
             const x = i * (barWidth + gap);
             ctx.fillRect(x, h - 2, barWidth, 2);
@@ -111,7 +111,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
             const x = i * (barWidth + gap);
             const y = h - barH;
 
-            ctx.fillStyle = '#f2a33c';
+            ctx.fillStyle = '#ff1e38';
             ctx.fillRect(x, y, barWidth, barH);
           }
         }
@@ -208,10 +208,10 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                   onMouseLeave={() => setHoverRatio(null)}
                   className="flex-1 h-3 flex items-center cursor-pointer relative group"
                 >
-                  <div className="w-full h-1 bg-[rgba(237,232,221,0.15)] rounded-full relative overflow-hidden group-hover:h-1.5 transition-all">
+                  <div className="w-full h-1 bg-[rgba(245,238,238,0.15)] rounded-full relative overflow-hidden group-hover:h-1.5 transition-all">
                     {hoverRatio !== null && (
                       <div
-                        className="absolute inset-y-0 left-0 bg-[rgba(237,232,221,0.25)] pointer-events-none"
+                        className="absolute inset-y-0 left-0 bg-[rgba(245,238,238,0.25)] pointer-events-none"
                         style={{ width: `${hoverRatio * 100}%` }}
                       />
                     )}
@@ -281,7 +281,7 @@ export const AudioPlayer = ({ isPlaying, onTogglePlay }: AudioPlayerProps) => {
                     step={0.02}
                     value={playerState.isMuted ? 0 : playerState.volume}
                     onChange={(e) => audioEngine.setVolume(parseFloat(e.target.value))}
-                    className="w-16 h-1 bg-[rgba(237,232,221,0.2)] accent-[var(--amber)] rounded-lg appearance-none cursor-pointer"
+                    className="w-16 h-1 bg-[rgba(245,238,238,0.2)] accent-[var(--amber)] rounded-lg appearance-none cursor-pointer"
                     aria-label="Volume"
                   />
                 </div>
