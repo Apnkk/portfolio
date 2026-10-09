@@ -1,0 +1,18 @@
+/* Canvas fixe derrière le contenu, au-dessus du fond de la page. */
+.audio-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  display: block;
+}
+
+/*
+ * Les sections avaient un fond opaque qui cachait le canvas.
+ * Règle hors @layer : elle passe devant les utilitaires Tailwind sans !important.
+ */
+main section {
+  background-color: transparent;
+}

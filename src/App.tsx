@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import Lenis from 'lenis';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { LanguageProvider } from './context/LanguageContext';
@@ -13,12 +13,19 @@ import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
 import { AudioPlayer } from './components/AudioPlayer';
 import { CustomCursor } from './components/CustomCursor';
+import { CommandPalette } from './components/CommandPalette';
 import { audioEngine } from './utils/audioSynth';
 import { ArrowUp } from 'lucide-react';
+
+// three.js is heavy: load the WebGL backdrop in its own chunk, after first paint
+const AudioBackdrop = lazy(() =>
+  import('./components/canvas/AudioBackdrop').then((m) => ({ default: m.AudioBackdrop })),
+);
 
 function PortfolioApp() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [scrollPercent, setScrollPercent] = useState(0);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const lenisRef = useRef<Lenis | null>(null);
 
   // Top amber hairline scroll progress
@@ -80,6 +87,19 @@ function PortfolioApp() {
     };
   }, []);
 
+  // Ctrl/Cmd+K opens the command palette (closing is handled inside CommandPalette)
+  useEffect(() => {
+    if (paletteOpen) return;
+    const handleOpen = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setPaletteOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleOpen);
+    return () => window.removeEventListener('keydown', handleOpen);
+  }, [paletteOpen]);
+
   // Sync audio state
   useEffect(() => {
     return audioEngine.subscribe((state) => {
@@ -104,6 +124,11 @@ function PortfolioApp() {
       {/* Analogue Noise Grain Texture */}
       <div className="noise" aria-hidden="true" />
 
+      {/* Fond en vagues réactif au son */}
+      <Suspense fallback={null}>
+        <AudioBackdrop />
+      </Suspense>
+
       {/* Amber Custom Cursor */}
       <CustomCursor />
 
@@ -117,6 +142,9 @@ function PortfolioApp() {
 
       {/* Top Navigation */}
       <Navbar />
+
+      {/* Command palette (Ctrl/Cmd+K) */}
+      <CommandPalette isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />
 
       {/* Persistent Audio Player Dock */}
       <AudioPlayer isPlaying={isPlaying} onTogglePlay={handleTogglePlay} />
@@ -139,7 +167,7 @@ function PortfolioApp() {
         </motion.button>
       )}
 
-      {/* Main Content Architecture identical to mysticsaba.com */}
+      {/* Main content */}
       <main id="main">
         <Hero />
         <Marquee />

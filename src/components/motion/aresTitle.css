@@ -1,0 +1,89 @@
+.ares-title {
+  --mx: 50%;
+  --my: 50%;
+  --spot: 0;
+  display: grid;
+  margin: 0 0 clamp(18px, 3vh, 36px);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(5rem, 24vw, 22rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: auto;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.ares-title__layer {
+  grid-area: 1 / 1;
+  display: flex;
+}
+
+.ares-title__mask {
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.06em 0.01em;
+}
+
+.ares-title__char {
+  display: inline-block;
+  color: transparent;
+  background-image: linear-gradient(
+    100deg,
+    #f5eeee 0%,
+    #f5eeee 38%,
+    #ff1e38 50%,
+    #f5eeee 62%,
+    #f5eeee 100%
+  );
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: ares-sweep 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ares-title__char--static {
+  animation: none;
+  background-image: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  color: #f5eeee;
+}
+
+/* Calque rouge révélé uniquement autour du curseur */
+.ares-title__spot {
+  pointer-events: none;
+  opacity: var(--spot);
+  transition: opacity 0.35s ease;
+  -webkit-mask-image: radial-gradient(circle 170px at var(--mx) var(--my), #000 0%, transparent 100%);
+  mask-image: radial-gradient(circle 170px at var(--mx) var(--my), #000 0%, transparent 100%);
+}
+
+.ares-title__char--spot {
+  animation: none;
+  background-image: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  color: #ff1e38;
+}
+
+@keyframes ares-sweep {
+  0%,
+  35% {
+    background-position: 100% 0;
+  }
+  75%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ares-title__char {
+    animation: none;
+  }
+}

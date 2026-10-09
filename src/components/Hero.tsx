@@ -1,14 +1,10 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { ParticleTerrainGL } from './canvas/ParticleTerrainGL';
 import { audioEngine } from '../utils/audioSynth';
 import { Play } from 'lucide-react';
+import { AresTitle } from './motion/AresTitle';
 
-interface HeroProps {
-  onOpenCommandPalette?: () => void;
-}
-
-export const Hero = ({ onOpenCommandPalette: _onOpenCommandPalette }: HeroProps) => {
+export const Hero = () => {
   const { language } = useLanguage();
 
   const handlePlayMusic = () => {
@@ -21,15 +17,6 @@ export const Hero = ({ onOpenCommandPalette: _onOpenCommandPalette }: HeroProps)
       className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden bg-[var(--bg)]"
       aria-label="Introduction"
     >
-      {/* Three.js Audio-Reactive 3D Particle Wave Canvas */}
-      <ParticleTerrainGL />
-
-      {/* Atmospheric Gradient Fades */}
-      <div
-        className="absolute inset-0 pointer-events-none z-1 bg-gradient-to-b from-[rgba(10,9,8,0.45)] via-transparent via-55% to-[var(--bg)] to-96%"
-        aria-hidden="true"
-      />
-
       {/* Hero Content Inner */}
       <div className="relative z-10 px-[var(--pad)] mb-[clamp(28px,5vh,64px)] pointer-events-none max-w-7xl w-full">
         {/* Status Kicker */}
@@ -47,20 +34,8 @@ export const Hero = ({ onOpenCommandPalette: _onOpenCommandPalette }: HeroProps)
           </span>
         </motion.div>
 
-        {/* Huge Typographic Hero Title: ARES / DEV */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display font-semibold text-[clamp(3.8rem,14.5vw,12.5rem)] leading-[0.88] tracking-[-0.03em] uppercase mb-[clamp(18px,3vh,36px)] select-none"
-        >
-          <span className="block text-[var(--cream)] overflow-hidden">
-            ARES
-          </span>
-          <span className="block outline-amber overflow-hidden">
-            DEV
-          </span>
-        </motion.h1>
+        {/* Huge Typographic Hero Title: ARES */}
+        <AresTitle />
 
         {/* Subtitle & Role */}
         <motion.div
